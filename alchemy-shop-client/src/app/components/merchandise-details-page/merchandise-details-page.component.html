@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="">
+    <div class="card row">
+      <div class="text-center view overlay hm-white-slight">
+        <img [src]="merchandise?.imageUrl" class="img-fluid details-img" alt="" />
+        <a href="#">
+          <div class="mask waves-effect waves-light"></div>
+        </a>
+      </div>
+      <div class="card-block mt-3 p-3">
+        <!--Title-->
+        <h4 class="card-title">{{ merchandise?.name }}</h4>
+        <!--Text-->
+        <p class="card-text">{{ merchandise?.longDescription }}</p>
+        <div class="row">
+          <div class="btn btn-group ml-auto">
+            <a class="btn btn-outline-primary ml-3 text-light" href="/merchandise/list" routerLink="/merchandise/list"
+              >Show all Merchandise</a
+            >
+            <button class="btn btn-success" id="cart-button" (click)="onAddToCartClick()" [disabled]="addingInProgress">
+              <div class="spinner-border spinner-border-sm" *ngIf="addingInProgress"></div>
+              Add {{ merchandise?.name }} to cart
+            </button>
+          </div>
+          <h3 class="pull-right ml-3 mr-3">{{ merchandise?.price | currency: 'EUR' }}</h3>
+          <span class="text-success mr-3" *ngIf="merchandise?.inStock; else outOfStock">In Stock</span>
+          <ng-template #outOfStock><span class="text-warning mr-3">Out of Stock</span></ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

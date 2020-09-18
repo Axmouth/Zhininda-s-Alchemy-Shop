@@ -1,0 +1,82 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import 'styles/bootsvariables';
+@import '~bootstrap/scss/bootstrap';
+@import 'styles/bootstheme';
+
+#cart-button {
+    margin-right: 8px;
+}
+
+.checkout-form {
+    margin-top: 5%;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.order-form {
+    margin-top: 5%;
+    border-radius: 20px;
+    border-style: solid;
+    border-color: #2fa4e7;
+}
+
+a.remove {
+    text-decoration: none;
+}
+
+a.remove:hover {
+    color: blue;
+}
+
+.center_div {
+    margin: 0 auto;
+    width: 80%
+        /* value of your choice which suits your alignment */
+}
+
+.form-pull-right-button {
+    margin-right: 10px !important
+}
+
+.carousel img {
+    min-width: 100%;
+}
+
+.drink-title {
+    color: blue;
+}
+
+.drink-title:hover {
+    text-decoration: underline;
+}
+
+.main-content {
+    min-height: 100vh;
+    margin-top: 8.5em;
+}
+
+.carousel {
+    margin-top: 2em;
+}
+
+.caption h4 {
+    white-space: nowrap;
+    white-space: nowrap;
+}
+
+.thumbnail img {
+    height: 10em;
+    width: auto;
+}
+
+.thumbnail .caption-full {
+    padding: 9px;
+    color: #333;
+}
+
+.details-img {
+    height: 17em;
+    width: auto;
+}

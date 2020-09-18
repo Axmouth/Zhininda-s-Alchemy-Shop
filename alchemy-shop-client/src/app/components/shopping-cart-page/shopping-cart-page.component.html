@@ -1,0 +1,85 @@
+<div class="checkout-form">
+  <h2>Your shopping cart</h2>
+  <h5>Here are the merchandises in your shopping cart.</h5>
+  <table class="table table-bordered table-striped table-sm">
+    <thead>
+      <tr>
+        <th>Selected amount</th>
+        <th>Merchandise</th>
+        <th class="text-right">Price</th>
+        <th class="text-right">Subtotal</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let shoppingCartItem of shoppingCartModel?.shoppingCart?.shoppingCartItems">
+        <td class="text-center">{{ shoppingCartItem?.amount }}</td>
+        <td class="text-left">{{ shoppingCartItem.merchandise?.name }}</td>
+        <td class="text-right">{{ shoppingCartItem.merchandise?.price }}</td>
+        <td class="text-right">
+          {{ shoppingCartItem?.amount * shoppingCartItem?.merchandise?.price }}
+        </td>
+        <td class="text-center">
+          <button
+            type="button"
+            class="btn btn-floating px-0"
+            (click)="addToCart(shoppingCartItem?.merchandise?.merchandiseId)"
+            [disabled]="changeInProgress"
+          >
+            <i class="fa fa-plus text-primary add"></i>
+          </button>
+        </td>
+
+        <td class="text-center">
+          <button
+            type="button"
+            class="btn btn-floating px-0"
+            (click)="removeFromCart(shoppingCartItem?.merchandise?.merchandiseId)"
+            [disabled]="changeInProgress"
+          >
+            <i class="fa fa-remove text-danger remove"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" class="text-right">Total:</td>
+        <td class="text-right">
+          {{ shoppingCartModel?.shoppingCartTotal }}
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="text-right">
+    <div class="btn-group">
+      <a class="btn btn-success" href="/shopping-cart/checkout" routerLink="/shopping-cart/checkout">Check out</a>
+      <div class="btn-group" ngbDropdown>
+        <a
+          ngbDropdownToggle
+          class="btn btn-outline-primary"
+          role="button"
+          id="dropdownMenuLink"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+          tabindex="0"
+        >
+          Add more merchandise<span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu" ngbDropdownMenu>
+          <li *ngFor="let category of categories" ngbDropdownItem>
+            <a
+              href="/merchandise/list"
+              routerLink="/merchandise/list"
+              [queryParams]="{ categoryName: category?.categoryName }"
+              >{{ category?.categoryName }}</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+
+    netsh interface portproxy add v4tov4 listenport=443 listenaddress=127.65.43.25 connectport=5001 connectaddress=127.0.0.1
+netsh interface portproxy add v4tov4 listenport=80 listenaddress=127.65.43.25 connectport=5000 connectaddress=127.0.0.1
+
+netsh interface portproxy add v4tov4 listenport=80 listenaddress=127.65.43.26 connectport=3199 connectaddress=127.0.0.1
+netsh interface portproxy add v4tov4 listenport=443 listenaddress=127.65.43.26 connectport=3199 connectaddress=127.0.0.1
+
+	127.65.43.25    api.zhinindas.shop.test
+	127.65.43.26       zhinindas.shop.test

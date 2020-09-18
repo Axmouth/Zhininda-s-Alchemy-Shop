@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-md-3">
+    <div class="list-group">
+      <a class="list-group-item list-group-item-action active" href="/account/profile" routerLink="/account/profile"
+        >My Profile</a
+      >
+      <a class="list-group-item list-group-item-action" href="/account/settings" routerLink="/account/settings"
+        >Account Settings</a
+      >
+      <a class="list-group-item list-group-item-action" href="/account/orders/list" routerLink="/account/orders/list"
+        >My Orders</a
+      >
+    </div>
+  </div>
+  <div class="col-md-9">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <h4>Your Profile</h4>
+            <hr />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="list-group">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <b>Username:</b><span class="pull-right">{{ myProfile?.userName }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <b>Email:</b><span class="pull-right">{{ myProfile?.email }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

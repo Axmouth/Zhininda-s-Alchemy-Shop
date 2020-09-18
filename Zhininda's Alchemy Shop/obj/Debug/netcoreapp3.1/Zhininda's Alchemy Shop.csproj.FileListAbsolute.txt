@@ -1,0 +1,110 @@
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\appsettings.Development.json
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\appsettings.json
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhininda's Alchemy Shop.csprojAssemblyReference.cache
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhininda's Alchemy Shop.AssemblyInfoInputs.cache
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhininda's Alchemy Shop.AssemblyInfo.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhininda's Alchemy Shop.RazorTargetAssemblyInfo.cache
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Bcl.HashCode.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Binder.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Options.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhininda's Alchemy Shop.csproj.CopyComplete
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Npgsql.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhininda's Alchemy Shop.genruntimeconfig.cache
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.exe
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.deps.json
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.runtimeconfig.json
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.runtimeconfig.dev.json
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.pdb
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.FileExtensions.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Json.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.FileProviders.Physical.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.FileSystemGlobbing.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.Debug.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\staticwebassets\Zhinindas Alchemy Shop.StaticWebAssets.Manifest.cache
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\staticwebassets\Zhinindas Alchemy Shop.StaticWebAssets.xml
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.pdb
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\AutoMapper.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\FluentValidation.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\FluentValidation.AspNetCore.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\FluentValidation.DependencyInjectionExtensions.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\MailKit.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\MimeKit.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Npgsql.EntityFrameworkCore.PostgreSQL.FuzzyStringMatch.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\NetTopologySuite.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\NetTopologySuite.IO.PostGis.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Npgsql.NetTopologySuite.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.OpenApi.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.DotNet.PlatformAbstractions.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyModel.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Scrutor.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Annotations.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Filters.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Logging.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhininda's Alchemy Shop.csproj.CoreCompileInputs.cache
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhininda's Alchemy Shop.RazorAssemblyInfo.cache
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhininda's Alchemy Shop.RazorAssemblyInfo.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\EFCoreNpgsqlNetTopologySuite.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.Views.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.Views.pdb
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.TagHelpers.input.cache
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.TagHelpers.output.cache
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhininda's Alchemy Shop.RazorCoreGenerate.cache
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Razor\Views\Emails\AccountVerification\AccountVerificationHtml.cshtml.g.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Razor\Views\Emails\AccountVerification\AccountVerificationText.cshtml.g.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Razor\Views\Emails\EmailChanged\EmailChangedHtml.cshtml.g.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Razor\Views\Emails\EmailChanged\EmailChangedText.cshtml.g.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Razor\Views\Emails\HelloWorld\HelloWorldHtml.cshtml.g.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Razor\Views\Emails\HelloWorld\HelloWorldText.cshtml.g.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Razor\Views\Emails\PasswordChanged\PasswordChangedHtml.cshtml.g.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Razor\Views\Emails\PasswordChanged\PasswordChangedText.cshtml.g.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Razor\Views\Emails\PasswordReset\PasswordResetHtml.cshtml.g.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Razor\Views\Emails\PasswordReset\PasswordResetText.cshtml.g.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_EmailButton.cshtml.g.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_EmailLayoutHtml.cshtml.g.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_EmailLayoutText.cshtml.g.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhininda's Alchemy Shop.RazorTargetAssemblyInfo.cs
+C:\Users\silve\Documents\MyCodeProjects\asp.net\Zhininda's Alchemy Shop\Zhininda's Alchemy Shop\obj\Debug\netcoreapp3.1\Zhinindas Alchemy Shop.Views.pdb

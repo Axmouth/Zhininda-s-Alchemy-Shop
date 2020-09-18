@@ -1,0 +1,38 @@
+<li ngbDropdown class="nav-item" *ngIf="loggedIn; else LoggedOut">
+  <a
+    ngbDropdownToggle
+    class="nav-link"
+    [ngClass]="{ active: rla.isActive }"
+    id="navbarDropdownUserMenu"
+    role="button"
+    tabindex="0"
+  >
+    {{ username }}
+  </a>
+  <a routerLink="/account" routerLinkActive="active" #rla="routerLinkActive" [hidden]="true"
+    >This is for adding .active to the dropdown</a
+  >
+  <div class="dropdown-menu" aria-labelledby="navbarDropdownUserMenu" ngbDropdownMenu>
+    <a ngbDropdownItem href="/account/profile" routerLink="/account/profile" routerLinkActive="active">My Profile</a>
+    <a ngbDropdownItem href="/account/settings" routerLink="/account/settings" routerLinkActive="active"
+      >Account Settings</a
+    >
+    <a ngbDropdownItem href="/account/orders/list" routerLink="/account/orders/list" routerLinkActive="active"
+      >My Orders</a
+    >
+    <div class="dropdown-divider"></div>
+    <form (ngSubmit)="onLogoutClick()" id="logoutForm" class="navbar-right">
+      <button type="submit" ngbDropdownItem>Log off</button>
+    </form>
+  </div>
+</li>
+<ng-template #LoggedOut>
+  <ul class="nav navbar-nav navbar-right">
+    <li class="nav-item" routerLink="/account/register" routerLinkActive="active">
+      <a class="nav-link" id="registerLink" href="/account/register" routerLink="/account/register"> Register </a>
+    </li>
+    <li class="nav-item" routerLink="/account/login" routerLinkActive="active">
+      <a class="nav-link" id="loginLink" href="/account/login" routerLink="/account/login"> Log in </a>
+    </li>
+  </ul>
+</ng-template>

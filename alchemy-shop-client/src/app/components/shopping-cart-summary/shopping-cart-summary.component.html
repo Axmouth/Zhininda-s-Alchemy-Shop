@@ -1,0 +1,8 @@
+<li class="nav-item" *ngIf="cartItemsCount > 0" routerLink="/shopping-cart" routerLinkActive="active">
+  <a class="nav-link" href="/shopping-cart" routerLink="/shopping-cart">
+    <span class="fa fa-shopping-cart"></span>
+    <span id="cart-status">
+      {{ cartItemsCount }}
+    </span>
+  </a>
+</li>

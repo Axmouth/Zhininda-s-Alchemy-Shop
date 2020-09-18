@@ -1,0 +1,34 @@
+<ngb-carousel
+  #carousel
+  *ngIf="images"
+  [ngClass]="direction"
+  [interval]="3000"
+  [pauseOnHover]="pauseOnHover"
+  [pauseOnFocus]="pauseOnFocus"
+  (slide)="onSlide($event)"
+>
+  <ng-template ngbSlide>
+    <div class="picsum-img-wrapper">
+      <img [src]="images[0]" alt="Random first slide" />
+    </div>
+    <div class="carousel-caption">
+      <h3>Khajiit has wares, if you have coin</h3>
+    </div>
+  </ng-template>
+  <ng-template ngbSlide>
+    <div class="picsum-img-wrapper">
+      <img [src]="images[1]" alt="Random second slide" />
+    </div>
+    <div class="carousel-caption">
+      <h3>Second slide label</h3>
+    </div>
+  </ng-template>
+  <ng-template ngbSlide>
+    <div class="picsum-img-wrapper">
+      <img [src]="images[2]" alt="Random third slide" />
+    </div>
+    <div class="carousel-caption">
+      <h3>Third slide label</h3>
+    </div>
+  </ng-template>
+</ngb-carousel>

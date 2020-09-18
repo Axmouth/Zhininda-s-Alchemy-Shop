@@ -1,0 +1,12 @@
+<zas-carousel></zas-carousel>
+
+<br />
+<h2>Preferred alchemy ingredients of the week</h2>
+<h5>Clients preferences - just for you!</h5>
+
+<div class="row">
+  <zas-preferred-merchandise-summary
+    [merchandise]="merchandise"
+    *ngFor="let merchandise of merchandises"
+  ></zas-preferred-merchandise-summary>
+</div>

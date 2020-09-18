@@ -1,0 +1,11 @@
+<h2 *ngIf="showCategoryHeader">Category: {{ categoryName }}</h2>
+<h2 *ngIf="showSearchHeader">Search: {{ search }}</h2>
+<h2 *ngIf="showAllHeader">All Merchandise!</h2>
+<h5>{{ merchandises?.length }} entries</h5>
+
+<div class="row">
+  <zas-merchandise-summary
+    [merchandise]="merchandise"
+    *ngFor="let merchandise of merchandises"
+  ></zas-merchandise-summary>
+</div>

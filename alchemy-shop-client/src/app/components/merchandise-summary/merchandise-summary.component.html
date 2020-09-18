@@ -1,0 +1,26 @@
+<div class="col-sm-4 col-lg-4 col-md-4 thumbnail">
+  <img [src]="merchandise?.imageThumbnailUrl" alt="" class="" loading="lazy" />
+  <div class="caption">
+    <h3 class="pull-right">{{ merchandise?.price | currency: 'EUR' }}</h3>
+    <h3>
+      <a
+        href="/merchandise/details/{{ merchandise?.merchandiseId }}"
+        routerLink="/merchandise/details/{{ merchandise?.merchandiseId }}"
+        >{{ merchandise?.name }}</a
+      >
+    </h3>
+    <p>{{ merchandise?.shortDescription }}</p>
+    <p>
+      <span class="text-success" *ngIf="merchandise?.inStock; else outOfStock">In Stock</span>
+      <ng-template #outOfStock><span class="text-warning">Out of Stock</span></ng-template>
+    </p>
+  </div>
+  <div class="add-to-cart text-right">
+    <p class="button">
+      <button class="btn btn-success" id="cart-button" (click)="onAddToCartClick()" [disabled]="addingInProgress">
+        <div class="spinner-border spinner-border-sm" *ngIf="addingInProgress"></div>
+        Add to Cart
+      </button>
+    </p>
+  </div>
+</div>

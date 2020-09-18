@@ -1,0 +1,33 @@
+<li class="nav-item" ngbDropdown>
+  <a
+    class="nav-link"
+    [ngClass]="{ active: rla.isActive }"
+    id="navbarDropdownCategoryMenu"
+    ngbDropdownToggle
+    role="button"
+    tabindex="0"
+  >
+    Merchandise
+  </a>
+  <a routerLink="/merchandise/list" routerLinkActive="active" #rla="routerLinkActive" [hidden]="true"></a>
+  <div class="dropdown-menu" aria-labelledby="navbarDropdownCategoryMenu" ngbDropdownMenu>
+    <a
+      ngbDropdownItem
+      href="/merchandise/list"
+      routerLink="/merchandise/list"
+      [queryParams]="{ categoryName: category.categoryName }"
+      routerLinkActive="active"
+      *ngFor="let category of categories"
+      >{{ category.categoryName }}</a
+    >
+    <div class="dropdown-divider"></div>
+    <a
+      ngbDropdownItem
+      href="/merchandise/list"
+      routerLink="/merchandise/list"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >View all Merchandise</a
+    >
+  </div>
+</li>

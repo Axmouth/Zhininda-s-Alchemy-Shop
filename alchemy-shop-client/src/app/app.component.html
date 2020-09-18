@@ -1,0 +1,58 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-dark fixed-top">
+  <a class="navbar-brand" href="/" routerLink="/">Zhininda's Alchemy Shop</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    aria-controls="navbarContent"
+    [attr.aria-expanded]="!collapsed"
+    aria-label="Toggle navigation"
+    (click)="collapsed = !collapsed"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarContent" [class.collapse]="collapsed">
+    <ul class="navbar-nav">
+      <li class="nav-item" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" href="/" routerLink="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <zas-category-menu></zas-category-menu>
+      <li class="nav-item" routerLink="/contact" routerLinkActive="active">
+        <a class="nav-link" href="/contact" routerLink="/contact" routerLinkActive="active">Contact Us</a>
+      </li>
+      <li class="nav-item" routerLink="/about" routerLinkActive="active">
+        <a class="nav-link" href="/about" routerLink="/about">About</a>
+      </li>
+      <zas-shopping-cart-summary></zas-shopping-cart-summary>
+    </ul>
+    <ul class="navbar-nav mr-auto">
+      <zas-login-partial></zas-login-partial>
+    </ul>
+    <form class="form-inline my-2 my-lg-0" [formGroup]="searchForm" (ngSubmit)="onSearchSubmit()">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search for merchandise"
+        name="search"
+        formControlName="search"
+        aria-required="true"
+        required
+      />
+      <button class="btn btn-secondary my-sm-0 mx-2" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+<div class="container body-content main-content">
+  <p *ngFor="let error of errors">
+    <ngb-alert type="danger" [dismissible]="false">{{ error }}</ngb-alert>
+  </p>
+  <p *ngFor="let message of messages">
+    <ngb-alert type="info" [dismissible]="false">{{ message }}</ngb-alert>
+  </p>
+  <router-outlet></router-outlet>
+</div>
+<hr />
+<footer>
+  <p>
+    <a class="ml-2" target="_blank" href="https://axmouth.dev">&copy; 2019 - Giorgos Nikolopoulos</a>
+  </p>
+</footer>

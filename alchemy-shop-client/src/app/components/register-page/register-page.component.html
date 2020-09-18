@@ -1,0 +1,137 @@
+<div class="register-form">
+  <div class="col-md-8 col-md-offset-3">
+    <h2>Register now at Dring&Go</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()" class="form-horizontal" role="form">
+      <h4>Create a new account and order your first drink today!</h4>
+      <hr />
+      <div class="form-group">
+        <label class="col-md-6 control-label">Username</label>
+        <div class="col-md-10">
+          <input name="username" formControlName="username" required class="form-control" />
+          <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div
+          *ngIf="registerForm.controls['username']?.touched && registerForm.controls['username']?.invalid"
+          class="col-md-5 offset-md-2"
+        >
+          <div *ngIf="registerForm.controls['username']?.errors?.required" class="alert alert-danger">
+            Userame is required.
+          </div>
+          <div *ngIf="registerForm.controls['username']?.errors?.minlength" class="alert alert-danger">
+            Userame must be at least
+            {{ registerForm.controls['username']?.errors?.minlength?.requiredLength }} characters. (Current is
+            {{ registerForm.controls['username']?.errors?.minlength?.actualLength }})
+          </div>
+          <div *ngIf="registerForm.controls['username'].errors.maxlength" class="alert alert-danger">
+            Userame must be
+            {{ registerForm.controls['username']?.errors?.maxlength?.requiredLength }} characters or fewer. (Current is
+            {{ registerForm.controls['username']?.errors?.maxlength?.actualLength }})
+          </div>
+          <div *ngIf="registerForm.controls['username']?.errors?.hasNoSpecialCharacters" class="alert alert-danger">
+            Userame must <b>not</b> contain a special character: {{ '!@#$%^&*()_+-=[]{};\':"\\|,.<>/?' }}
+          </div>
+          <div *ngIf="registerForm.controls['username']?.errors?.hasSpacePrefixOrSuffix" class="alert alert-danger">
+            Userame must start or end with a space.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-6 control-label">E-Mail Address</label>
+        <div class="col-md-10">
+          <input name="email" formControlName="email" required class="form-control" type="email" />
+          <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div
+          *ngIf="registerForm.controls['email']?.touched && registerForm.controls['email']?.invalid"
+          class="alert alert-danger col-md-5 offset-md-2"
+        >
+          <div *ngIf="registerForm.controls['email']?.errors?.required">E-Mail Address is required.</div>
+          <div *ngIf="registerForm.controls['email']?.errors?.email">E-Mail Address must be a valid email format.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-6 control-label">Password</label>
+        <div class="col-md-10">
+          <input
+            name="password"
+            formControlName="password"
+            minlength="6"
+            required
+            class="form-control"
+            type="password"
+          />
+          <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div
+          *ngIf="registerForm.controls['password']?.touched && registerForm.controls['password']?.invalid"
+          class="col-md-5 offset-md-2"
+        >
+          <div *ngIf="registerForm.controls['password']?.errors?.required" class="alert alert-danger">
+            Password is required.
+          </div>
+          <div *ngIf="registerForm.controls['password']?.errors?.minlength" class="alert alert-danger">
+            Password must be at least
+            {{ registerForm.controls['password']?.errors?.minlength?.requiredLength }} characters. (Current is
+            {{ registerForm.controls['password']?.errors?.minlength?.actualLength }})
+          </div>
+          <div *ngIf="registerForm.controls['password']?.errors?.maxlength" class="alert alert-danger">
+            Password must be
+            {{ registerForm.controls['password']?.errors?.maxlength?.requiredLength }} characters or fewer. (Current is
+            {{ registerForm.controls['password']?.errors?.maxlength?.actualLength }})
+          </div>
+          <div *ngIf="registerForm.controls['password']?.errors?.hasLowerCase" class="alert alert-danger">
+            Password must contain a lower case letter.
+          </div>
+          <div *ngIf="registerForm.controls['password']?.errors?.hasUpperCase" class="alert alert-danger">
+            Password must contain an upper case letter.
+          </div>
+          <div *ngIf="registerForm.controls['password']?.errors?.hasNumber" class="alert alert-danger">
+            Password must contain a number.
+          </div>
+          <div *ngIf="registerForm.controls['password']?.errors?.hasSpecialCharacters" class="alert alert-danger">
+            Password must contain a special character : {{ '!@#$%^&*()_+-=[]{};:"\\|,.<>/?' }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-6 control-label">Confirm Password</label>
+        <div class="col-md-10">
+          <input name="password2" formControlName="password2" required class="form-control" type="password" />
+          <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div
+          *ngIf="registerForm.controls['password2'].touched && registerForm.controls['password2'].invalid"
+          class="alert alert-danger col-md-5 offset-md-2"
+        >
+          <div *ngIf="registerForm.controls['password2'].errors.required">Confirm Password is required.</div>
+
+          <div *ngIf="registerForm.controls['password2'].errors.mismatch">
+            Password and Confirm Password must match.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group pull-right form-pull-right-button">
+        <div class="col-md-offset-2 col-md-10">
+          <input
+            type="submit"
+            class="btn btn-success"
+            value="Register"
+            [disabled]="!registerForm.valid || registerInProgress"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

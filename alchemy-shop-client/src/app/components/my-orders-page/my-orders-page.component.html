@@ -1,0 +1,65 @@
+<div class="row">
+  <div class="col-md-3">
+    <div class="list-group">
+      <a class="list-group-item list-group-item-action" href="/account/profile" routerLink="/account/profile"
+        >My Profile</a
+      >
+      <a class="list-group-item list-group-item-action" href="/account/settings" routerLink="/account/settings"
+        >Account Settings</a
+      >
+      <a
+        class="list-group-item list-group-item-action active"
+        href="/account/orders/list"
+        routerLink="/account/orders/list"
+        >My Orders</a
+      >
+    </div>
+  </div>
+  <div class="col-md-9">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <h4>Your Orders</h4>
+            <hr />
+
+            <table class="table table-bordered table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>Order Id</th>
+                  <th>Order Items</th>
+                  <th class="text-right">Date Ordered</th>
+                  <th class="text-right">Subtotal</th>
+                  <th class="text-right">Address</th>
+                  <th class="text-right">Zip</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let order of myOrders">
+                  <td class="text-center">
+                    <a
+                      href="/account/orders/details/{{ order.orderId }}"
+                      routerLink="/account/orders/details/{{ order.orderId }}"
+                      >{{ order.orderId }}</a
+                    >
+                  </td>
+                  <td class="text-center">{{ order?.orderLines?.length }}</td>
+                  <td class="text-center">{{ order?.orderPlaced | date: 'short' }}</td>
+                  <td class="text-center">{{ order?.orderTotal }}</td>
+                  <td class="text-center">{{ order?.addressLine1 }}</td>
+                  <td class="text-center">{{ order?.zipCode }}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr></tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

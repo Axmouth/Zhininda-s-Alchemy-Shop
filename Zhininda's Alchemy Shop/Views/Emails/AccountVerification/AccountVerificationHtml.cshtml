@@ -1,0 +1,26 @@
+﻿@using Zhinindas_Alchemy_Shop.EmailTemplates.ViewModels
+@model AccountVerificationViewModel
+
+@{
+    Layout = "_EmailLayoutHtml";
+    ViewContext.ViewData["EmailTitle"] = "Verify your email account";
+}
+<p>Greetings @Model.UserName,</p>
+<p>
+    Thank you for registering to Dragonfly services!
+</p>
+<p>
+    We need you to verify that this email belongs to you. In order to confirm your email address click the link bellow.
+</p>
+<p>
+    If you did not register for Dragonfly, you can ignore this message.
+</p>
+
+@await Html.PartialAsync("_EmailButton", new EmailButtonViewModel("Verify your account", Model.VerificationLink))
+
+<br />
+<br />
+<br />
+<p>
+  -  Dragonfly Team
+</p>
