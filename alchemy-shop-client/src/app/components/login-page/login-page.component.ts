@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { ErrorsService } from '../../services/errors.service';
@@ -8,6 +8,7 @@ import { AccountSettings } from '../../models/api/account-settings';
 import { AccountService } from 'src/app/services/account.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'zas-login-page',
@@ -30,10 +31,17 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     private errorsService: ErrorsService,
     private router: Router,
     private title: Title,
+    private meta: Meta,
+    @Inject(DOCUMENT) private doc: Document,
   ) {}
 
   ngOnInit(): void {
-    this.title.setTitle(`Login - Zhininda's Alchemy Shop`);
+    this.title.setTitle(`Login | Zhininda's Alchemy Shop`);
+    this.meta.updateTag({ name: `title`, content: this.title.getTitle() });
+    this.meta.updateTag({ property: `og:url`, content: this.doc.location.href });
+    this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
+    this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
+    this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
   }
 
   onLoginSubmit(): void {

@@ -1,0 +1,10 @@
+FROM node:14
+
+## Install http-server
+# RUN npm install http-server -g
+COPY --from=ghcr.io/axmouth/zhinindas-alchemy-shop-user-client-builder /app/dist /app/dist
+
+WORKDIR /app
+RUN chmod +x /app/dist/alchemy-shop-client/server/main.js
+
+CMD ["node", "/app/dist/alchemy-shop-client/server/main.js"]

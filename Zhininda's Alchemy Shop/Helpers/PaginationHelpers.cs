@@ -9,7 +9,7 @@ namespace Zhinindas_Alchemy_Shop.Helpers
 {
     public class PaginationHelpers
     {
-        public static BaseResponse<List<T>> CreatePaginatedResponse<T>(IUriService uriService, PaginationFilter pagination, List<T> response)
+        public static BaseResponse<IEnumerable<T>> CreatePaginatedResponse<T>(IUriService uriService, PaginationFilter pagination, IEnumerable<T> response)
         {
              var nextPage = pagination.PageNumber >= 1
                 ? uriService.GetPagedUri(new PaginationQuery(pagination.PageNumber + 1, pagination.PageSize)).ToString()
@@ -19,19 +19,20 @@ namespace Zhinindas_Alchemy_Shop.Helpers
                 ? uriService.GetPagedUri(new PaginationQuery(pagination.PageNumber - 1, pagination.PageSize)).ToString()
                 : null;
 
-            return new BaseResponse<List<T>>
+            return new BaseResponse<IEnumerable<T>>
             {
                 Data = response,
                 Pagination = new Pagination
                 {
-                PageNumber = pagination.PageNumber >= 1 ? pagination.PageNumber : (int?)null,
-                PageSize = pagination.PageSize >= 1 ? pagination.PageSize : (int?)null,
-                NextPage = response.Any() ? nextPage : null,
-                PreviousPage = previousPage
-                }
+                    PageNumber = pagination.PageNumber >= 1 ? pagination.PageNumber : (int?)null,
+                    PageSize = pagination.PageSize >= 1 ? pagination.PageSize : (int?)null,
+                    NextPage = response.Any() ? nextPage : null,
+                    PreviousPage = previousPage,
+                },
+                Success = true,
             };
         }
-        public static BaseResponse<List<T>> CreatePaginatedResponse<T>(IUriService uriService, PaginationFilter pagination, List<T> response, int count)
+        public static BaseResponse<IEnumerable<T>> CreatePaginatedResponse<T>(IUriService uriService, PaginationFilter pagination, IEnumerable<T> response, int count)
         {
             var nextPage = pagination.PageNumber >= 1
                ? uriService.GetPagedUri(new PaginationQuery(pagination.PageNumber + 1, pagination.PageSize)).ToString()
@@ -41,7 +42,7 @@ namespace Zhinindas_Alchemy_Shop.Helpers
                 ? uriService.GetPagedUri(new PaginationQuery(pagination.PageNumber - 1, pagination.PageSize)).ToString()
                 : null;
 
-            return new BaseResponse<List<T>>
+            return new BaseResponse<IEnumerable<T>>
             {
                 Data = response,
                 Pagination = new Pagination
@@ -49,8 +50,10 @@ namespace Zhinindas_Alchemy_Shop.Helpers
                     PageNumber = pagination.PageNumber >= 1 ? pagination.PageNumber : (int?)null,
                     PageSize = pagination.PageSize >= 1 ? pagination.PageSize : (int?)null,
                     NextPage = response.Any() ? nextPage : null,
-                    PreviousPage = previousPage
-                }
+                    PreviousPage = previousPage,
+                    TotalResults = count,
+                },
+                Success = true,
             };
         }
     }

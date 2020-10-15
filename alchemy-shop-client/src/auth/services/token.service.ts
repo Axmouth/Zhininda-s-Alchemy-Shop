@@ -5,6 +5,8 @@ import { TokenPack } from '../internal/token-pack';
 import { AuthToken } from '../internal/auth-token';
 import { isPlatformBrowser } from '@angular/common';
 import { AuthCreateJWTToken } from '../internal/auth-jwt-token';
+import { AX_AUTH_OPTIONS } from '..';
+import { AuthModuleOptionsConfig } from '../auth-module-options-config';
 
 @Injectable({
   providedIn: 'root',
@@ -13,10 +15,11 @@ export class TokenService implements OnDestroy {
   ngUnsubscribe = new Subject<void>();
   protected token$: BehaviorSubject<AuthToken> = new BehaviorSubject(null);
 
-  protected key = 'auth_app_token';
+  protected key: string;
 
-  constructor(@Inject(PLATFORM_ID) private platform: object) {
+  constructor(@Inject(PLATFORM_ID) private platform: object, @Inject(AX_AUTH_OPTIONS) config: AuthModuleOptionsConfig) {
     if (isPlatformBrowser(platform)) {
+      this.key = config.jwtTokenKey ?? 'auth_app_token';
       this.publishStoredToken();
     }
   }
@@ -105,7 +108,7 @@ export class TokenService implements OnDestroy {
       tokenCreatedAt = new Date(Number(tokenPack.createdAt));
     }
 
-    return AuthCreateJWTToken(tokenValue, tokenOwnerStrategyName, tokenCreatedAt);
+    return AuthCreateJWTToken(tokenValue, tokenCreatedAt);
   }
 
   protected parseTokenPack(value: string): TokenPack {

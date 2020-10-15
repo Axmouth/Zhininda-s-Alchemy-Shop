@@ -1,11 +1,34 @@
 <h2 *ngIf="showCategoryHeader">Category: {{ categoryName }}</h2>
+<h2 *ngIf="showEffectHeader">Effect: {{ effectName }}</h2>
 <h2 *ngIf="showSearchHeader">Search: {{ search }}</h2>
 <h2 *ngIf="showAllHeader">All Merchandise!</h2>
-<h5>{{ merchandises?.length }} entries</h5>
+<h5>{{ totalResults }} entries</h5>
 
+<ngb-pagination
+  [collectionSize]="totalResults"
+  [(page)]="pageNumber"
+  [boundaryLinks]="true"
+  [maxSize]="10"
+  [pageSize]="pageSize"
+  (pageChange)="onPageChange()"
+></ngb-pagination>
+<br />
+<hr />
+<br />
 <div class="row">
   <zas-merchandise-summary
     [merchandise]="merchandise"
     *ngFor="let merchandise of merchandises"
   ></zas-merchandise-summary>
 </div>
+<br />
+<hr />
+<br />
+<ngb-pagination
+  [collectionSize]="totalResults"
+  [(page)]="pageNumber"
+  [boundaryLinks]="true"
+  [maxSize]="10"
+  [pageSize]="pageSize"
+  (pageChange)="onPageChange()"
+></ngb-pagination>

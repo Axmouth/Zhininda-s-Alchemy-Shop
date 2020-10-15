@@ -12,6 +12,9 @@ using Zhinindas_Alchemy_Shop.Contracts.V1.Responses;
 using Zhinindas_Alchemy_Shop.Contracts.V1;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Zhinindas_Alchemy_Shop.Contracts.V1.Requests;
+using Zhinindas_Alchemy_Shop.Contracts.V1.Requests.Queries;
+using Zhinindas_Alchemy_Shop.Helpers;
+using Zhinindas_Alchemy_Shop.Services.Interfaces;
 
 namespace Zhinindas_Alchemy_Shop.Controllers.V1
 {
@@ -21,12 +24,14 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
         private readonly IOrderRepository _orderRepository;
         private readonly ShoppingCart _shoppingCart;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IUriService _uriService;
 
-        public OrderController(IOrderRepository orderRepository, ShoppingCart shoppingCart, UserManager<AppUser> userManager)
+        public OrderController(IOrderRepository orderRepository, ShoppingCart shoppingCart, UserManager<AppUser> userManager, IUriService uriService)
         {
             _orderRepository = orderRepository;
             _shoppingCart = shoppingCart;
             _userManager = userManager;
+            _uriService = uriService;
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -94,16 +99,29 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet(ApiRoutes.Orders.GetAll)]
-        public async Task<IActionResult> GetAllOrders()
+        public async Task<IActionResult> GetAllOrders([FromQuery] PaginationQuery paginationQuery)
         {
             var username = _userManager.GetUserId(HttpContext.User);
             var userId = (await _userManager.FindByNameAsync(username)).Id;
             var orders = await _orderRepository.GetUserOrders(userId);
-            return Ok(new BaseResponse<IEnumerable<Order>>
+            var count = orders.Count(); ;
+            if (paginationQuery != null)
             {
-                Data = orders,
-                Success = true
-            });
+                orders = orders.Skip(paginationQuery.PageSize * (paginationQuery.PageNumber - 1)).Take(paginationQuery.PageSize);
+            }
+
+
+            if (paginationQuery == null || paginationQuery.PageNumber < 1 || paginationQuery.PageSize < 1)
+            {
+                paginationQuery = new PaginationQuery
+                {
+                    PageNumber = 0,
+                    PageSize = 0,
+                };
+            }
+
+            var paginationResponse = PaginationHelpers.CreatePaginatedResponse(_uriService, new PaginationFilter(paginationQuery), orders, count);
+            return Ok(paginationResponse);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

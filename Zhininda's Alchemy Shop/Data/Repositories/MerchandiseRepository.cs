@@ -18,11 +18,11 @@ namespace Zhinindas_Alchemy_Shop.Data.Repositories
             _appDbContext = dbContext;
         }
 
-        public IEnumerable<Merchandise> Merchandises => _appDbContext.Merchandises.Include(c => c.Category);
+        public IEnumerable<Merchandise> Merchandises => _appDbContext.Merchandises.Include(c => c.Category).Include(m => m.PrimaryEffect).Include(m => m.SecondaryEffect).Include(m => m.TertiaryEffect).Include(m => m.QuaternaryEffect);
 
 
-        public IEnumerable<Merchandise> PreferredMerchandises => _appDbContext.Merchandises.Where(p => p.IsPreferred).Include(c => c.Category);
+        public IEnumerable<Merchandise> PreferredMerchandises => _appDbContext.Merchandises.Where(p => p.IsPreferred).Include(c => c.Category).Include(m => m.PrimaryEffect).Include(m => m.SecondaryEffect).Include(m => m.TertiaryEffect).Include(m => m.QuaternaryEffect);
 
-        public Merchandise GetMerchandiseById(int merchandiseId) => _appDbContext.Merchandises.FirstOrDefault(p => p.MerchandiseId == merchandiseId);
+        public Merchandise GetMerchandiseById(int merchandiseId) => _appDbContext.Merchandises.Include(c => c.Category).Include(m => m.PrimaryEffect).Include(m => m.SecondaryEffect).Include(m => m.TertiaryEffect).Include(m => m.QuaternaryEffect).FirstOrDefault(p => p.MerchandiseId == merchandiseId);
     }
 }

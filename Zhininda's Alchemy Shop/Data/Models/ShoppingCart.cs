@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace Zhinindas_Alchemy_Shop.Data.Models
             _appDbContext = appDbContext;
         }
 
+        [Key]
         public string ShoppingCartId { get; set; }
         
         public List<ShoppingCartItem> ShoppingCartItems { get; set; }
@@ -141,7 +143,7 @@ namespace Zhinindas_Alchemy_Shop.Data.Models
 
         public decimal GetShoppingCartTotal()
         {
-            var total = _appDbContext.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId).Select(c => c.Merchandise.Price * c.Amount).Sum();
+            var total = _appDbContext.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId).Select(c => c.Merchandise.Value * c.Amount).Sum();
 
             return total;
         }

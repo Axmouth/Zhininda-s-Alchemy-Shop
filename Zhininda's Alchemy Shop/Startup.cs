@@ -33,6 +33,7 @@ using Zhinindas_Alchemy_Shop.Services.Interfaces;
 using Zhinindas_Alchemy_Shop.Services.Implementations;
 using Zhinindas_Alchemy_Shop.Helpers;
 using Zhinindas_Alchemy_Shop.Services;
+using Zhinindas_Alchemy_Shop.Data.Interfaces;
 
 namespace Zhinindas_Alchemy_Shop
 {
@@ -184,6 +185,7 @@ namespace Zhinindas_Alchemy_Shop
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddTransient<IEffectRepository, EffectRepository>();
             services.AddTransient<IAccountService, AccountService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

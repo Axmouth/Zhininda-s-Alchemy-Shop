@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Merchandise } from '../../models/api/merchandise';
 import { MerchandiseService } from '../../services/merchandise.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
-import { Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'zas-merchandise-details-page',
@@ -23,6 +24,8 @@ export class MerchandiseDetailsPageComponent implements OnInit, OnDestroy {
     private merchandiseService: MerchandiseService,
     private shoppingCartService: ShoppingCartService,
     private title: Title,
+    private meta: Meta,
+    @Inject(DOCUMENT) private doc: Document,
   ) {}
 
   ngOnInit(): void {
@@ -40,7 +43,22 @@ export class MerchandiseDetailsPageComponent implements OnInit, OnDestroy {
       .subscribe(
         (result) => {
           this.merchandise = result.data;
-          this.title.setTitle(`${this.merchandise.name} - Zhininda's Alchemy Shop`);
+          this.title.setTitle(`${this.merchandise.name} | Zhininda's Alchemy Shop`);
+          this.meta.updateTag({ name: `title`, content: this.title.getTitle() });
+          this.meta.updateTag({ name: `description`, content: this?.merchandise?.shortDescription });
+          this.meta.updateTag({
+            name: `keywords`,
+            content: `axmouth,developer,webdev,programmer,portfolio,${this.merchandise.name}`,
+          });
+          this.meta.updateTag({ property: `og:url`, content: this.doc.location.href });
+          this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
+          this.meta.updateTag({ property: `og:description`, content: this?.merchandise?.shortDescription });
+          this.meta.updateTag({ property: `og:image`, content: this?.merchandise?.imageThumbnailUrl });
+          this.meta.updateTag({ property: `twitter:card`, content: this?.merchandise?.imageThumbnailUrl });
+          this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
+          this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
+          this.meta.updateTag({ property: `twitter:description`, content: this?.merchandise?.shortDescription });
+          this.meta.updateTag({ property: `twitter:image`, content: this?.merchandise?.imageThumbnailUrl });
         },
         (err) => {
           console.log(err);

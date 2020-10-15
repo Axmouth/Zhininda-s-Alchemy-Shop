@@ -14,30 +14,37 @@ export class MerchandiseService implements OnDestroy {
   ngUnsubscribe = new Subject<void>();
   merchandiseUrl = `${apiRoot}merchandises`;
   categoryUrl = `${apiRoot}categories`;
+  effectUrl = `${apiRoot}effects`;
 
   constructor(private apiService: RestApiService) {}
 
   getPreferredMerchandise(query: any = {}): Observable<BaseResponse<Merchandise[]>> {
     return this.apiService
-      .getAll<BaseResponse<Merchandise[]>>(`${this.merchandiseUrl}`, query)
+      .getAll<BaseResponse<Merchandise[]>>(`${this.merchandiseUrl}`, query, true)
       .pipe(takeUntil(this.ngUnsubscribe));
   }
 
   getAllMerchandise(query: any = {}): Observable<BaseResponse<Merchandise[]>> {
     return this.apiService
-      .getAll<BaseResponse<Merchandise[]>>(`${this.merchandiseUrl}`, query)
+      .getAll<BaseResponse<Merchandise[]>>(`${this.merchandiseUrl}`, query, true)
       .pipe(takeUntil(this.ngUnsubscribe));
   }
 
   getMerchandise(id: string, query: any = {}): Observable<BaseResponse<Merchandise>> {
     return this.apiService
-      .get<BaseResponse<Merchandise>>(`${this.merchandiseUrl}`, id, query)
+      .get<BaseResponse<Merchandise>>(`${this.merchandiseUrl}`, id, query, true)
       .pipe(takeUntil(this.ngUnsubscribe));
   }
 
   getAllMerchandiseCategories(query: any = {}): Observable<BaseResponse<Category[]>> {
     return this.apiService
       .getAll<BaseResponse<Category[]>>(`${this.categoryUrl}`, query, true)
+      .pipe(takeUntil(this.ngUnsubscribe));
+  }
+
+  getAllMerchandiseEffects(query: any = {}): Observable<BaseResponse<Category[]>> {
+    return this.apiService
+      .getAll<BaseResponse<Category[]>>(`${this.effectUrl}`, query, true)
       .pipe(takeUntil(this.ngUnsubscribe));
   }
 

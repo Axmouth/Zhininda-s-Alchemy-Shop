@@ -29,6 +29,9 @@ import { AuthModule } from 'src/auth/auth.module';
 import { apiRoot, jwtWhitelist } from 'src/environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MyOrderDetailsPageComponent } from './components/my-order-details-page/my-order-details-page.component';
+import { PasswordResetPageComponent } from './components/password-reset-page/password-reset-page.component';
+import { RequestPasswordResetPageComponent } from './components/request-password-reset-page/request-password-reset-page.component';
+import { VerifyEmailPageComponent } from './components/verify-email-page/verify-email-page.component';
 
 @NgModule({
   declarations: [
@@ -54,9 +57,12 @@ import { MyOrderDetailsPageComponent } from './components/my-order-details-page/
     MerchandiseDetailsPageComponent,
     ShoppingCartPageComponent,
     MyOrderDetailsPageComponent,
+    PasswordResetPageComponent,
+    RequestPasswordResetPageComponent,
+    VerifyEmailPageComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
@@ -67,7 +73,7 @@ import { MyOrderDetailsPageComponent } from './components/my-order-details-page/
         authEndpointPrefix: `${apiRoot}account/`,
         whitelistedDomains: jwtWhitelist,
         blacklistedRoutes: [],
-        // authScheme: ""
+        skipWhenExpired: false,
       },
     }),
   ],

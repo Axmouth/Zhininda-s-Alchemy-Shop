@@ -18,6 +18,12 @@ export class LoginPartialComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.accountService
+      .isAuthenticatedOrRefresh()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((isAuth) => {
+        this.loggedIn = isAuth;
+      });
+    this.accountService
       .onAuthenticationChange()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((result) => {

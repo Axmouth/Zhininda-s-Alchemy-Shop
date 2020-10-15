@@ -7,13 +7,13 @@ namespace Zhinindas_Alchemy_Shop.Contracts.V1.Requests.Queries
         public PaginationQuery()
         {
             PageNumber = 1;
-            PageSize = 50;
+            PageSize = 1000;
         }
 
         public PaginationQuery(int pageNumber, int pageSize)
         {
             PageNumber = pageNumber;
-            PageSize = pageSize % 50;
+            PageSize = pageSize;
         }
 
         public int PageNumber { get; set; }

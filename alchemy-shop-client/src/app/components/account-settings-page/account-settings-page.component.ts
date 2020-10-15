@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AccountService } from 'src/app/services/account.service';
@@ -6,7 +6,8 @@ import { AccountSettings } from 'src/app/models/api/account-settings';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ErrorsService } from 'src/app/services/errors.service';
 import { MessagesService } from 'src/app/services/messages.service';
-import { Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'zas-account-settings-page',
@@ -38,10 +39,17 @@ export class AccountSettingsPageComponent implements OnInit, OnDestroy {
     private errorsService: ErrorsService,
     private messagesService: MessagesService,
     private title: Title,
+    private meta: Meta,
+    @Inject(DOCUMENT) private doc: Document,
   ) {}
 
   ngOnInit(): void {
-    this.title.setTitle(`Account Settings - Zhininda's Alchemy Shop`);
+    this.title.setTitle(`Account Settings | Zhininda's Alchemy Shop`);
+    this.meta.updateTag({ name: `title`, content: this.title.getTitle() });
+    this.meta.updateTag({ property: `og:url`, content: this.doc.location.href });
+    this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
+    this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
+    this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
     this.initialise();
   }
 

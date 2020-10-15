@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Zhinindas_Alchemy_Shop.Migrations
 {
-    public partial class initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -61,12 +61,27 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                 {
                     CategoryId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CategoryName = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    CategoryName = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Effects",
+                columns: table => new
+                {
+                    EffectId = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    Positive = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Effects", x => x.EffectId);
                 });
 
             migrationBuilder.CreateTable(
@@ -181,7 +196,7 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                 {
                     OrderId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: false),
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
                     LastName = table.Column<string>(maxLength: 50, nullable: false),
                     AddressLine1 = table.Column<string>(maxLength: 100, nullable: false),
@@ -203,7 +218,30 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Token = table.Column<string>(nullable: false),
+                    JwtId = table.Column<string>(nullable: false),
+                    CreationDate = table.Column<DateTime>(nullable: false),
+                    ExpiryDate = table.Column<DateTime>(nullable: false),
+                    Used = table.Column<bool>(nullable: false),
+                    Invalidated = table.Column<bool>(nullable: false),
+                    UserId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Token);
+                    table.ForeignKey(
+                        name: "FK_RefreshTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -212,15 +250,20 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                 {
                     MerchandiseId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(nullable: true),
-                    ShortDescription = table.Column<string>(nullable: true),
-                    LongDescription = table.Column<string>(nullable: true),
-                    Price = table.Column<decimal>(nullable: false),
-                    ImageUrl = table.Column<string>(nullable: true),
-                    ImageThumbnailUrl = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    ShortDescription = table.Column<string>(nullable: false),
+                    LongDescription = table.Column<string>(nullable: false),
+                    Value = table.Column<int>(nullable: false),
+                    Weight = table.Column<decimal>(nullable: false),
+                    ImageUrl = table.Column<string>(nullable: false),
+                    ImageThumbnailUrl = table.Column<string>(nullable: false),
                     IsPreferred = table.Column<bool>(nullable: false),
-                    InStock = table.Column<bool>(nullable: false),
-                    CategoryId = table.Column<int>(nullable: false)
+                    AmountInStock = table.Column<int>(nullable: false),
+                    CategoryId = table.Column<int>(nullable: false),
+                    PrimaryEffectId = table.Column<int>(nullable: false),
+                    SecondaryEffectId = table.Column<int>(nullable: true),
+                    TertiaryEffectId = table.Column<int>(nullable: true),
+                    QuaternaryEffectId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -231,6 +274,30 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                         principalTable: "Categories",
                         principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Merchandises_Effects_PrimaryEffectId",
+                        column: x => x.PrimaryEffectId,
+                        principalTable: "Effects",
+                        principalColumn: "EffectId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Merchandises_Effects_QuaternaryEffectId",
+                        column: x => x.QuaternaryEffectId,
+                        principalTable: "Effects",
+                        principalColumn: "EffectId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Merchandises_Effects_SecondaryEffectId",
+                        column: x => x.SecondaryEffectId,
+                        principalTable: "Effects",
+                        principalColumn: "EffectId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Merchandises_Effects_TertiaryEffectId",
+                        column: x => x.TertiaryEffectId,
+                        principalTable: "Effects",
+                        principalColumn: "EffectId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -242,7 +309,7 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                     OrderId = table.Column<int>(nullable: false),
                     MerchandiseId = table.Column<int>(nullable: false),
                     Amount = table.Column<int>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false)
+                    Value = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -267,9 +334,9 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                 {
                     ShoppingCartItemId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    MerchandiseId = table.Column<int>(nullable: true),
+                    MerchandiseId = table.Column<int>(nullable: false),
                     Amount = table.Column<int>(nullable: false),
-                    ShoppingCartId = table.Column<string>(nullable: true)
+                    ShoppingCartId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -279,7 +346,7 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                         column: x => x.MerchandiseId,
                         principalTable: "Merchandises",
                         principalColumn: "MerchandiseId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -325,6 +392,26 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Merchandises_PrimaryEffectId",
+                table: "Merchandises",
+                column: "PrimaryEffectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Merchandises_QuaternaryEffectId",
+                table: "Merchandises",
+                column: "QuaternaryEffectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Merchandises_SecondaryEffectId",
+                table: "Merchandises",
+                column: "SecondaryEffectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Merchandises_TertiaryEffectId",
+                table: "Merchandises",
+                column: "TertiaryEffectId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_MerchandiseId",
                 table: "OrderDetails",
                 column: "MerchandiseId");
@@ -337,6 +424,11 @@ namespace Zhinindas_Alchemy_Shop.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
                 table: "Orders",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_UserId",
+                table: "RefreshTokens",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -366,6 +458,9 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                 name: "OrderDetails");
 
             migrationBuilder.DropTable(
+                name: "RefreshTokens");
+
+            migrationBuilder.DropTable(
                 name: "ShoppingCartItems");
 
             migrationBuilder.DropTable(
@@ -382,6 +477,9 @@ namespace Zhinindas_Alchemy_Shop.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Effects");
         }
     }
 }

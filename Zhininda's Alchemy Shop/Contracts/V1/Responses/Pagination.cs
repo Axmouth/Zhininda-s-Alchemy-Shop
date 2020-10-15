@@ -11,5 +11,6 @@ namespace Zhinindas_Alchemy_Shop.Contracts.V1.Responses
         public int? PageSize { get; set; }
         public string NextPage { get; set; }
         public string PreviousPage { get; set; }
+        public int? TotalResults { get; set; }
     }
 }

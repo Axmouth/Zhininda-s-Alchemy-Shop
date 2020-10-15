@@ -19,16 +19,12 @@ namespace Zhinindas_Alchemy_Shop.Data
         }
 
         public DbSet<Merchandise> Merchandises {get; set; }
-
         public DbSet<Category> Categories { get; set; }
-
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
-
         public DbSet<Order> Orders { get; set; }
-
         public DbSet<OrderDetail> OrderDetails { get; set; }
-
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Effect> Effects { get; set; }
 
     }
 }

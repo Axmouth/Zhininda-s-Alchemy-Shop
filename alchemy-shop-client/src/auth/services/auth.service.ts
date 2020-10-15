@@ -1,6 +1,6 @@
 import { Injectable, Inject, OnDestroy } from '@angular/core';
 import { TokenService } from './token.service';
-import { map, switchMap, catchError, retry, take, takeUntil } from 'rxjs/operators';
+import { map, switchMap, catchError, retry, take, takeUntil, concatMap } from 'rxjs/operators';
 import { Observable, of, observable, Subject } from 'rxjs';
 import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
@@ -23,8 +23,8 @@ import { ProfileResponse } from '../../app/models/api/profile-response';
 export class AuthService implements OnDestroy {
   ngUnsubscribe = new Subject<void>();
   authenticating = false;
-  authenticatingNotifier = new Subject<AuthResult>();
-
+  authenticatingNotifier = new Subject<boolean>();
+  config: AuthModuleOptionsConfig;
   authEndpointPrefix: string;
 
   constructor(
@@ -35,6 +35,7 @@ export class AuthService implements OnDestroy {
     @Inject(AX_AUTH_OPTIONS) config: AuthModuleOptionsConfig,
   ) {
     this.authEndpointPrefix = config.authEndpointPrefix;
+    this.config = config;
   }
 
   /**
@@ -89,8 +90,14 @@ export class AuthService implements OnDestroy {
    *
    */
   getProfile(): Observable<BaseResponse<ProfileResponse>> {
-    const url = `${this.authEndpointPrefix}profile`;
-    const result = baseApiRequest<BaseResponse<ProfileResponse>>(this.http, url, {}, 'get', undefined)
+    const url = `${this.authEndpointPrefix}${this.config.profileEndpoint ?? 'profile'}`;
+    const result = baseApiRequest<BaseResponse<ProfileResponse>>(
+      this.http,
+      url,
+      {},
+      this.config.profileMethod ?? 'get',
+      undefined,
+    )
       .pipe(
         map((res) => {
           return res;
@@ -111,9 +118,15 @@ export class AuthService implements OnDestroy {
    *
    */
   authenticate(data?: any): Observable<AuthResult> {
-    const url = `${this.authEndpointPrefix}login`;
+    const url = `${this.authEndpointPrefix}${this.config.loginEndpoint ?? 'login'}`;
 
-    const result = baseApiRequest<BaseResponse<AuthSuccess>>(this.http, url, {}, 'post', data).pipe(
+    const result = baseApiRequest<BaseResponse<AuthSuccess>>(
+      this.http,
+      url,
+      {},
+      this.config.loginMethod ?? 'post',
+      data,
+    ).pipe(
       map((res) => {
         return new AuthResult(
           true,
@@ -146,13 +159,13 @@ export class AuthService implements OnDestroy {
    *
    */
   logout(): Observable<AuthResult> {
-    const url = `${this.authEndpointPrefix}logout`;
+    const url = `${this.authEndpointPrefix}${this.config.logoutEndpoint ?? 'logout'}`;
     const result = of({}).pipe(
       switchMap((res: any) => {
         if (!url) {
           return of(res);
         }
-        return baseApiRequest<BaseResponse<null>>(this.http, url, {}, 'delete', undefined);
+        return baseApiRequest<BaseResponse<null>>(this.http, url, {}, this.config.logoutMethod ?? 'delete', undefined);
       }),
       map((res) => {
         return new AuthResult(
@@ -190,8 +203,14 @@ export class AuthService implements OnDestroy {
    *
    */
   register(data?: any): Observable<AuthResult> {
-    const url = `${this.authEndpointPrefix}register`;
-    const result = baseApiRequest<BaseResponse<AuthSuccess>>(this.http, url, {}, 'post', data).pipe(
+    const url = `${this.authEndpointPrefix}${this.config.registerEndpoint ?? 'register'}`;
+    const result = baseApiRequest<BaseResponse<AuthSuccess>>(
+      this.http,
+      url,
+      {},
+      this.config.registerMethod ?? 'post',
+      data,
+    ).pipe(
       map((res) => {
         return new AuthResult(
           true,
@@ -237,42 +256,56 @@ export class AuthService implements OnDestroy {
     }
     if (this.authenticating) {
       // check if auth request is in progress and do nothing then
+      console.log('waiting while authenticating');
+      // return of(false);
       return this.authenticatingNotifier
         .pipe(take(1))
-        .pipe(map((authResult) => authResult.isSuccess()))
-        .pipe(takeUntil(this.ngUnsubscribe));
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .pipe(
+          map((t) => {
+            console.log('waiting over ' + this.authenticating);
+            return t;
+          }),
+        );
     }
-    return this.getToken().pipe(
-      switchMap((token) => {
-        if (token.getValue() && !token.isValid()) {
-          return this.refreshToken(token, callback$).pipe(
-            switchMap((res) => {
-              if (res === null) {
-                // For the case where there is an auth request in progress. Keep the status quo
-                return of(true);
-              }
-              if (res.isSuccess()) {
-                return this.isAuthenticated().pipe(takeUntil(this.ngUnsubscribe));
-              } else {
-                console.log(res.getResponse());
-                if (res.getResponse().status !== 400 && res.getResponse().status !== '400') {
-                  return this.isAuthenticated().pipe(takeUntil(this.ngUnsubscribe));
+    return this.getToken()
+      .pipe(
+        switchMap((token) => {
+          if (token.getValue() && !token.isValid()) {
+            return this.refreshToken(token, callback$).pipe(
+              switchMap((res) => {
+                if (res === null) {
+                  // For the case where there is an auth request in progress. Keep the status quo
+                  return of(true);
                 }
-                /*
+                if (res.isSuccess()) {
+                  return this.isAuthenticated();
+                } else {
+                  if (res.getResponse().status !== 400 && res.getResponse().status !== '400') {
+                    return this.isAuthenticated();
+                  }
+                  /*
                 return this.logout().pipe(
                   map((result) => {
                     return !result.isSuccess();
                   }),
                 );*/
-                return of(false).pipe(takeUntil(this.ngUnsubscribe));
-              }
-            }),
-          );
-        } else {
-          return of(token.isValid()).pipe(takeUntil(this.ngUnsubscribe));
-        }
-      }),
-    );
+                  return of(false);
+                }
+              }),
+            );
+          } else {
+            return of(token.isValid());
+          }
+        }),
+      )
+      .pipe(
+        map((t) => {
+          this.authenticating = false;
+          this.authenticatingNotifier.next(t);
+          return t;
+        }),
+      );
   }
 
   /**
@@ -296,26 +329,17 @@ export class AuthService implements OnDestroy {
    *
    */
   refreshToken(data?: any, callback$?: Observable<any>): Observable<AuthResult> {
-    if (this.authenticating) {
-      // check if auth request is in progress and do nothing then
-      return this.authenticatingNotifier
-        .pipe(take(1))
-        .pipe(
-          switchMap((value, index) => {
-            return this.refreshToken(data, callback$);
-          }),
-        )
-        .pipe(takeUntil(this.ngUnsubscribe));
-    }
-    // set the flag that there is an auth request in progress
-    this.authenticating = true;
-
-    const url = `${this.authEndpointPrefix}refresh`;
-    const refresh$ = baseApiRequest<BaseResponse<AuthSuccess>>(this.http, url, {}, 'post', data)
+    const url = `${this.authEndpointPrefix}${this.config.refreshEndpoint ?? 'refresh'}`;
+    const refresh$ = baseApiRequest<BaseResponse<AuthSuccess>>(
+      this.http,
+      url,
+      {},
+      this.config.refreshMethod ?? 'post',
+      data,
+    )
       .pipe(
         map((res) => {
-          const token = AuthCreateJWTToken(res.data?.token, 'refreshToken');
-          this.authenticating = false;
+          const token = AuthCreateJWTToken(res.data?.token);
           const authResult = new AuthResult(
             true,
             res,
@@ -324,33 +348,28 @@ export class AuthService implements OnDestroy {
             ['Your token has been successfully refreshed.'],
             token,
           );
-          this.authenticatingNotifier.next(authResult);
           return authResult;
         }),
         catchError((res) => {
-          this.authenticating = false;
-          this.handleResponseError(res)
-            .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe((authResult) => {
-              this.authenticatingNotifier.next(authResult);
-            });
+          // this.handleResponseError(res)
+          //  .pipe(takeUntil(this.ngUnsubscribe))
+          //  .subscribe((authResult) => {
+          //    // this.authenticatingNotifier.next(authResult);
+          //  });
           return this.handleResponseError(res);
         }),
       )
       .pipe(
         switchMap((result: AuthResult) => {
-          this.authenticating = false;
-          this.authenticatingNotifier.next(result);
           return this.processResultToken(result);
         }),
       );
     if (callback$ === undefined) {
-      console.log('refreshToken$ - null');
       callback$ = of(null);
     }
     return callback$
       .pipe(
-        switchMap((obj) => {
+        switchMap((_) => {
           return refresh$;
         }),
       )
@@ -384,8 +403,8 @@ export class AuthService implements OnDestroy {
    *
    */
   requestPasswordReset(data?: any): Observable<AuthResult> {
-    const url = `${this.authEndpointPrefix}password-reset-email`;
-    return baseApiRequest(this.http, url, {}, 'post', data)
+    const url = `${this.authEndpointPrefix}${this.config.requestPasswordResetEndpoint ?? 'request-password-reset'}`;
+    return baseApiRequest(this.http, url, {}, this.config.requestPasswordResetMethod ?? 'post', data)
       .pipe(
         map((res) => {
           return new AuthResult(
@@ -411,13 +430,13 @@ export class AuthService implements OnDestroy {
    *
    */
   passwordReset(data?: any): Observable<AuthResult> {
-    const url = `${this.authEndpointPrefix}password-reset`;
-    const tokenQueryKey = 'reset_password_token';
-    const userNameQueryKey = 'user_name';
-    const emailQueryKey = 'email';
-    const tokenKey = 'token';
-    const userNameKey = 'userName';
-    const emailKey = 'email';
+    const url = `${this.authEndpointPrefix}${this.config.passwordResetEndpoint ?? 'password-reset'}`;
+    const tokenQueryKey = this.config?.passwordResetConfig?.tokenQueryKey ?? 'reset_password_token';
+    const userNameQueryKey = this.config?.passwordResetConfig?.userNameQueryKey ?? 'user_name';
+    const emailQueryKey = this.config?.passwordResetConfig?.emailQueryKey ?? 'email';
+    const tokenKey = this.config?.passwordResetConfig?.tokenKey ?? 'token';
+    const userNameKey = this.config?.passwordResetConfig?.userNameKey ?? 'userName';
+    const emailKey = this.config?.passwordResetConfig?.emailKey ?? 'email';
     data[tokenKey] = this.route.snapshot.queryParams[tokenQueryKey];
     if (this.route.snapshot.queryParams[userNameQueryKey]) {
       data[userNameKey] = this.route.snapshot.queryParams[userNameQueryKey];
@@ -425,7 +444,7 @@ export class AuthService implements OnDestroy {
     if (this.route.snapshot.queryParams[emailQueryKey]) {
       data[emailKey] = this.route.snapshot.queryParams[emailQueryKey];
     }
-    return baseApiRequest(this.http, url, {}, 'post', data)
+    return baseApiRequest(this.http, url, {}, this.config.passwordResetMethod ?? 'post', data)
       .pipe(
         map((res) => {
           return new AuthResult(
@@ -452,13 +471,13 @@ export class AuthService implements OnDestroy {
    */
   verifyEmail(): Observable<AuthResult> {
     const data = {};
-    const url = `${this.authEndpointPrefix}email-confirm`;
-    const tokenQueryKey = 'email_confirm_token';
-    const userNameQueryKey = 'user_name';
-    const emailQueryKey = 'email';
-    const tokenKey = 'token';
-    const userNameKey = 'userName';
-    const emailKey = 'email';
+    const url = `${this.authEndpointPrefix}${this.config.verifyEmailEndpoint ?? 'verify-email'}`;
+    const tokenQueryKey = this.config?.verifyEmailConfig?.tokenQueryKey ?? 'email_confirm_token';
+    const userNameQueryKey = this.config?.verifyEmailConfig?.userNameQueryKey ?? 'user_name';
+    const emailQueryKey = this.config?.verifyEmailConfig?.emailQueryKey ?? 'email';
+    const tokenKey = this.config?.verifyEmailConfig?.tokenKey ?? 'token';
+    const userNameKey = this.config?.verifyEmailConfig?.userNameKey ?? 'userName';
+    const emailKey = this.config?.verifyEmailConfig?.emailKey ?? 'email';
     data[tokenKey] = this.route.snapshot.queryParams[tokenQueryKey];
     if (this.route.snapshot.queryParams[userNameQueryKey]) {
       data[userNameKey] = this.route.snapshot.queryParams[userNameQueryKey];
@@ -466,7 +485,7 @@ export class AuthService implements OnDestroy {
     if (this.route.snapshot.queryParams[emailQueryKey]) {
       data[emailKey] = this.route.snapshot.queryParams[emailQueryKey];
     }
-    return baseApiRequest(this.http, url, {}, 'post', data)
+    return baseApiRequest(this.http, url, {}, this.config.verifyEmailMethod ?? 'post', data)
       .pipe(
         map((res) => {
           return new AuthResult(
@@ -492,8 +511,10 @@ export class AuthService implements OnDestroy {
    *
    */
   requestVerificationEmail(data?: any): Observable<AuthResult> {
-    const url = `${this.authEndpointPrefix}email-confirm-email`;
-    return baseApiRequest(this.http, url, {}, 'post', data)
+    const url = `${this.authEndpointPrefix}${
+      this.config.requestVerificationEmailEndpoint ?? 'request-verification-email'
+    }`;
+    return baseApiRequest(this.http, url, {}, this.config.requestVerificationEmailMethod ?? 'post', data)
       .pipe(
         map((res) => {
           return new AuthResult(
@@ -527,7 +548,7 @@ export class AuthService implements OnDestroy {
   }
 
   createToken(value: any, failWhenInvalidToken?: boolean): AuthJWTToken {
-    const token = AuthCreateJWTToken(value, 'refreshToken');
+    const token = AuthCreateJWTToken(value);
     // At this point, AuthCreateToken failed with AuthIllegalTokenError which MUST be intercepted
     // Or token is created. It MAY be created even if backend did not return any token, in this case it is !Valid
     if (failWhenInvalidToken && !token.isValid()) {

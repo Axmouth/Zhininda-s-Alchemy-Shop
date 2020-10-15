@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ShoppingCart } from 'src/app/models/api/shopping-cart';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
 import { MerchandiseService } from '../../services/merchandise.service';
 import { Category } from '../../models/api/category';
-import { Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'zas-shopping-cart-page',
@@ -22,10 +23,17 @@ export class ShoppingCartPageComponent implements OnInit, OnDestroy {
     private shoppingCartService: ShoppingCartService,
     private merchandiseService: MerchandiseService,
     private title: Title,
+    private meta: Meta,
+    @Inject(DOCUMENT) private doc: Document,
   ) {}
 
   ngOnInit(): void {
-    this.title.setTitle(`Shopping Cart - Zhininda's Alchemy Shop`);
+    this.title.setTitle(`Shopping Cart | Zhininda's Alchemy Shop`);
+    this.meta.updateTag({ name: `title`, content: this.title.getTitle() });
+    this.meta.updateTag({ property: `og:url`, content: this.doc.location.href });
+    this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
+    this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
+    this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
     this.initialise();
   }
 

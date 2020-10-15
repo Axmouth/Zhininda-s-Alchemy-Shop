@@ -6,7 +6,7 @@ export class OrderDetail {
   orderId: number;
   merchandiseId: number;
   amount: number;
-  price: number;
+  value: number;
   merchandise?: Merchandise;
   order?: Order;
 }

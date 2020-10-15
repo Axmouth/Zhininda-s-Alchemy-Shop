@@ -49,6 +49,15 @@
             public const string Create = Base + "/categories";
         }
 
+        public static class Effects
+        {
+            public const string GetAll = Base + "/effects";
+            public const string Update = Base + "/effects/{effectId}";
+            public const string Delete = Base + "/effects/{effectId}";
+            public const string Get = Base + "/effects/{effectId}";
+            public const string Create = Base + "/effects";
+        }
+
         public static class Orders
         {
             public const string GetAll = Base + "/orders";
@@ -76,6 +85,11 @@
             public const string Profile = Base + "/account/profile";
             public const string GetSettings = Base + "/account/settings";
             public const string UpdateSettings = Base + "/account/settings";
+            public const string PasswordChange = Base + "/account/password-change";
+            public const string PasswordReset = Base + "/account/password-reset";
+            public const string PasswordResetEmail = Base + "/account/request-password-reset";
+            public const string EmailConfirmEmail = Base + "/account/request-verification-email";
+            public const string EmailConfirm = Base + "/account/verify-email";
         }
 
         public static class ShoppingCart

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AccountService } from '../../services/account.service';
 
@@ -65,10 +66,21 @@ export class RegisterPageComponent implements OnInit {
 
   registerInProgress = false;
 
-  constructor(private accountService: AccountService, private router: Router, private title: Title) {}
+  constructor(
+    private accountService: AccountService,
+    private router: Router,
+    private title: Title,
+    private meta: Meta,
+    @Inject(DOCUMENT) private doc: Document,
+  ) {}
 
   ngOnInit(): void {
-    this.title.setTitle(`Create A New Account - Zhininda's Alchemy Shop`);
+    this.title.setTitle(`Create A New Account | Zhininda's Alchemy Shop`);
+    this.meta.updateTag({ name: `title`, content: this.title.getTitle() });
+    this.meta.updateTag({ property: `og:url`, content: this.doc.location.href });
+    this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
+    this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
+    this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
     this.setValidators();
   }
 

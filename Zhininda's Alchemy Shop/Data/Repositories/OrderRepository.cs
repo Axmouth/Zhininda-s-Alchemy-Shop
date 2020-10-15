@@ -33,10 +33,10 @@ namespace Zhinindas_Alchemy_Shop.Data.Repositories
                     Amount = item.Amount,
                     MerchandiseId = item.Merchandise.MerchandiseId,
                     OrderId = order.OrderId,
-                    Price = item.Merchandise.Price
+                    Value = item.Merchandise.Value
                 };
                 _appDbContext.OrderDetails.Add(orderDetail);
-                order.OrderTotal += orderDetail.Price * orderDetail.Amount;
+                order.OrderTotal += orderDetail.Value * orderDetail.Amount;
             }
             _appDbContext.SaveChanges();
         }

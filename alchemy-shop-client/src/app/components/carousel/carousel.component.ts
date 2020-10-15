@@ -8,7 +8,9 @@ import { NgbCarousel, NgbSlideEvent, NgbSlideEventSource } from '@ng-bootstrap/n
   encapsulation: ViewEncapsulation.None,
 })
 export class CarouselComponent implements OnInit {
-  images = ['carousel1.jpg', 'carousel2.jpg.png', 'carousel3.jpg'].map((n) => `/assets/images/${n}`);
+  images = ['alchemy-shop-banner-with-stuff.jpg', 'alchemy-shop-contact-us.jpg', 'alchemy-shop-reviewer.jpg'].map(
+    (n) => `/assets/images/${n}`,
+  );
   direction: any;
   paused = false;
   unpauseOnArrow = false;

@@ -1,0 +1,61 @@
+version: "3"
+services:
+  docker-host:
+    image: qoomon/docker-host
+    cap_add: ["NET_ADMIN", "NET_RAW"]
+    # mem_limit: 8M
+    restart: unless-stopped
+  zhinindas-alchemy-shop-postfix:
+    image: boky/postfix
+    container_name: zhinindas-alchemy-shop-postfix
+    environment:
+      - ALLOW_EMPTY_SENDER_DOMAINS=true
+      - ALLOWED_SENDER_DOMAINS
+      - POSTFIX_myhostname=zhinindas-alchemy-shop-postfix
+      #- POSTFIX_smtpd_recipient_restrictions=permit_sasl_authenticated, permit_mynetworks
+      #- POSTFIX_smtpd_relay_restrictions=permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+      #- POSTFIX_mynetworks= 192.168.1.0/24 127.0.0.0/8
+      #- RELAYHOST_TLS_LEVEL=secure
+      #- POSTFIX_smtpd_use_tls=no
+    #ports:
+    #  - 1587:587
+
+  zhinindas-alchemy-shop-user-client:
+    restart: unless-stopped
+    image: ghcr.io/axmouth/zhinindas-alchemy-shop-user-client:latest
+    ports:
+      - "6544:4000"
+    container_name: zhinindas-alchemy-shop-user-client
+
+  zhinindas-alchemy-shop-api:
+    working_dir: /var/lib/axmouth/zhinindas-alchemy-shop/api
+    restart: unless-stopped
+    tty: true
+    image: ghcr.io/axmouth/zhinindas-alchemy-shop-api:latest
+    container_name: zhinindas-alchemy-shop-api
+    ports:
+      - "6543:5000"
+    #   env_file:
+    #     - ./.env
+    environment:
+      - BIND_ADDRESS
+      - CAPTCHA_SECRET
+      - CAPTCHA_VERIFY_URL
+      - CONTACT_ADDRESS
+      - DATABASE_URL
+      - JWT_SECRET
+      - JWT_DURATION
+      - MAIL_FROM_NAME
+      - MAIL_FROM_ADDRESS
+      - MAIL_HOST
+      - MAIL_PASSWORD
+      - MAIL_PORT
+      - MAIL_USERNAME
+      - RUST_LOG
+      - STATIC_FILE_DIR
+      - STATIC_FILE_ADDRESS
+      - WEBSITE_URL
+    volumes:
+      - zhinindas-alchemy-shop-files:/var/lib/axmouth/axmouth.dev/static-assets:rw
+volumes:
+  zhinindas-alchemy-shop-files:

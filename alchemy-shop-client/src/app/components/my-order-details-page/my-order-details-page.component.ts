@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Title } from '@angular/platform-browser';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Meta, Title } from '@angular/platform-browser';
 import { Order } from 'src/app/models/api/order';
 import { OrderService } from 'src/app/services/order.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'zas-my-order-details-page',
@@ -16,10 +17,21 @@ export class MyOrderDetailsPageComponent implements OnInit, OnDestroy {
   order: Order;
   orderId: string;
 
-  constructor(private orderService: OrderService, private route: ActivatedRoute, private title: Title) {}
+  constructor(
+    private orderService: OrderService,
+    private route: ActivatedRoute,
+    private title: Title,
+    private meta: Meta,
+    @Inject(DOCUMENT) private doc: Document,
+  ) {}
 
   ngOnInit(): void {
-    this.title.setTitle(`Order Details - Zhininda's Alchemy Shop`);
+    this.title.setTitle(`Order Details | Zhininda's Alchemy Shop`);
+    this.meta.updateTag({ name: `title`, content: this.title.getTitle() });
+    this.meta.updateTag({ property: `og:url`, content: this.doc.location.href });
+    this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
+    this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
+    this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
     this.route.params.pipe(takeUntil(this.ngUnsubscribe)).subscribe((params) => {
       this.orderId = params.orderId;
       this.initialise();

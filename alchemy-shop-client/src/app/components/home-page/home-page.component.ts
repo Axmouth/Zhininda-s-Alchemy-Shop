@@ -1,7 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MerchandiseService } from '../../services/merchandise.service';
+import { Meta, Title } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'zas-home-page',
@@ -12,9 +14,20 @@ export class HomePageComponent implements OnInit, OnDestroy {
   ngUnsubscribe = new Subject<void>();
   merchandises = [];
 
-  constructor(private merchandiseService: MerchandiseService) {}
+  constructor(
+    private merchandiseService: MerchandiseService,
+    private title: Title,
+    private meta: Meta,
+    @Inject(DOCUMENT) private doc: Document,
+  ) {}
 
   ngOnInit(): void {
+    this.title.setTitle(`Zhininda's Alchemy Shop`);
+    this.meta.updateTag({ name: `title`, content: this.title.getTitle() });
+    this.meta.updateTag({ property: `og:url`, content: this.doc.location.href });
+    this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
+    this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
+    this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
     this.initialise();
   }
 

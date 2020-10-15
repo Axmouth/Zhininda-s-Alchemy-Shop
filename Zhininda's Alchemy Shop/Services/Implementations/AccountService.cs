@@ -112,66 +112,51 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
         {
             var validatedToken = GetPrincipalFromToken(token);
 
-
             if (string.IsNullOrEmpty(token))
             {
                 return new AuthenticationResult { Errors = new[] { "Empty Token" } };
             }
-
             if (string.IsNullOrEmpty(refreshToken))
             {
                 return new AuthenticationResult { Errors = new[] { "Empty Refresh Token" } };
             }
-
             if (validatedToken == null)
             {
                 return new AuthenticationResult { Errors = new[] { "Invalid Token" } };
             }
-
             var expiryDateUnix =
                 long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
-
             var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 .AddSeconds(expiryDateUnix);
-
             if (expiryDateTimeUtc > DateTime.UtcNow)
             {
                 return new AuthenticationResult { Errors = new[] { "This token hasn't expired yet" } };
             }
-
             var jti = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
-
             var storedRefreshToken = await _appMainDataContext.RefreshTokens.SingleOrDefaultAsync(x => x.Token == refreshToken).ConfigureAwait(false);
-
             if (storedRefreshToken == null)
             {
                 return new AuthenticationResult { Errors = new[] { "This refresh token does not exist" } };
             }
-
             if (DateTime.UtcNow > storedRefreshToken.ExpiryDate)
             {
                 return new AuthenticationResult { Errors = new[] { "This refresh token has expired" } };
             }
-
             if (storedRefreshToken.Invalidated)
             {
                 return new AuthenticationResult { Errors = new[] { "This refresh token has been invalidated" } };
             }
-
             if (storedRefreshToken.Used)
             {
                 return new AuthenticationResult { Errors = new[] { "This refresh token has been used" } };
             }
-
             if (storedRefreshToken.JwtId != jti)
             {
                 return new AuthenticationResult { Errors = new[] { "This refresh token does not match this JWT" } };
             }
-
             storedRefreshToken.Used = true;
             _appMainDataContext.RefreshTokens.Update(storedRefreshToken);
             await _appMainDataContext.SaveChangesAsync().ConfigureAwait(false);
-
             var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == "id").Value).ConfigureAwait(false);
             return await GenerateAuthenticationResultForUserAsync(user).ConfigureAwait(false);
         }
@@ -244,7 +229,7 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
                 };
             }
 
-            var sent = await SendConfirmationEmailAsync(newUser).ConfigureAwait(false);
+            // var sent = await SendConfirmationEmailAsync(newUser).ConfigureAwait(false);
 
             return await GenerateAuthenticationResultForUserAsync(newUser).ConfigureAwait(false);
         }

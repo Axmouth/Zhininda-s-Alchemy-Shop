@@ -158,10 +158,10 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
 
         [AllowAnonymous]
         [HttpPost(ApiRoutes.Account.Refresh)]
-        public async Task<IActionResult> Refresh()
+        public async Task<IActionResult> Refresh([FromBody] RefreshRequest request)
         {
             var RefreshToken = Request.Cookies[refreshTokenCookieName];
-            var jwtToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "") ?? "";
+            var jwtToken = request.Token; // HttpContext.Request.Headers["authorization"].ToString().Replace("Bearer ", "") ?? "";
 
             var authResponse = await _accountService.RefreshTokenAsync(jwtToken, RefreshToken).ConfigureAwait(false);
 
@@ -347,6 +347,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                 Success = true,
             });
         }
+
         private string getCookieDomain()
         {
             return "." + RemoveSubdomain(Request.Host.ToString());
@@ -365,5 +366,320 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                 return host;
             }
         }
+
+
+        [HttpPost(ApiRoutes.Account.PasswordChange)]
+        public async Task<IActionResult> PasswordChange([FromBody] PasswordChangeRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "Empty Request." },
+                    Success = false,
+                });
+            }
+            var oldUser = await _userManager.FindByNameAsync(request.UserName).ConfigureAwait(false);
+            if (oldUser == null)
+            {
+                return NotFound(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "Could not find this User." },
+                    Success = false,
+                });
+            }
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
+            if (user.UserName != request.UserName)
+            {
+                return Unauthorized(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "You are not Authorized to edit this User." },
+                    Success = false,
+                });
+            }
+            var passCheck = await _accountService.CheckUserPasswordAsync(user, request.OldPassword).ConfigureAwait(false);
+            if (!passCheck.Success)
+            {
+                return Unauthorized(new BaseResponse<string>
+                {
+                    Errors = passCheck.Errors,
+                    Success = false,
+                });
+            }
+            var passUpdated = await _accountService.UpdatePasswordAsync(user, request.NewPassword).ConfigureAwait(false);
+            if (!passUpdated.Success)
+            {
+                return StatusCode(500, new BaseResponse<string>
+                {
+                    Errors = passUpdated.Errors,
+                    Success = false,
+                });
+            }
+            return NotFound();
+        }
+
+
+        [AllowAnonymous]
+        [HttpPost(ApiRoutes.Account.PasswordReset)]
+        public async Task<IActionResult> PasswordReset([FromBody] PasswordResetRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "Empty Request." },
+                    Success = false,
+                });
+            }
+            if (string.IsNullOrEmpty(request.Token))
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "No password change token included." },
+                    Success = false,
+                });
+            }
+            AppUser user;
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                var userId = _userManager.GetUserId(HttpContext.User);
+                user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
+                if (user != null && ((!string.IsNullOrEmpty(request.Email) && user.Email != request.Email) || (!string.IsNullOrEmpty(request.UserName) && user.UserName != request.UserName)))
+                {
+                    return BadRequest(new BaseResponse<string>
+                    {
+                        Errors = new List<string>() { "Mismatched user data." },
+                        Success = false,
+                    });
+                }
+            }
+            else if (!string.IsNullOrEmpty(request.UserName))
+            {
+                user = await _userManager.FindByNameAsync(request.UserName).ConfigureAwait(false);
+            }
+            else if (!string.IsNullOrEmpty(request.Email))
+            {
+                user = await _userManager.FindByEmailAsync(request.Email).ConfigureAwait(false);
+            }
+            else
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "No user data included." },
+                    Success = false,
+                });
+            }
+            if (user == null)
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "Could not find user." },
+                    Success = false,
+                });
+            }
+            var sentResult = await _accountService.ResetPasswordAsync(user, request.Token, request.NewPassword).ConfigureAwait(false);
+            if (!sentResult.Success)
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = sentResult.Errors,
+                    Success = false,
+                });
+            }
+            return Ok(new BaseResponse<string>
+            {
+                Success = true,
+            });
+        }
+
+        [AllowAnonymous]
+        [HttpPost(ApiRoutes.Account.PasswordResetEmail)]
+        public async Task<IActionResult> PasswordResetEmail([FromBody] PasswordResetEmailRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "Empty Request." },
+                    Success = false,
+                });
+            }
+            AppUser user;
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                var userId = _userManager.GetUserId(HttpContext.User);
+                user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
+                if (user != null && ((!string.IsNullOrEmpty(request.Email) && user.Email != request.Email) || (!string.IsNullOrEmpty(request.UserName) && user.UserName != request.UserName)))
+                {
+                    return BadRequest(new BaseResponse<string>
+                    {
+                        Errors = new List<string>() { "Mismatched user data." },
+                        Success = false,
+                    });
+                }
+            }
+            else if (!string.IsNullOrEmpty(request.UserName))
+            {
+                user = await _userManager.FindByNameAsync(request.UserName).ConfigureAwait(false);
+            }
+            else if (!string.IsNullOrEmpty(request.Email))
+            {
+                user = await _userManager.FindByEmailAsync(request.Email).ConfigureAwait(false);
+            }
+            else
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "No user data included." },
+                    Success = false,
+                });
+            }
+            if (user == null)
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "Could not find user." },
+                    Success = false,
+                });
+            }
+            var sentResult = await _accountService.ResetPasswordEmailAsync(user).ConfigureAwait(false);
+            if (!sentResult.Success)
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = sentResult.Errors,
+                    Success = false,
+                });
+            }
+            return Ok(new BaseResponse<string>
+            {
+                Success = true,
+            });
+        }
+
+        [AllowAnonymous]
+        [HttpPost(ApiRoutes.Account.EmailConfirmEmail)]
+        public async Task<IActionResult> EmailConfirmEmail([FromBody] EmailConfirmEmailRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "Empty Request." },
+                    Success = false,
+                });
+            }
+            AppUser user;
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                var userId = _userManager.GetUserId(HttpContext.User);
+                user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
+                if (user != null && ((!string.IsNullOrEmpty(request.Email) && user.Email != request.Email) || (!string.IsNullOrEmpty(request.UserName) && user.UserName != request.UserName)))
+                {
+                    return BadRequest(new BaseResponse<string>
+                    {
+                        Errors = new List<string>() { "Mismatched user data." },
+                        Success = false,
+                    });
+                }
+            }
+            else if (!string.IsNullOrEmpty(request.UserName))
+            {
+                user = await _userManager.FindByNameAsync(request.UserName).ConfigureAwait(false);
+            }
+            else if (!string.IsNullOrEmpty(request.Email))
+            {
+                user = await _userManager.FindByEmailAsync(request.Email).ConfigureAwait(false);
+            }
+            else
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "No user data included." },
+                    Success = false,
+                });
+            }
+            if (user == null)
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "Could not find user." },
+                    Success = false,
+                });
+            }
+            var sentResult = await _accountService.SendConfirmationEmailAsync(user).ConfigureAwait(false);
+            if (!sentResult.Success)
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = sentResult.Errors,
+                    Success = false,
+                });
+            }
+            return Ok(new BaseResponse<string>
+            {
+                Success = true,
+            });
+        }
+
+        [AllowAnonymous]
+        [HttpPost(ApiRoutes.Account.EmailConfirm)]
+        public async Task<IActionResult> EmailConfirm([FromBody] EmailConfirmRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "Empty Request." },
+                    Success = false,
+                });
+            }
+            AppUser user;
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                var userId = _userManager.GetUserId(HttpContext.User);
+                user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
+            }
+            else if (!string.IsNullOrEmpty(request.UserName))
+            {
+                user = await _userManager.FindByNameAsync(request.UserName).ConfigureAwait(false);
+            }
+            else if (!string.IsNullOrEmpty(request.Email))
+            {
+                user = await _userManager.FindByEmailAsync(request.Email).ConfigureAwait(false);
+            }
+            else
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "No user data included." },
+                    Success = false,
+                });
+            }
+            if (user == null)
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = new List<string>() { "Could not find user." },
+                    Success = false,
+                });
+            }
+            var result = await _accountService.ConfirmEmailAsync(user, request.Token).ConfigureAwait(false);
+            if (!result.Success)
+            {
+                return BadRequest(new BaseResponse<string>
+                {
+                    Errors = result.Errors,
+                    Success = false,
+                });
+            }
+            return Ok(new BaseResponse<string>
+            {
+                Success = true
+            });
+        }
+
+
     }
 }

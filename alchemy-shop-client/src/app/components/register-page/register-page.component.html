@@ -1,8 +1,8 @@
 <div class="register-form">
   <div class="col-md-8 col-md-offset-3">
-    <h2>Register now at Dring&Go</h2>
+    <h2>Register now at Zhininda's Alchemy Shop</h2>
     <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()" class="form-horizontal" role="form">
-      <h4>Create a new account and order your first drink today!</h4>
+      <h4>Create a new account for Zhininda to send you her best materials</h4>
       <hr />
       <div class="form-group">
         <label class="col-md-6 control-label">Username</label>
@@ -14,7 +14,7 @@
       <div class="row">
         <div
           *ngIf="registerForm.controls['username']?.touched && registerForm.controls['username']?.invalid"
-          class="col-md-5 offset-md-2"
+          class="col-md-5 offset-md-1"
         >
           <div *ngIf="registerForm.controls['username']?.errors?.required" class="alert alert-danger">
             Userame is required.
@@ -48,7 +48,7 @@
       <div class="row">
         <div
           *ngIf="registerForm.controls['email']?.touched && registerForm.controls['email']?.invalid"
-          class="alert alert-danger col-md-5 offset-md-2"
+          class="alert alert-danger col-md-5 offset-md-1"
         >
           <div *ngIf="registerForm.controls['email']?.errors?.required">E-Mail Address is required.</div>
           <div *ngIf="registerForm.controls['email']?.errors?.email">E-Mail Address must be a valid email format.</div>
@@ -72,7 +72,7 @@
       <div class="row">
         <div
           *ngIf="registerForm.controls['password']?.touched && registerForm.controls['password']?.invalid"
-          class="col-md-5 offset-md-2"
+          class="col-md-5 offset-md-1"
         >
           <div *ngIf="registerForm.controls['password']?.errors?.required" class="alert alert-danger">
             Password is required.
@@ -112,11 +112,13 @@
       <div class="row">
         <div
           *ngIf="registerForm.controls['password2'].touched && registerForm.controls['password2'].invalid"
-          class="alert alert-danger col-md-5 offset-md-2"
+          class="col-md-5 offset-md-1"
         >
-          <div *ngIf="registerForm.controls['password2'].errors.required">Confirm Password is required.</div>
+          <div *ngIf="registerForm.controls['password2'].errors.required" class="alert alert-danger">
+            Confirm Password is required.
+          </div>
 
-          <div *ngIf="registerForm.controls['password2'].errors.mismatch">
+          <div *ngIf="registerForm.controls['password2'].errors.mismatch" class="alert alert-danger">
             Password and Confirm Password must match.
           </div>
         </div>

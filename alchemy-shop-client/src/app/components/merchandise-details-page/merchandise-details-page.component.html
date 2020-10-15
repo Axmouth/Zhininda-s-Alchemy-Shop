@@ -22,8 +22,10 @@
               Add {{ merchandise?.name }} to cart
             </button>
           </div>
-          <h3 class="pull-right ml-3 mr-3">{{ merchandise?.price | currency: 'EUR' }}</h3>
-          <span class="text-success mr-3" *ngIf="merchandise?.inStock; else outOfStock">In Stock</span>
+          <h3 class="pull-right ml-3 mr-3">{{ merchandise?.value | currency: 'EUR' }}</h3>
+          <span class="text-success mr-3" *ngIf="merchandise?.amountInStock > 0; else outOfStock"
+            >{{ merchandise?.amountInStock }} In Stock</span
+          >
           <ng-template #outOfStock><span class="text-warning mr-3">Out of Stock</span></ng-template>
         </div>
       </div>

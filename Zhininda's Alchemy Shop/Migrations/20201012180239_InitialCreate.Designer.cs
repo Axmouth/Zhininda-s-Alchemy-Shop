@@ -10,8 +10,8 @@ using Zhinindas_Alchemy_Shop.Data;
 namespace Zhinindas_Alchemy_Shop.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200916232215_create-refresh-tokens")]
-    partial class createrefreshtokens
+    [Migration("20201012180239_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -247,14 +247,39 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CategoryName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Zhinindas_Alchemy_Shop.Data.Models.Effect", b =>
+                {
+                    b.Property<int>("EffectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Positive")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("EffectId");
+
+                    b.ToTable("Effects");
                 });
 
             modelBuilder.Entity("Zhinindas_Alchemy_Shop.Data.Models.Merchandise", b =>
@@ -264,36 +289,65 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<int>("AmountInStock")
+                        .HasColumnType("integer");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
                     b.Property<string>("ImageThumbnailUrl")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("InStock")
-                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsPreferred")
                         .HasColumnType("boolean");
 
                     b.Property<string>("LongDescription")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
+                    b.Property<int?>("PrimaryEffectId")
+                        .IsRequired()
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("QuaternaryEffectId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SecondaryEffectId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ShortDescription")
+                        .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int?>("TertiaryEffectId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Weight")
+                        .HasColumnType("numeric");
 
                     b.HasKey("MerchandiseId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("PrimaryEffectId");
+
+                    b.HasIndex("QuaternaryEffectId");
+
+                    b.HasIndex("SecondaryEffectId");
+
+                    b.HasIndex("TertiaryEffectId");
 
                     b.ToTable("Merchandises");
                 });
@@ -354,6 +408,7 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                         .HasMaxLength(10);
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ZipCode")
@@ -384,8 +439,8 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
+                    b.Property<int>("Value")
+                        .HasColumnType("integer");
 
                     b.HasKey("OrderDetailId");
 
@@ -439,10 +494,11 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("MerchandiseId")
+                    b.Property<int>("MerchandiseId")
                         .HasColumnType("integer");
 
                     b.Property<string>("ShoppingCartId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("ShoppingCartItemId");
@@ -506,17 +562,37 @@ namespace Zhinindas_Alchemy_Shop.Migrations
             modelBuilder.Entity("Zhinindas_Alchemy_Shop.Data.Models.Merchandise", b =>
                 {
                     b.HasOne("Zhinindas_Alchemy_Shop.Data.Models.Category", "Category")
-                        .WithMany("Merchandises")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Zhinindas_Alchemy_Shop.Data.Models.Effect", "PrimaryEffect")
+                        .WithMany()
+                        .HasForeignKey("PrimaryEffectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Zhinindas_Alchemy_Shop.Data.Models.Effect", "QuaternaryEffect")
+                        .WithMany()
+                        .HasForeignKey("QuaternaryEffectId");
+
+                    b.HasOne("Zhinindas_Alchemy_Shop.Data.Models.Effect", "SecondaryEffect")
+                        .WithMany()
+                        .HasForeignKey("SecondaryEffectId");
+
+                    b.HasOne("Zhinindas_Alchemy_Shop.Data.Models.Effect", "TertiaryEffect")
+                        .WithMany()
+                        .HasForeignKey("TertiaryEffectId");
                 });
 
             modelBuilder.Entity("Zhinindas_Alchemy_Shop.Data.Models.Order", b =>
                 {
                     b.HasOne("Identity.Models.AppUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Zhinindas_Alchemy_Shop.Data.Models.OrderDetail", b =>
@@ -547,7 +623,9 @@ namespace Zhinindas_Alchemy_Shop.Migrations
                 {
                     b.HasOne("Zhinindas_Alchemy_Shop.Data.Models.Merchandise", "Merchandise")
                         .WithMany()
-                        .HasForeignKey("MerchandiseId");
+                        .HasForeignKey("MerchandiseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

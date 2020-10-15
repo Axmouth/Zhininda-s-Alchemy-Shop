@@ -3,4 +3,5 @@ export class Pagination {
   pageSize: number;
   nextPage: string;
   previousPage: string;
+  totalResults: number;
 }
