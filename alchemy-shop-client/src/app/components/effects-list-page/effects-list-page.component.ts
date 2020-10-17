@@ -1,8 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Effect } from 'src/app/models/api/effect';
 import { MerchandiseService } from 'src/app/services/merchandise.service';
 import { takeUntil } from 'rxjs/operators';
+import { DOCUMENT } from '@angular/common';
+import { Title, Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'zas-effects-list-page',
@@ -13,9 +15,20 @@ export class EffectsListPageComponent implements OnInit, OnDestroy {
   ngUnsubscribe = new Subject<void>();
   effects: Effect[];
 
-  constructor(private merchandiseService: MerchandiseService) {}
+  constructor(
+    private merchandiseService: MerchandiseService,
+    private title: Title,
+    private meta: Meta,
+    @Inject(DOCUMENT) private doc: Document,
+  ) {}
 
   ngOnInit(): void {
+    this.title.setTitle(`Alchemical Effects List | Zhininda's Alchemy Shop`);
+    this.meta.updateTag({ name: `title`, content: this.title.getTitle() });
+    this.meta.updateTag({ property: `og:url`, content: this.doc.location.href });
+    this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
+    this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
+    this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
     this.initialise();
   }
 

@@ -388,8 +388,8 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                     Success = false,
                 });
             }
-            var userId = _userManager.GetUserId(HttpContext.User);
-            var user = await _userManager.FindByIdAsync(userId);
+            var username = _userManager.GetUserId(HttpContext.User);
+            var user = await _userManager.FindByNameAsync(username);
             if (user.UserName != request.UserName)
             {
                 return Unauthorized(new BaseResponse<string>
@@ -443,8 +443,8 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
             AppUser user;
             if (HttpContext.User.Identity.IsAuthenticated)
             {
-                var userId = _userManager.GetUserId(HttpContext.User);
-                user = await _userManager.FindByIdAsync(userId);
+                var username = _userManager.GetUserId(HttpContext.User);
+                user = await _userManager.FindByNameAsync(username);
                 if (user != null && ((!string.IsNullOrEmpty(request.Email) && user.Email != request.Email) || (!string.IsNullOrEmpty(request.UserName) && user.UserName != request.UserName)))
                 {
                     return BadRequest(new BaseResponse<string>
@@ -573,8 +573,8 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
             AppUser user;
             if (HttpContext.User.Identity.IsAuthenticated)
             {
-                var userId = _userManager.GetUserId(HttpContext.User);
-                user = await _userManager.FindByIdAsync(userId);
+                var username = _userManager.GetUserId(HttpContext.User);
+                user = await _userManager.FindByNameAsync(username);
                 if (user != null && ((!string.IsNullOrEmpty(request.Email) && user.Email != request.Email) || (!string.IsNullOrEmpty(request.UserName) && user.UserName != request.UserName)))
                 {
                     return BadRequest(new BaseResponse<string>

@@ -52,7 +52,7 @@ export class AuthService implements OnDestroy {
           }
           const payload = token.getPayload();
           if (payload) {
-            return payload.display_name;
+            return payload.sub;
           }
           return null;
         }),

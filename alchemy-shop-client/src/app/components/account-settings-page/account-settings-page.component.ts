@@ -101,7 +101,20 @@ export class AccountSettingsPageComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap((email) => {
           return this.accountService
-            .requestVerificationEmail({ email })
+            .getUsername()
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .pipe(
+              map((userName) => {
+                console.log(userName);
+                return { userName, email };
+              }),
+            );
+        }),
+      )
+      .pipe(
+        switchMap((data) => {
+          return this.accountService
+            .requestVerificationEmail(data)
             .pipe(takeUntil(this.ngUnsubscribe))
             .pipe(
               map((t) => {
@@ -122,7 +135,20 @@ export class AccountSettingsPageComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap((email) => {
           return this.accountService
-            .requestPasswordReset({ email })
+            .getUsername()
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .pipe(
+              map((userName) => {
+                console.log(userName);
+                return { userName, email };
+              }),
+            );
+        }),
+      )
+      .pipe(
+        switchMap((data) => {
+          return this.accountService
+            .requestPasswordReset(data)
             .pipe(takeUntil(this.ngUnsubscribe))
             .pipe(
               map((t) => {
