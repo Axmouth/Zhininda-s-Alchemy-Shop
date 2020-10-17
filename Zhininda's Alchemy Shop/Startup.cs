@@ -56,7 +56,7 @@ namespace Zhinindas_Alchemy_Shop
                                   builder =>
                                   {
                                       builder.WithOrigins(
-                                                          "https://apizhinindas.alchemy.shop.axmouth.dev",
+                                                          "https://api.zhinindas.alchemy.shop.axmouth.dev",
                                                           "https://zhinindas.alchemy.shop.axmouth.dev",
                                                           "http://apizhinindas.alchemy.shop.axmouth.dev",
                                                           "http://zhinindas.alchemy.shop.axmouth.dev",

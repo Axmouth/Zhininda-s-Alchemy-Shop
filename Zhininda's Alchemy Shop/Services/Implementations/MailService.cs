@@ -48,7 +48,7 @@ namespace Zhinindas_Alchemy_Shop.Services
                 return false;
             }
 
-            var host = "http://zhinindas.shop.axmouth.dev/";
+            var host = "http://zhinindas.alchemy.shop.axmouth.dev/";
             var verificationLink = $"{host}verify-email?email_confirm_token={Uri.EscapeDataString(token)}&user_name={user.UserName}";
             var model = new AccountVerificationViewModel(verificationLink, user.UserName);
             var name = "AccountVerification";
@@ -92,7 +92,7 @@ namespace Zhinindas_Alchemy_Shop.Services
             {
                 return false;
             }
-            var host = "http://zhinindas.shop.axmouth.dev";
+            var host = "http://zhinindas.alchemy.shop.axmouth.dev";
             var model = new OrderCreatedViewModel(user, order, host);
             var name = "OrderCreated";
             var htmlBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Html.cshtml", model);
@@ -107,7 +107,7 @@ namespace Zhinindas_Alchemy_Shop.Services
             {
                 return false;
             }
-            var host = "http://zhinindas.shop.axmouth.dev/";
+            var host = "http://zhinindas.alchemy.shop.axmouth.dev/";
             var resetLink = $"{host}password-reset?reset_password_token={Uri.EscapeDataString(token)}&user_name={user.UserName}";
             var model = new PasswordResetViewModel(resetLink, user.UserName);
             var name = "PasswordReset";
