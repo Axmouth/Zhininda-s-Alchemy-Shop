@@ -66,7 +66,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                    });
             }
 
-            var authResponse = await _accountService.LoginAsync(userAuthenticationRequest.UserName, userAuthenticationRequest.Password).ConfigureAwait(false);
+            var authResponse = await _accountService.LoginAsync(userAuthenticationRequest.UserName, userAuthenticationRequest.Password);
 
             if (!authResponse.Success)
             {
@@ -131,7 +131,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                        Success = false,
                    });
             }
-            var authResponse = await _accountService.RegisterAsync(userRegistrationRequest.UserName, userRegistrationRequest.Email, userRegistrationRequest.Password).ConfigureAwait(false);
+            var authResponse = await _accountService.RegisterAsync(userRegistrationRequest.UserName, userRegistrationRequest.Email, userRegistrationRequest.Password);
 
             if (!authResponse.Success)
             {
@@ -163,7 +163,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
             var RefreshToken = Request.Cookies[refreshTokenCookieName];
             var jwtToken = request.Token; // HttpContext.Request.Headers["authorization"].ToString().Replace("Bearer ", "") ?? "";
 
-            var authResponse = await _accountService.RefreshTokenAsync(jwtToken, RefreshToken).ConfigureAwait(false);
+            var authResponse = await _accountService.RefreshTokenAsync(jwtToken, RefreshToken);
 
             if (!authResponse.Success)
             {
@@ -205,7 +205,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
         {
             var RefreshToken = Request.Cookies[refreshTokenCookieName];
 
-            var authResponse = await _accountService.LogoutAsync(RefreshToken).ConfigureAwait(false);
+            var authResponse = await _accountService.LogoutAsync(RefreshToken);
 
             if (!authResponse.Success)
             {
@@ -379,7 +379,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                     Success = false,
                 });
             }
-            var oldUser = await _userManager.FindByNameAsync(request.UserName).ConfigureAwait(false);
+            var oldUser = await _userManager.FindByNameAsync(request.UserName);
             if (oldUser == null)
             {
                 return NotFound(new BaseResponse<string>
@@ -389,7 +389,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                 });
             }
             var userId = _userManager.GetUserId(HttpContext.User);
-            var user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user.UserName != request.UserName)
             {
                 return Unauthorized(new BaseResponse<string>
@@ -398,7 +398,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                     Success = false,
                 });
             }
-            var passCheck = await _accountService.CheckUserPasswordAsync(user, request.OldPassword).ConfigureAwait(false);
+            var passCheck = await _accountService.CheckUserPasswordAsync(user, request.OldPassword);
             if (!passCheck.Success)
             {
                 return Unauthorized(new BaseResponse<string>
@@ -407,7 +407,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                     Success = false,
                 });
             }
-            var passUpdated = await _accountService.UpdatePasswordAsync(user, request.NewPassword).ConfigureAwait(false);
+            var passUpdated = await _accountService.UpdatePasswordAsync(user, request.NewPassword);
             if (!passUpdated.Success)
             {
                 return StatusCode(500, new BaseResponse<string>
@@ -444,7 +444,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 var userId = _userManager.GetUserId(HttpContext.User);
-                user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
+                user = await _userManager.FindByIdAsync(userId);
                 if (user != null && ((!string.IsNullOrEmpty(request.Email) && user.Email != request.Email) || (!string.IsNullOrEmpty(request.UserName) && user.UserName != request.UserName)))
                 {
                     return BadRequest(new BaseResponse<string>
@@ -456,11 +456,11 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
             }
             else if (!string.IsNullOrEmpty(request.UserName))
             {
-                user = await _userManager.FindByNameAsync(request.UserName).ConfigureAwait(false);
+                user = await _userManager.FindByNameAsync(request.UserName);
             }
             else if (!string.IsNullOrEmpty(request.Email))
             {
-                user = await _userManager.FindByEmailAsync(request.Email).ConfigureAwait(false);
+                user = await _userManager.FindByEmailAsync(request.Email);
             }
             else
             {
@@ -478,7 +478,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                     Success = false,
                 });
             }
-            var sentResult = await _accountService.ResetPasswordAsync(user, request.Token, request.NewPassword).ConfigureAwait(false);
+            var sentResult = await _accountService.ResetPasswordAsync(user, request.Token, request.NewPassword);
             if (!sentResult.Success)
             {
                 return BadRequest(new BaseResponse<string>
@@ -509,7 +509,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 var userId = _userManager.GetUserId(HttpContext.User);
-                user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
+                user = await _userManager.FindByIdAsync(userId);
                 if (user != null && ((!string.IsNullOrEmpty(request.Email) && user.Email != request.Email) || (!string.IsNullOrEmpty(request.UserName) && user.UserName != request.UserName)))
                 {
                     return BadRequest(new BaseResponse<string>
@@ -521,11 +521,11 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
             }
             else if (!string.IsNullOrEmpty(request.UserName))
             {
-                user = await _userManager.FindByNameAsync(request.UserName).ConfigureAwait(false);
+                user = await _userManager.FindByNameAsync(request.UserName);
             }
             else if (!string.IsNullOrEmpty(request.Email))
             {
-                user = await _userManager.FindByEmailAsync(request.Email).ConfigureAwait(false);
+                user = await _userManager.FindByEmailAsync(request.Email);
             }
             else
             {
@@ -543,7 +543,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                     Success = false,
                 });
             }
-            var sentResult = await _accountService.ResetPasswordEmailAsync(user).ConfigureAwait(false);
+            var sentResult = await _accountService.ResetPasswordEmailAsync(user);
             if (!sentResult.Success)
             {
                 return BadRequest(new BaseResponse<string>
@@ -574,7 +574,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 var userId = _userManager.GetUserId(HttpContext.User);
-                user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
+                user = await _userManager.FindByIdAsync(userId);
                 if (user != null && ((!string.IsNullOrEmpty(request.Email) && user.Email != request.Email) || (!string.IsNullOrEmpty(request.UserName) && user.UserName != request.UserName)))
                 {
                     return BadRequest(new BaseResponse<string>
@@ -586,11 +586,11 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
             }
             else if (!string.IsNullOrEmpty(request.UserName))
             {
-                user = await _userManager.FindByNameAsync(request.UserName).ConfigureAwait(false);
+                user = await _userManager.FindByNameAsync(request.UserName);
             }
             else if (!string.IsNullOrEmpty(request.Email))
             {
-                user = await _userManager.FindByEmailAsync(request.Email).ConfigureAwait(false);
+                user = await _userManager.FindByEmailAsync(request.Email);
             }
             else
             {
@@ -608,7 +608,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                     Success = false,
                 });
             }
-            var sentResult = await _accountService.SendConfirmationEmailAsync(user).ConfigureAwait(false);
+            var sentResult = await _accountService.SendConfirmationEmailAsync(user);
             if (!sentResult.Success)
             {
                 return BadRequest(new BaseResponse<string>
@@ -639,15 +639,15 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 var userId = _userManager.GetUserId(HttpContext.User);
-                user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
+                user = await _userManager.FindByIdAsync(userId);
             }
             else if (!string.IsNullOrEmpty(request.UserName))
             {
-                user = await _userManager.FindByNameAsync(request.UserName).ConfigureAwait(false);
+                user = await _userManager.FindByNameAsync(request.UserName);
             }
             else if (!string.IsNullOrEmpty(request.Email))
             {
-                user = await _userManager.FindByEmailAsync(request.Email).ConfigureAwait(false);
+                user = await _userManager.FindByEmailAsync(request.Email);
             }
             else
             {
@@ -665,7 +665,7 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                     Success = false,
                 });
             }
-            var result = await _accountService.ConfirmEmailAsync(user, request.Token).ConfigureAwait(false);
+            var result = await _accountService.ConfirmEmailAsync(user, request.Token);
             if (!result.Success)
             {
                 return BadRequest(new BaseResponse<string>

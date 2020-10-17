@@ -8,9 +8,9 @@ namespace Zhinindas_Alchemy_Shop.Data.interfaces
 {
     public interface IOrderRepository
     {
-        void CreateOrder(Order order);
+        Task<Order> CreateOrder(Order order);
 
-        Task<IEnumerable<Order>> GetUserOrders(string userId);
+        IQueryable<Order> GetUserOrders(string userId);
 
         Task<Order> GetOrderById(int orderId);
     }

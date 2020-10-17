@@ -30,6 +30,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     lastName: new FormControl(''),
     phoneNumber: new FormControl(''),
   });
+  checkoutInProgress = false;
 
   constructor(
     private router: Router,
@@ -66,6 +67,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   }
 
   onCheckoutSubmit(): void {
+    this.checkoutInProgress = true;
     const checkoutRequest: CheckoutRequest = this.checkoutForm.getRawValue();
     this.orderService
       .checkout(checkoutRequest)
@@ -74,11 +76,13 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         (result) => {
           this.alertService.clearErrorList();
           this.shoppingCartService.reload();
+          this.checkoutInProgress = false;
           this.router.navigateByUrl('/shopping-cart/checkout-complete');
         },
         (err) => {
           console.log(err);
           this.alertService.setErrorList(err?.error?.errors);
+          this.checkoutInProgress = false;
         },
       );
   }

@@ -34,24 +34,24 @@ services:
     image: ghcr.io/axmouth/zhinindas-alchemy-shop-api:latest
     container_name: zhinindas-alchemy-shop-api
     ports:
-      - "6543:5000"
-    #   env_file:
-    #     - ./.env
+      - "6543:80"
+    env_file:
+      - ./.env
     environment:
       - BIND_ADDRESS
       - CAPTCHA_SECRET
       - CAPTCHA_VERIFY_URL
       - CONTACT_ADDRESS
-      - DATABASE_URL
-      - JWT_SECRET
-      - JWT_DURATION
-      - MAIL_FROM_NAME
-      - MAIL_FROM_ADDRESS
-      - MAIL_HOST
-      - MAIL_PASSWORD
-      - MAIL_PORT
-      - MAIL_USERNAME
-      - RUST_LOG
+      - ConnectionStrings__DefaultConnection
+      - JwtSettings__Secret
+      - JwtSettings__TokenLifetime
+      - EmailSettings__FromName
+      - EmailSettings__FromAddress
+      - EmailSettings__UserName
+      - EmailSettings__Password
+      - EmailSettings__Host
+      - EmailSettings__Port
+      - Logging__LogLevel__Default
       - STATIC_FILE_DIR
       - STATIC_FILE_ADDRESS
       - WEBSITE_URL

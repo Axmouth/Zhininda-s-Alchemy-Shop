@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +16,6 @@ namespace Zhinindas_Alchemy_Shop.Data.Repositories
             _appDbContext = dbContext;
         }
 
-        public IEnumerable<Effect> Effects => _appDbContext.Effects;
+        public IQueryable<Effect> Effects => _appDbContext.SpawnNew().Effects.AsNoTracking();
     }
 }

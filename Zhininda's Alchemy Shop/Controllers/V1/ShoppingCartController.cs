@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Zhinindas_Alchemy_Shop.Contracts.V1.Responses;
 using Zhinindas_Alchemy_Shop.Contracts.V1;
+using Microsoft.EntityFrameworkCore;
 
 namespace Zhinindas_Alchemy_Shop.Controllers.V1
 {
@@ -26,13 +27,13 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
         [HttpGet(ApiRoutes.ShoppingCart.GetAll)]
         public async Task<IActionResult> GetAll()
         {
-            var items = _shoppingCart.GetShoppingCartItems();
+            ShoppingCartItem[] items = await _shoppingCart.GetShoppingCartItems();
             _shoppingCart.ShoppingCartItems = items;
 
-            var shoppingCartResponse = new ShoppingCartResponse
+            ShoppingCartResponse shoppingCartResponse = new ShoppingCartResponse
             {
                 ShoppingCart = _shoppingCart,
-                ShoppingCartTotal = _shoppingCart.GetShoppingCartTotal()
+                ShoppingCartTotal = await _shoppingCart.GetShoppingCartTotal()
             };
             return Ok(new BaseResponse<ShoppingCartResponse>
             {
@@ -42,25 +43,25 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
         }
 
         [HttpPost(ApiRoutes.ShoppingCart.Add)]
-        public IActionResult AddToShoppingCart([FromRoute]int merchandiseId, [FromQuery] int amount)
+        public async Task<IActionResult> AddToShoppingCart([FromRoute]int merchandiseId, [FromQuery] int amount)
         {
-            var selectedMerchandise = _merchandiseRepository.Merchandises.FirstOrDefault(p => p.MerchandiseId == merchandiseId);
+            Merchandise selectedMerchandise = await _merchandiseRepository.Merchandises.FirstOrDefaultAsync(p => p.MerchandiseId == merchandiseId);
 
             if (selectedMerchandise != null)
             {
-                _shoppingCart.AddToCart(selectedMerchandise, amount);
+                await _shoppingCart.AddToCart(selectedMerchandise, amount);
             }
             else
             {
                 return NotFound();
             }
-            var items = _shoppingCart.GetShoppingCartItems();
+            ShoppingCartItem[] items = await _shoppingCart.GetShoppingCartItems();
             _shoppingCart.ShoppingCartItems = items;
 
-            var shoppingCartResponse = new ShoppingCartResponse
+            ShoppingCartResponse shoppingCartResponse = new ShoppingCartResponse
             {
                 ShoppingCart = _shoppingCart,
-                ShoppingCartTotal = _shoppingCart.GetShoppingCartTotal()
+                ShoppingCartTotal = await _shoppingCart.GetShoppingCartTotal()
             };
             return Ok(new BaseResponse<ShoppingCartResponse>
             {
@@ -70,25 +71,25 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
         }
 
         [HttpDelete(ApiRoutes.ShoppingCart.Remove)]
-        public IActionResult RemoveFromShoppingCart([FromRoute]int merchandiseId, [FromQuery] int amount)
+        public async Task<IActionResult> RemoveFromShoppingCart([FromRoute]int merchandiseId, [FromQuery] int amount)
         {
-            var selectedMerchandise = _merchandiseRepository.Merchandises.FirstOrDefault(p => p.MerchandiseId == merchandiseId);
+            Merchandise selectedMerchandise = _merchandiseRepository.Merchandises.FirstOrDefault(p => p.MerchandiseId == merchandiseId);
 
             if (selectedMerchandise != null)
             {
-                _shoppingCart.RemoveFromCart(selectedMerchandise, amount);
+                await _shoppingCart.RemoveFromCart(selectedMerchandise, amount);
             }
             else
             {
                 return NotFound();
             }
-            var items = _shoppingCart.GetShoppingCartItems();
+            ShoppingCartItem[] items = await _shoppingCart.GetShoppingCartItems();
             _shoppingCart.ShoppingCartItems = items;
 
-            var shoppingCartResponse = new ShoppingCartResponse
+            ShoppingCartResponse shoppingCartResponse = new ShoppingCartResponse
             {
                 ShoppingCart = _shoppingCart,
-                ShoppingCartTotal = _shoppingCart.GetShoppingCartTotal()
+                ShoppingCartTotal = await _shoppingCart.GetShoppingCartTotal()
             };
             return Ok(new BaseResponse<ShoppingCartResponse>
             {
@@ -98,25 +99,25 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
         }
 
         [HttpPut(ApiRoutes.ShoppingCart.Update)]
-        public IActionResult UpdateShoppingCartItem([FromRoute] int merchandiseId, [FromQuery] int amount)
+        public async Task<IActionResult> UpdateShoppingCartItem([FromRoute] int merchandiseId, [FromQuery] int amount)
         {
-            var selectedMerchandise = _merchandiseRepository.Merchandises.FirstOrDefault(p => p.MerchandiseId == merchandiseId);
+            Merchandise selectedMerchandise = _merchandiseRepository.Merchandises.FirstOrDefault(p => p.MerchandiseId == merchandiseId);
 
             if (selectedMerchandise != null)
             {
-                _shoppingCart.UpdateCartItem(selectedMerchandise, amount);
+                await _shoppingCart.UpdateCartItem(selectedMerchandise, amount);
             }
             else
             {
                 return NotFound();
             }
-            var items = _shoppingCart.GetShoppingCartItems();
+            ShoppingCartItem[] items = await _shoppingCart.GetShoppingCartItems();
             _shoppingCart.ShoppingCartItems = items;
 
-            var shoppingCartResponse = new ShoppingCartResponse
+            ShoppingCartResponse shoppingCartResponse = new ShoppingCartResponse
             {
                 ShoppingCart = _shoppingCart,
-                ShoppingCartTotal = _shoppingCart.GetShoppingCartTotal()
+                ShoppingCartTotal = await _shoppingCart.GetShoppingCartTotal()
             };
             return Ok(new BaseResponse<ShoppingCartResponse>
             {

@@ -1,5 +1,84 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Zhinindas_Alchemy_Shop.EmailTemplates.ViewModels
+@model OrderCreatedViewModel
+
 @{
+    Layout = "_EmailLayoutHtml";
+    ViewContext.ViewData["EmailTitle"] = "Your order has been created!";
 }
+<p>Greetings @Model.User.UserName,</p>
+<p>
+    Thank you for ordering from Zhininda's Alchemy Shop!
+</p>
+<h2>Your order</h2>
+
+<style>
+    table.cust-table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .cust-table td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    .cust-table tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-justify {
+        text-align: justify;
+    }
+</style>
+<table class="table table-bordered table-striped table-sm cust-table" cellpadding="0" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Selected amount</th>
+            <th>Merchandise</th>
+            <th class="text-right">Price</th>
+            <th class="text-right">Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var line in Model.Order.OrderLines)
+        {
+            <tr>
+                <td class="text-center">@line.Amount</td>
+                <td class="text-left"><a href="@Model.Host/merchandise/details/@line.Merchandise.MerchandiseId">@line.Merchandise.Name</a></td>
+                <td class="text-right">@line.Value.ToString()</td>
+                <td class="text-right">
+                    @((line.Amount * line.Merchandise.Value).ToString())
+                </td>
+            </tr>
+}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-right" align="right">Total:</td>
+            <td class="text-right">
+                @Model.Order.OrderTotal.ToString()
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<br />
+<br />
+<br />
+<p>
+    - Zhininda's Alchemy Shop Team
+</p>

@@ -13,9 +13,10 @@ namespace Zhinindas_Alchemy_Shop.Data
     public class AppDbContext : IdentityDbContext<AppUser>
 
     {
+        private readonly DbContextOptions<AppDbContext> DbOptions;
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-
+            DbOptions = options;
         }
 
         public DbSet<Merchandise> Merchandises {get; set; }
@@ -25,6 +26,10 @@ namespace Zhinindas_Alchemy_Shop.Data
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Effect> Effects { get; set; }
+
+        public AppDbContext SpawnNew() {
+            return new AppDbContext(DbOptions);
+        }
 
     }
 }

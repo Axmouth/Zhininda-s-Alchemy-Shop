@@ -8,10 +8,10 @@ namespace Zhinindas_Alchemy_Shop.Data.interfaces
 {
     public interface IMerchandiseRepository
     {
-        IEnumerable<Merchandise> Merchandises { get;  }
+        IQueryable<Merchandise> Merchandises { get;  }
 
-        IEnumerable<Merchandise> PreferredMerchandises { get;  }
+        IQueryable<Merchandise> PreferredMerchandises { get;  }
 
-        Merchandise GetMerchandiseById(int merchandiseId);
+        Task<Merchandise> GetMerchandiseById(int merchandiseId);
     }
 }

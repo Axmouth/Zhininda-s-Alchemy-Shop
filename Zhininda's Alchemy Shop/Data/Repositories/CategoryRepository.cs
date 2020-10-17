@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Zhinindas_Alchemy_Shop.Data.Repositories
 {
@@ -15,6 +16,6 @@ namespace Zhinindas_Alchemy_Shop.Data.Repositories
             _appDbContext = dbContext;
         }
 
-        public IEnumerable<Category> Categories => _appDbContext.Categories;
+        public IQueryable<Category> Categories => _appDbContext.SpawnNew().Categories.AsNoTracking();
     }
 }

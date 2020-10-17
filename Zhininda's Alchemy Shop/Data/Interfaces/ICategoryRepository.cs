@@ -8,6 +8,6 @@ namespace Zhinindas_Alchemy_Shop.Data.interfaces
 {
     public interface ICategoryRepository
     {
-        IEnumerable<Category> Categories { get;}
+        IQueryable<Category> Categories { get;}
     }
 }

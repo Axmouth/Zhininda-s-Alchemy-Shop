@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Zhinindas_Alchemy_Shop.Options;
 using Zhinindas_Alchemy_Shop.Services.Interfaces;
+using Zhinindas_Alchemy_Shop.Data.Models;
+using Zhinindas_Alchemy_Shop.ViewModels;
 
 namespace Zhinindas_Alchemy_Shop.Services
 {
@@ -46,13 +48,13 @@ namespace Zhinindas_Alchemy_Shop.Services
                 return false;
             }
 
-            var host = "http://dragonflytracker.com/";
+            var host = "http://zhinindas.shop.axmouth.dev/";
             var verificationLink = $"{host}verify-email?email_confirm_token={Uri.EscapeDataString(token)}&user_name={user.UserName}";
             var model = new AccountVerificationViewModel(verificationLink, user.UserName);
             var name = "AccountVerification";
-            var htmlBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Html.cshtml", model).ConfigureAwait(false);
-            var textBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Text.cshtml", model).ConfigureAwait(false);
-            var result = await SendEmailAsync(new List<string> { user.Email }, _fromAddress, "Verify your Dragonfly Account's Email", textBody, htmlBody).ConfigureAwait(false);
+            var htmlBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Html.cshtml", model);
+            var textBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Text.cshtml", model);
+            var result = await SendEmailAsync(new List<string> { user.Email }, _fromAddress, "Verify your Account's Email", textBody, htmlBody);
             return result;
         }
 
@@ -62,11 +64,11 @@ namespace Zhinindas_Alchemy_Shop.Services
             {
                 return false;
             }
-            var model = new HelloWorldViewModel("https://www.google.com");
-            var name = "HelloWorld";
-            var htmlBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Html.cshtml", model).ConfigureAwait(false);
-            var textBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Text.cshtml", model).ConfigureAwait(false);
-            var result = await SendEmailAsync(new List<string> { user.Email }, _fromAddress, "Your Dragonfly Email was changed", textBody, htmlBody).ConfigureAwait(false);
+            var model = new EmailChangedViewModel();
+            var name = "EmailChanged";
+            var htmlBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Html.cshtml", model);
+            var textBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Text.cshtml", model);
+            var result = await SendEmailAsync(new List<string> { user.Email }, _fromAddress, "Your Email was changed", textBody, htmlBody);
             return result;
         }
 
@@ -76,11 +78,26 @@ namespace Zhinindas_Alchemy_Shop.Services
             {
                 return false;
             }
-            var model = new HelloWorldViewModel("https://www.google.com");
-            var name = "HelloWorld";
-            var htmlBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Html.cshtml", model).ConfigureAwait(false);
-            var textBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Text.cshtml", model).ConfigureAwait(false);
-            var result = await SendEmailAsync(new List<string> { user.Email }, _fromAddress, "Your Dragonfly Password was changed", textBody, htmlBody).ConfigureAwait(false);
+            var model = new PasswordChangedViewModel();
+            var name = "PasswordChanged";
+            var htmlBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Html.cshtml", model);
+            var textBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Text.cshtml", model);
+            var result = await SendEmailAsync(new List<string> { user.Email }, _fromAddress, "Your Password was changed", textBody, htmlBody);
+            return result;
+        }
+
+        public async Task<bool> SendOrderCreatedEmailAsync(AppUser user, Order order)
+        {
+            if (user == null)
+            {
+                return false;
+            }
+            var host = "http://zhinindas.shop.axmouth.dev";
+            var model = new OrderCreatedViewModel(user, order, host);
+            var name = "OrderCreated";
+            var htmlBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Html.cshtml", model);
+            var textBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Text.cshtml", model);
+            var result = await SendEmailAsync(new List<string> { user.Email }, _fromAddress, "Your Order has been created", textBody, htmlBody);
             return result;
         }
 
@@ -90,13 +107,13 @@ namespace Zhinindas_Alchemy_Shop.Services
             {
                 return false;
             }
-            var host = "http://dragonflytracker.com/";
+            var host = "http://zhinindas.shop.axmouth.dev/";
             var resetLink = $"{host}password-reset?reset_password_token={Uri.EscapeDataString(token)}&user_name={user.UserName}";
             var model = new PasswordResetViewModel(resetLink, user.UserName);
             var name = "PasswordReset";
-            var htmlBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Html.cshtml", model).ConfigureAwait(false);
-            var textBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Text.cshtml", model).ConfigureAwait(false);
-            var result = await SendEmailAsync(new List<string> { user.Email }, _fromAddress, "Dragonfly Password Reset Requested", textBody, htmlBody).ConfigureAwait(false);
+            var htmlBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Html.cshtml", model);
+            var textBody = await _renderer.RenderViewToStringAsync($"{templateBaseDir}/{name}/{name}Text.cshtml", model);
+            var result = await SendEmailAsync(new List<string> { user.Email }, _fromAddress, "Password Reset Requested", textBody, htmlBody);
             return result;
         }
 
@@ -111,7 +128,7 @@ namespace Zhinindas_Alchemy_Shop.Services
 
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress(_fromName, sender));
-                message.To.Add(new MailboxAddress(recipient));
+                message.To.Add(new MailboxAddress(recipient, recipient));
                 message.Subject = subject;
 
                 var bodyBuilder = new BodyBuilder
@@ -124,14 +141,16 @@ namespace Zhinindas_Alchemy_Shop.Services
 
                 using (var client = new SmtpClient())
                 {
-                    await client.ConnectAsync(_host, _port, MailKit.Security.SecureSocketOptions.StartTlsWhenAvailable).ConfigureAwait(false);
-                    // await client.ConnectAsync(_host, _port).ConfigureAwait(false);
+                    await client.ConnectAsync(_host, _port, MailKit.Security.SecureSocketOptions.StartTlsWhenAvailable);
+                    // await client.ConnectAsync(_host, _port);
 
                     // Note: only needed if the SMTP server requires authentication
-                    await client.AuthenticateAsync(_username, _password).ConfigureAwait(false);
+                    if (!string.IsNullOrEmpty(_username)) {
+                        await client.AuthenticateAsync(_username, _password);
+                    }
 
-                    await client.SendAsync(message).ConfigureAwait(false);
-                    await client.DisconnectAsync(true).ConfigureAwait(false);
+                    await client.SendAsync(message);
+                    await client.DisconnectAsync(true);
                 }
             }
             return true;

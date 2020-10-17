@@ -15,6 +15,7 @@ using Zhinindas_Alchemy_Shop.Contracts.V1.Requests;
 using Zhinindas_Alchemy_Shop.Contracts.V1.Requests.Queries;
 using Zhinindas_Alchemy_Shop.Helpers;
 using Zhinindas_Alchemy_Shop.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Zhinindas_Alchemy_Shop.Controllers.V1
 {
@@ -25,48 +26,30 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
         private readonly ShoppingCart _shoppingCart;
         private readonly UserManager<AppUser> _userManager;
         private readonly IUriService _uriService;
+        private readonly IMailService _mailService;
 
-        public OrderController(IOrderRepository orderRepository, ShoppingCart shoppingCart, UserManager<AppUser> userManager, IUriService uriService)
+        public OrderController(IOrderRepository orderRepository, ShoppingCart shoppingCart, UserManager<AppUser> userManager, IUriService uriService, IMailService mailService)
         {
             _orderRepository = orderRepository;
             _shoppingCart = shoppingCart;
             _userManager = userManager;
             _uriService = uriService;
-        }
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet(ApiRoutes.Orders.Create+"derp")]
-        public async Task<IActionResult> CheckoutAsync()
-        {
-            var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-            var order = new Order
-            {
-                AddressLine1 = user.AddressLine,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                City = user.City,
-                Country = user.Country,
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber,
-                State = user.State,
-                ZipCode = user.ZipCode
-            };
-            return Ok(order);
+            _mailService = mailService;
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost(ApiRoutes.Orders.Create)]
         public async Task<IActionResult> CheckoutAsync(CheckoutRequest checkoutRequest)
         {
-            var items = _shoppingCart.GetShoppingCartItems();
+            ShoppingCartItem[] items = await _shoppingCart.GetShoppingCartItems();
             _shoppingCart.ShoppingCartItems = items;
 
-            if (_shoppingCart.ShoppingCartItems.Count == 0)
+            if (_shoppingCart.ShoppingCartItems.Count() == 0)
             {
                 ModelState.AddModelError(string.Empty, "Your cart is empty, add some merchandises first!");
             }
 
-            var order = new Order {
+            Order order = new Order {
                 AddressLine1 = checkoutRequest.AddressLine,
                 AddressLine2 = checkoutRequest.AddressLine2,
                 City = checkoutRequest.City,
@@ -81,10 +64,15 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
 
             if (ModelState.IsValid)
             {
-                var username =  _userManager.GetUserId(HttpContext.User);
-                order.UserId = (await _userManager.FindByNameAsync(username)).Id;
-                _orderRepository.CreateOrder(order);
-                _shoppingCart.ClearCart();
+                string username =  _userManager.GetUserId(HttpContext.User);
+                AppUser user = await _userManager.FindByNameAsync(username);
+                order.UserId = user.Id;
+                Task<Order> orderTask = _orderRepository.CreateOrder(order);
+                order = await orderTask;
+                Task<bool> mailTask = _mailService.SendOrderCreatedEmailAsync(user, order);
+                await mailTask;
+                Task clearCartTask = _shoppingCart.ClearCart();
+                await clearCartTask;
                 return Ok(new BaseResponse<Order> { 
                     Data = order,
                     Success = true
@@ -103,8 +91,8 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
         {
             var username = _userManager.GetUserId(HttpContext.User);
             var userId = (await _userManager.FindByNameAsync(username)).Id;
-            var orders = await _orderRepository.GetUserOrders(userId);
-            var count = orders.Count(); ;
+            var orders = _orderRepository.GetUserOrders(userId);
+            var countTask = _orderRepository.GetUserOrders(userId).CountAsync(); ;
             if (paginationQuery != null)
             {
                 orders = orders.Skip(paginationQuery.PageSize * (paginationQuery.PageNumber - 1)).Take(paginationQuery.PageSize);
@@ -119,8 +107,9 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                     PageSize = 0,
                 };
             }
+            var orderListTask = orders.ToArrayAsync();
 
-            var paginationResponse = PaginationHelpers.CreatePaginatedResponse(_uriService, new PaginationFilter(paginationQuery), orders, count);
+            var paginationResponse = PaginationHelpers.CreatePaginatedResponse(_uriService, new PaginationFilter(paginationQuery), await orderListTask, await countTask);
             return Ok(paginationResponse);
         }
 

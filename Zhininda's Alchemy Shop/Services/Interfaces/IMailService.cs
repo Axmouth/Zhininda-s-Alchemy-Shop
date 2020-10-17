@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Identity.Models;
+using Zhinindas_Alchemy_Shop.Data.Models;
 
 namespace Zhinindas_Alchemy_Shop.Services.Interfaces
 {
@@ -14,5 +15,6 @@ namespace Zhinindas_Alchemy_Shop.Services.Interfaces
         Task<bool> SendPasswordChangedEmailAsync(AppUser user);
         Task<bool> SendEmailChangedEmailAsync(AppUser user, string oldEmail, string newEmail);
         Task<bool> SendEmailAsync(List<string> recipients, string sender, string subject, string textBody, string htmlBody);
+        Task<bool> SendOrderCreatedEmailAsync(AppUser user, Order order);
     }
 }

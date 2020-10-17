@@ -12,6 +12,7 @@ using Zhinindas_Alchemy_Shop.Data.Interfaces;
 using Zhinindas_Alchemy_Shop.Helpers;
 using Zhinindas_Alchemy_Shop.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 
 public enum MerchandiseSortType
 {
@@ -26,7 +27,7 @@ public enum MerchandiseSortType
 namespace Zhinindas_Alchemy_Shop.Controllers.V1
 {
     [ApiController]
-    public class MerchandiseController: ControllerBase
+    public class MerchandiseController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMerchandiseRepository _merchandiseRepository;
@@ -45,31 +46,33 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
         public async Task<IActionResult> GetAllMerchandises([FromQuery] string categoryName, [FromQuery] string effectName, [FromQuery] string search, [FromQuery] bool preferred, [FromQuery] PaginationQuery paginationQuery, [FromQuery] MerchandiseSortType sortType)
         {
             string _category = categoryName;
-            IEnumerable<Merchandise> merchandises;
-
             string currentCategory = string.Empty;
 
-            merchandises = _merchandiseRepository.Merchandises;
+            IQueryable<Merchandise> merchandises = _merchandiseRepository.Merchandises;
+            IQueryable<Merchandise> merchCount = _merchandiseRepository.Merchandises;
             if (string.IsNullOrEmpty(categoryName) == false)
             {
                 merchandises = merchandises.Where(m => m.Category.CategoryName.Equals(categoryName)).OrderBy(p => p.Name);
+                merchCount = merchCount.Where(m => m.Category.CategoryName.Equals(categoryName)).OrderBy(p => p.Name);
             }
             if (preferred == true)
             {
                 merchandises = merchandises.Where(m => m.IsPreferred == true);
+                merchCount = merchCount.Where(m => m.IsPreferred == true);
             }
             if (string.IsNullOrEmpty(search) == false)
             {
-                    merchandises = merchandises.Where(m => m.Name.ToLower().Contains(search.ToLower()) || m.ShortDescription.ToLower().Contains(search.ToLower()));
-
+                merchandises = merchandises.Where(m => m.Name.ToLower().Contains(search.ToLower()) || m.ShortDescription.ToLower().Contains(search.ToLower()));
+                merchCount = merchCount.Where(m => m.Name.ToLower().Contains(search.ToLower()) || m.ShortDescription.ToLower().Contains(search.ToLower()));
             }
             if (string.IsNullOrEmpty(effectName) == false)
             {
-                merchandises = merchandises.Where(m => m.PrimaryEffect?.Name == effectName || m.SecondaryEffect?.Name == effectName || m.TertiaryEffect?.Name == effectName || m.QuaternaryEffect?.Name == effectName);
+                merchandises = merchandises.Where(m => m.PrimaryEffect.Name == effectName || m.SecondaryEffect.Name == effectName || m.TertiaryEffect.Name == effectName || m.QuaternaryEffect.Name == effectName);
+                merchCount = merchCount.Where(m => m.PrimaryEffect.Name == effectName || m.SecondaryEffect.Name == effectName || m.TertiaryEffect.Name == effectName || m.QuaternaryEffect.Name == effectName);
 
             }
+            Task<int> countTask = merchCount.CountAsync();
             merchandises = merchandises.OrderBy(n => n.Name);
-            var count = merchandises.Count();
             if (paginationQuery != null)
             {
                 merchandises = merchandises.Skip(paginationQuery.PageSize * (paginationQuery.PageNumber - 1)).Take(paginationQuery.PageSize);
@@ -78,24 +81,25 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
 
             if (paginationQuery == null || paginationQuery.PageNumber < 1 || paginationQuery.PageSize < 1)
             {
-                paginationQuery = new PaginationQuery {
+                paginationQuery = new PaginationQuery
+                {
                     PageNumber = 0,
                     PageSize = 0,
                 };
             }
 
-            var paginationResponse = PaginationHelpers.CreatePaginatedResponse(_uriService, new PaginationFilter(paginationQuery), merchandises, count);
+            Task<Merchandise[]> merchandiseTask = merchandises.ToArrayAsync();
+
+            BaseResponse<IEnumerable<Merchandise>> paginationResponse = PaginationHelpers.CreatePaginatedResponse(_uriService, new PaginationFilter(paginationQuery), await merchandiseTask, await countTask);
             return Ok(paginationResponse);
         }
 
         [HttpGet(ApiRoutes.Categories.GetAll)]
         public async Task<IActionResult> GetAllCategories([FromQuery] PaginationQuery paginationQuery)
-        {;
-            IEnumerable<Category> categories;
-
-            categories = _categoryRepository.Categories;
+        {
+            IQueryable<Category> categories = _categoryRepository.Categories;
+            Task<int> countTask = _categoryRepository.Categories.CountAsync();
             categories = categories.OrderBy(c => c.CategoryName);
-            var count = categories.Count();
             if (paginationQuery != null)
             {
                 categories = categories.Skip(paginationQuery.PageSize * (paginationQuery.PageNumber - 1)).Take(paginationQuery.PageSize);
@@ -110,20 +114,17 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                     PageSize = 0,
                 };
             }
-
-            var paginationResponse = PaginationHelpers.CreatePaginatedResponse(_uriService, new PaginationFilter(paginationQuery), categories, count);
+            Task<Category[]> categoriesTask = categories.ToArrayAsync();
+            BaseResponse<IEnumerable<Category>> paginationResponse = PaginationHelpers.CreatePaginatedResponse(_uriService, new PaginationFilter(paginationQuery), await categoriesTask, await countTask);
             return Ok(paginationResponse);
         }
 
         [HttpGet(ApiRoutes.Effects.GetAll)]
         public async Task<IActionResult> GetAllEffects([FromQuery] PaginationQuery paginationQuery)
         {
-            ;
-            IEnumerable<Effect> effects;
-
-            effects = _effectRepository.Effects;
+            IQueryable<Effect> effects = _effectRepository.Effects;
+            Task<int> countTask = _effectRepository.Effects.CountAsync();
             effects = effects.OrderBy(c => c.Name);
-            var count = effects.Count();
             if (paginationQuery != null)
             {
                 effects = effects.Skip(paginationQuery.PageSize * (paginationQuery.PageNumber - 1)).Take(paginationQuery.PageSize);
@@ -138,15 +139,15 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
                     PageSize = 0,
                 };
             }
-
-            var paginationResponse = PaginationHelpers.CreatePaginatedResponse(_uriService, new PaginationFilter(paginationQuery), effects, count);
+            Task<Effect[]> effectTask = effects.ToArrayAsync();
+            BaseResponse<IEnumerable<Effect>> paginationResponse = PaginationHelpers.CreatePaginatedResponse(_uriService, new PaginationFilter(paginationQuery), await effectTask, await countTask);
             return Ok(paginationResponse);
         }
 
         [HttpGet(ApiRoutes.Merchandises.Get)]
         public async Task<IActionResult> MerchandiseDetails(int merchandiseId)
         {
-            var merchandise = _merchandiseRepository.Merchandises.FirstOrDefault(m => m.MerchandiseId == merchandiseId);
+            Merchandise merchandise = await _merchandiseRepository.GetMerchandiseById(merchandiseId);
             if (merchandise == null)
             {
                 return NotFound();

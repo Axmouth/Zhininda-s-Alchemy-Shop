@@ -19,12 +19,13 @@ namespace Zhinindas_Alchemy_Shop.Data.Repositories
             _appDbContext = appDbContext;
             _shoppingCart = shoppingCart;
         }
-        public void CreateOrder(Order order)
+        public async Task<Order> CreateOrder(Order order)
         {
+            AppDbContext appDbContext = _appDbContext.SpawnNew();
             order.OrderPlaced = DateTime.Now;
             order.OrderTotal = 0;
-            _appDbContext.Orders.Add(order);
-            _appDbContext.SaveChanges();
+            await appDbContext.Orders.AddAsync(order);
+            await appDbContext.SaveChangesAsync();
             var shoppingCartItems  = _shoppingCart.ShoppingCartItems;
             foreach (var item in shoppingCartItems)
             {
@@ -35,20 +36,21 @@ namespace Zhinindas_Alchemy_Shop.Data.Repositories
                     OrderId = order.OrderId,
                     Value = item.Merchandise.Value
                 };
-                _appDbContext.OrderDetails.Add(orderDetail);
+                appDbContext.OrderDetails.Add(orderDetail);
                 order.OrderTotal += orderDetail.Value * orderDetail.Amount;
             }
-            _appDbContext.SaveChanges();
+            appDbContext.SaveChanges();
+            return await appDbContext.Orders.Where(o => o.OrderId == order.OrderId).Include(o => o.OrderLines).ThenInclude(ol => ol.Merchandise).AsNoTracking().FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Order>> GetUserOrders(string userId)
+        public IQueryable<Order> GetUserOrders(string userId)
         {
-            return await _appDbContext.Orders.Include(o => o.OrderLines).ThenInclude(ol => ol.Merchandise).Where(o => o.UserId == userId).OrderByDescending(o => o.OrderPlaced).ToListAsync();
+            return _appDbContext.SpawnNew().Orders.Include(o => o.OrderLines).ThenInclude(ol => ol.Merchandise).Where(o => o.UserId == userId).OrderByDescending(o => o.OrderPlaced).AsNoTracking();
         }
 
         public async Task<Order> GetOrderById(int orderId)
         {
-            return await _appDbContext.Orders.Include(o => o.OrderLines).ThenInclude(ol => ol.Merchandise).Where(o => o.OrderId == orderId).SingleOrDefaultAsync();
+            return await _appDbContext.SpawnNew().Orders.AsNoTracking().Include(o => o.OrderLines).ThenInclude(ol => ol.Merchandise).Where(o => o.OrderId == orderId).SingleOrDefaultAsync();
         }
     }
 }

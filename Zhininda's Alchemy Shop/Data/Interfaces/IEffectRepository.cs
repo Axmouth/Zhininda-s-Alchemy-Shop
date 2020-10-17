@@ -8,6 +8,6 @@ namespace Zhinindas_Alchemy_Shop.Data.Interfaces
 {
     public interface IEffectRepository
     {
-        IEnumerable<Effect> Effects { get; }
+        IQueryable<Effect> Effects { get; }
     }
 }

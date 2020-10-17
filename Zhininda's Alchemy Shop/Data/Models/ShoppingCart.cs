@@ -21,7 +21,7 @@ namespace Zhinindas_Alchemy_Shop.Data.Models
         [Key]
         public string ShoppingCartId { get; set; }
         
-        public List<ShoppingCartItem> ShoppingCartItems { get; set; }
+        public ShoppingCartItem[] ShoppingCartItems { get; set; }
 
         public static ShoppingCart GetCart(IServiceProvider services)
         {
@@ -37,32 +37,34 @@ namespace Zhinindas_Alchemy_Shop.Data.Models
             return new ShoppingCart(context) { ShoppingCartId = cartId };
         }
 
-        public void AddToCart(Merchandise merchandise, int amount = 1)
+        public async Task AddToCart(Merchandise merchandise, int amount = 1)
         {
-            var shoppingCartItem = _appDbContext.ShoppingCartItems.SingleOrDefault(s => s.Merchandise.MerchandiseId == merchandise.MerchandiseId && s.ShoppingCartId == ShoppingCartId);
+            AppDbContext appDbContext = _appDbContext;
+            ShoppingCartItem shoppingCartItem = await appDbContext.ShoppingCartItems.SingleOrDefaultAsync(s => s.Merchandise.MerchandiseId == merchandise.MerchandiseId && s.ShoppingCartId == ShoppingCartId);
 
             if (shoppingCartItem == null)
             {
                 shoppingCartItem = new ShoppingCartItem
                 {
                     ShoppingCartId = ShoppingCartId,
-                    Merchandise = merchandise,
+                    MerchandiseId = merchandise.MerchandiseId,
                     Amount = amount
                 };
 
-                _appDbContext.ShoppingCartItems.Add(shoppingCartItem);
+                appDbContext.ShoppingCartItems.Add(shoppingCartItem);
             }
             else
             {
                 shoppingCartItem.Amount += amount;
             }
 
-            _appDbContext.SaveChanges();
+            await appDbContext.SaveChangesAsync();
         }
 
-        public void UpdateCartItem(Merchandise merchandise, int amount)
+        public async Task UpdateCartItem(Merchandise merchandise, int amount)
         {
-            var shoppingCartItem = _appDbContext.ShoppingCartItems.SingleOrDefault(s => s.Merchandise.MerchandiseId == merchandise.MerchandiseId && s.ShoppingCartId == ShoppingCartId);
+            AppDbContext appDbContext = _appDbContext;
+            ShoppingCartItem shoppingCartItem = await appDbContext.ShoppingCartItems.SingleOrDefaultAsync(s => s.Merchandise.MerchandiseId == merchandise.MerchandiseId && s.ShoppingCartId == ShoppingCartId);
 
             if (shoppingCartItem == null)
             {
@@ -73,21 +75,22 @@ namespace Zhinindas_Alchemy_Shop.Data.Models
                     Amount = amount
                 };
 
-                _appDbContext.ShoppingCartItems.Add(shoppingCartItem);
+                appDbContext.ShoppingCartItems.Add(shoppingCartItem);
             }
             else
             {
                 shoppingCartItem.Amount = amount;
             }
 
-            _appDbContext.SaveChanges();
+            await appDbContext.SaveChangesAsync();
         }
 
-        public int SetItemAmount(Merchandise merchandise, int amount)
+        public async Task<int> SetItemAmount(Merchandise merchandise, int amount)
         {
-            var shoppingCartItem = _appDbContext.ShoppingCartItems.SingleOrDefault(s => s.Merchandise.MerchandiseId == merchandise.MerchandiseId && s.ShoppingCartId == ShoppingCartId);
+            AppDbContext appDbContext = _appDbContext;
+            ShoppingCartItem shoppingCartItem = await appDbContext.ShoppingCartItems.SingleOrDefaultAsync(s => s.Merchandise.MerchandiseId == merchandise.MerchandiseId && s.ShoppingCartId == ShoppingCartId);
 
-            var localAmount = 0;
+            int localAmount = 0;
             shoppingCartItem.Amount = amount;
 
             if (shoppingCartItem.Amount > 0)
@@ -96,18 +99,19 @@ namespace Zhinindas_Alchemy_Shop.Data.Models
             }
             else
             {
-                _appDbContext.ShoppingCartItems.Remove(shoppingCartItem);
+                appDbContext.ShoppingCartItems.Remove(shoppingCartItem);
             }
 
 
-            _appDbContext.SaveChanges();
+            await appDbContext.SaveChangesAsync();
 
             return localAmount;
         }
 
-        public int RemoveFromCart(Merchandise merchandise, int amount = 1)
+        public async Task<int> RemoveFromCart(Merchandise merchandise, int amount = 1)
         {
-            var shoppingCartItem = _appDbContext.ShoppingCartItems.SingleOrDefault(s => s.Merchandise.MerchandiseId == merchandise.MerchandiseId && s.ShoppingCartId == ShoppingCartId);
+            AppDbContext appDbContext = _appDbContext;
+            ShoppingCartItem shoppingCartItem = appDbContext.ShoppingCartItems.SingleOrDefault(s => s.Merchandise.MerchandiseId == merchandise.MerchandiseId && s.ShoppingCartId == ShoppingCartId);
 
             var localAmount = 0;
                 shoppingCartItem.Amount -= amount;
@@ -118,32 +122,33 @@ namespace Zhinindas_Alchemy_Shop.Data.Models
             }
             else
             {
-                _appDbContext.ShoppingCartItems.Remove(shoppingCartItem);
+                appDbContext.ShoppingCartItems.Remove(shoppingCartItem);
             }
             
 
-            _appDbContext.SaveChanges();
+            await appDbContext.SaveChangesAsync();
 
             return localAmount;
         }
 
-        public List<ShoppingCartItem> GetShoppingCartItems()
+        public async Task<ShoppingCartItem[]> GetShoppingCartItems()
         {
-            return ShoppingCartItems ??= _appDbContext.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId).Include(s => s.Merchandise).ToList();
+            return ShoppingCartItems ??= await _appDbContext.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId).Include(s => s.Merchandise).AsNoTracking().ToArrayAsync();
         }
 
-        public void ClearCart()
+        public async Task ClearCart()
         {
-            var cartItems = _appDbContext.ShoppingCartItems.Where(cart => cart.ShoppingCartId == ShoppingCartId);
+            AppDbContext appDbContext = _appDbContext;
+            IQueryable<ShoppingCartItem> cartItems = appDbContext.ShoppingCartItems.Where(cart => cart.ShoppingCartId == ShoppingCartId);
 
-            _appDbContext.ShoppingCartItems.RemoveRange(cartItems);
+            appDbContext.ShoppingCartItems.RemoveRange(cartItems);
 
-            _appDbContext.SaveChanges();
+            await appDbContext.SaveChangesAsync();
         }
 
-        public decimal GetShoppingCartTotal()
+        public async Task<decimal> GetShoppingCartTotal()
         {
-            var total = _appDbContext.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId).Select(c => c.Merchandise.Value * c.Amount).Sum();
+            decimal total = await _appDbContext.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId).AsNoTracking().Select(c => c.Merchandise.Value * c.Amount).SumAsync();
 
             return total;
         }

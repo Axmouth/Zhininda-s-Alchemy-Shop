@@ -38,18 +38,18 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
         }
         public async Task<AuthenticationResult> CheckUserPasswordAsync(AppUser user, string password)
         {
-            var result = await _userManager.CheckPasswordAsync(user, password).ConfigureAwait(false);
+            var result = await _userManager.CheckPasswordAsync(user, password);
 
             return new AuthenticationResult
             {
                 Success = result,
-                Errors = new List<string>() { "Failed password check." }
+                Errors = new List<string>() { "Failed password check." },
             };
         }
 
         public async Task<AuthenticationResult> ConfirmEmailAsync(AppUser user, string token)
         {
-            var confirmResult = await _userManager.ConfirmEmailAsync(user, token).ConfigureAwait(false);
+            var confirmResult = await _userManager.ConfirmEmailAsync(user, token);
 
             return new AuthenticationResult
             {
@@ -60,31 +60,31 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
 
         public async Task<AuthenticationResult> LoginAsync(string loginId, string password)
         {
-            var user = await _userManager.FindByNameAsync(loginId).ConfigureAwait(false);
+            var user = await _userManager.FindByNameAsync(loginId);
             if (user == null)
             {
-                user = await _userManager.FindByEmailAsync(loginId).ConfigureAwait(false);
+                user = await _userManager.FindByEmailAsync(loginId);
             }
 
             if (user == null)
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "User does not exist" }
+                    Errors = new[] { "User does not exist" },
                 };
             }
 
-            var userHasValidPassword = await _userManager.CheckPasswordAsync(user, password).ConfigureAwait(false);
+            var userHasValidPassword = await _userManager.CheckPasswordAsync(user, password);
 
             if (!userHasValidPassword)
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "User/password combination is wrong" }
+                    Errors = new[] { "User/password combination is wrong" },
                 };
             }
 
-            return await GenerateAuthenticationResultForUserAsync(user).ConfigureAwait(false);
+            return await GenerateAuthenticationResultForUserAsync(user);
         }
 
         public async Task<AuthenticationResult> LogoutAsync(string token)
@@ -93,17 +93,20 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
 
             if (refreshToken == null)
             {
-                return new AuthenticationResult { Errors = new[] { "Invalid Token" } };
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "Invalid Token" },
+                };
             }
 
             refreshToken.Invalidated = true;
             _appMainDataContext.RefreshTokens.Update(refreshToken);
-            var updated = await _appMainDataContext.SaveChangesAsync().ConfigureAwait(false);
+            var updated = await _appMainDataContext.SaveChangesAsync();
 
             // var refreshToken = new RefreshToken { Token = RefreshToken };
             // _context.RefreshTokens.Attach(refreshToken);
             // _context.RefreshTokens.Remove(refreshToken);
-            //var deleted = await _context.SaveChangesAsync().ConfigureAwait(false);
+            //var deleted = await _context.SaveChangesAsync();
 
             return new AuthenticationResult { Success = true };
         }
@@ -114,15 +117,24 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
 
             if (string.IsNullOrEmpty(token))
             {
-                return new AuthenticationResult { Errors = new[] { "Empty Token" } };
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "Empty Token" },
+                };
             }
             if (string.IsNullOrEmpty(refreshToken))
             {
-                return new AuthenticationResult { Errors = new[] { "Empty Refresh Token" } };
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "Empty Refresh Token" },
+                };
             }
             if (validatedToken == null)
             {
-                return new AuthenticationResult { Errors = new[] { "Invalid Token" } };
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "Invalid Token" },
+                };
             }
             var expiryDateUnix =
                 long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
@@ -130,40 +142,58 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
                 .AddSeconds(expiryDateUnix);
             if (expiryDateTimeUtc > DateTime.UtcNow)
             {
-                return new AuthenticationResult { Errors = new[] { "This token hasn't expired yet" } };
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "This token hasn't expired yet" },
+                };
             }
             var jti = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
-            var storedRefreshToken = await _appMainDataContext.RefreshTokens.SingleOrDefaultAsync(x => x.Token == refreshToken).ConfigureAwait(false);
+            var storedRefreshToken = await _appMainDataContext.RefreshTokens.SingleOrDefaultAsync(x => x.Token == refreshToken);
             if (storedRefreshToken == null)
             {
-                return new AuthenticationResult { Errors = new[] { "This refresh token does not exist" } };
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "This refresh token does not exist" },
+                };
             }
             if (DateTime.UtcNow > storedRefreshToken.ExpiryDate)
             {
-                return new AuthenticationResult { Errors = new[] { "This refresh token has expired" } };
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "This refresh token has expired" },
+                };
             }
             if (storedRefreshToken.Invalidated)
             {
-                return new AuthenticationResult { Errors = new[] { "This refresh token has been invalidated" } };
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "This refresh token has been invalidated" },
+                };
             }
             if (storedRefreshToken.Used)
             {
-                return new AuthenticationResult { Errors = new[] { "This refresh token has been used" } };
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "This refresh token has been used" },
+                };
             }
             if (storedRefreshToken.JwtId != jti)
             {
-                return new AuthenticationResult { Errors = new[] { "This refresh token does not match this JWT" } };
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "This refresh token does not match this JWT" },
+                };
             }
             storedRefreshToken.Used = true;
             _appMainDataContext.RefreshTokens.Update(storedRefreshToken);
-            await _appMainDataContext.SaveChangesAsync().ConfigureAwait(false);
-            var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == "id").Value).ConfigureAwait(false);
-            return await GenerateAuthenticationResultForUserAsync(user).ConfigureAwait(false);
+            await _appMainDataContext.SaveChangesAsync();
+            var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == "id").Value);
+            return await GenerateAuthenticationResultForUserAsync(user);
         }
 
         public async Task<AuthenticationResult> RegisterAsync(string email, string password)
         {
-            var existingUserWithEmail = await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
+            var existingUserWithEmail = await _userManager.FindByEmailAsync(email);
 
             if (existingUserWithEmail != null)
             {
@@ -179,7 +209,7 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
                 UserName = email
             };
 
-            var createdUser = await _userManager.CreateAsync(newUser, password).ConfigureAwait(false);
+            var createdUser = await _userManager.CreateAsync(newUser, password);
 
             if (!createdUser.Succeeded)
             {
@@ -189,12 +219,12 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
                 };
             }
 
-            return await GenerateAuthenticationResultForUserAsync(newUser).ConfigureAwait(false);
+            return await GenerateAuthenticationResultForUserAsync(newUser);
         }
 
         public async Task<AuthenticationResult> RegisterAsync(string username, string email, string password)
         {
-            var existingUserWithEmail = await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
+            var existingUserWithEmail = await _userManager.FindByEmailAsync(email);
 
             if (existingUserWithEmail != null)
             {
@@ -203,7 +233,7 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
                     Errors = new[] { "User with this email address already exists" }
                 };
             }
-            var existingUserWithUsername = await _userManager.FindByNameAsync(username).ConfigureAwait(false);
+            var existingUserWithUsername = await _userManager.FindByNameAsync(username);
 
             if (existingUserWithUsername != null)
             {
@@ -219,7 +249,7 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
                 UserName = username
             };
 
-            var createdUser = await _userManager.CreateAsync(newUser, password).ConfigureAwait(false);
+            var createdUser = await _userManager.CreateAsync(newUser, password);
 
             if (!createdUser.Succeeded)
             {
@@ -229,14 +259,14 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
                 };
             }
 
-            // var sent = await SendConfirmationEmailAsync(newUser).ConfigureAwait(false);
+            var sent = await SendConfirmationEmailAsync(newUser);
 
-            return await GenerateAuthenticationResultForUserAsync(newUser).ConfigureAwait(false);
+            return await GenerateAuthenticationResultForUserAsync(newUser);
         }
 
         public async Task<AuthenticationResult> ResetPasswordAsync(AppUser user, string token, string newPassword)
         {
-            var passChangeResult = await _userManager.ResetPasswordAsync(user, token, newPassword).ConfigureAwait(false);
+            var passChangeResult = await _userManager.ResetPasswordAsync(user, token, newPassword);
 
             return new AuthenticationResult
             {
@@ -247,8 +277,8 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
 
         public async Task<AuthenticationResult> ResetPasswordEmailAsync(AppUser user)
         {
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
-            var result = await _mailService.SendPasswordResetEmailAsync(user, token).ConfigureAwait(false);
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _mailService.SendPasswordResetEmailAsync(user, token);
 
             return new AuthenticationResult
             {
@@ -259,8 +289,8 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
 
         public async Task<AuthenticationResult> SendConfirmationEmailAsync(AppUser user)
         {
-            var emailConfirmationCode = await _userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
-            var sent = await _mailService.SendAccountVerificationEmailAsync(user, emailConfirmationCode).ConfigureAwait(false);
+            var emailConfirmationCode = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var sent = await _mailService.SendAccountVerificationEmailAsync(user, emailConfirmationCode);
 
             return new AuthenticationResult
             {
@@ -271,8 +301,8 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
 
         public async Task<AuthenticationResult> UpdatePasswordAsync(AppUser userToUpdate, string newPassword)
         {
-            var token = await _userManager.GeneratePasswordResetTokenAsync(userToUpdate).ConfigureAwait(false);
-            var passChangeResult = await _userManager.ResetPasswordAsync(userToUpdate, token, newPassword).ConfigureAwait(false);
+            var token = await _userManager.GeneratePasswordResetTokenAsync(userToUpdate);
+            var passChangeResult = await _userManager.ResetPasswordAsync(userToUpdate, token, newPassword);
 
             return new AuthenticationResult
             {
@@ -299,16 +329,16 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
                 new Claim("id", user.Id.ToString())
             };
 
-            var userClaims = await _userManager.GetClaimsAsync(user).ConfigureAwait(false);
+            var userClaims = await _userManager.GetClaimsAsync(user);
             claims.AddRange(userClaims);
 
-            var userRoles = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
+            var userRoles = await _userManager.GetRolesAsync(user);
             foreach (var userRole in userRoles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, userRole));
-                var role = await _roleManager.FindByNameAsync(userRole).ConfigureAwait(false);
+                var role = await _roleManager.FindByNameAsync(userRole);
                 if (role == null) continue;
-                var roleClaims = await _roleManager.GetClaimsAsync(role).ConfigureAwait(false);
+                var roleClaims = await _roleManager.GetClaimsAsync(role);
 
                 foreach (var roleClaim in roleClaims)
                 {
@@ -337,8 +367,8 @@ namespace Zhinindas_Alchemy_Shop.Services.Implementations
                 ExpiryDate = DateTime.UtcNow.AddMonths(6)
             };
 
-            await _appMainDataContext.RefreshTokens.AddAsync(refreshToken).ConfigureAwait(false);
-            await _appMainDataContext.SaveChangesAsync().ConfigureAwait(false);
+            await _appMainDataContext.RefreshTokens.AddAsync(refreshToken);
+            await _appMainDataContext.SaveChangesAsync();
 
             return new AuthenticationResult
             {

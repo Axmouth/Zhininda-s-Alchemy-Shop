@@ -46,7 +46,7 @@ namespace Zhinindas_Alchemy_Shop.Filters
                 return;
             }
 
-            await next().ConfigureAwait(false);
+            await next();
 
             // after controller
         }

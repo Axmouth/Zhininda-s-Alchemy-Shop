@@ -42,9 +42,9 @@ namespace Zhinindas_Alchemy_Shop
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IHostEnvironment hostEnvironment)
         {
-            Configuration = configuration;
+            Configuration = new ConfigurationBuilder().SetBasePath(hostEnvironment.ContentRootPath).AddJsonFile("appsettings.json", true).AddJsonFile("appsettings.Local.json", true).AddEnvironmentVariables().Build();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -74,7 +74,7 @@ namespace Zhinindas_Alchemy_Shop
                                   });
             });
 
-            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
             var jwtSettings = new JwtSettings();
