@@ -71,7 +71,7 @@ jobs:
           CONTAINER_NAME: zhinindas-alchemy-shop-postfix
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           JwtSettings__Secret: ${{ secrets.JWT_SECRET }}
-          JwtSettings__TokenLifetime: 0:0:500
+          JwtSettings__TokenLifetime: 0:7:30
           EmailSettings__FromAddress: noreply@zhininda.axmouth.dev
           EmailSettings__FromName: Zhininda
           EmailSettings__UserName: ${{ secrets.MAIL_USERNAME }}
