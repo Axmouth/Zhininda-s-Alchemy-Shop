@@ -32,6 +32,7 @@ import { MyOrderDetailsPageComponent } from './components/my-order-details-page/
 import { PasswordResetPageComponent } from './components/password-reset-page/password-reset-page.component';
 import { RequestPasswordResetPageComponent } from './components/request-password-reset-page/request-password-reset-page.component';
 import { VerifyEmailPageComponent } from './components/verify-email-page/verify-email-page.component';
+import { EffectsListPageComponent } from './components/effects-list-page/effects-list-page.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { VerifyEmailPageComponent } from './components/verify-email-page/verify-
     PasswordResetPageComponent,
     RequestPasswordResetPageComponent,
     VerifyEmailPageComponent,
+    EffectsListPageComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -74,6 +76,9 @@ import { VerifyEmailPageComponent } from './components/verify-email-page/verify-
         whitelistedDomains: jwtWhitelist,
         blacklistedRoutes: [],
         skipWhenExpired: false,
+        loginTokengetter: (authRes: any) => {
+          return authRes.data?.token;
+        },
       },
     }),
   ],

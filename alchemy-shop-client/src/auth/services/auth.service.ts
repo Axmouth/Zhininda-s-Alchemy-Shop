@@ -1,21 +1,20 @@
 import { Injectable, Inject, OnDestroy } from '@angular/core';
 import { TokenService } from './token.service';
-import { map, switchMap, catchError, retry, take, takeUntil, concatMap } from 'rxjs/operators';
-import { Observable, of, observable, Subject } from 'rxjs';
-import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { map, switchMap, catchError, retry, take, takeUntil } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { AuthSuccess } from 'src/app/models/api/auth-success-response';
 import { AuthResult } from '../internal/auth-result';
 import { AuthToken } from '../internal/auth-token';
 import { AuthJWTToken, AuthCreateJWTToken } from '../internal/auth-jwt-token';
 import { AuthIllegalTokenError } from '../internal/auth-illegal-token-error';
-import { isPlatformBrowser } from '@angular/common';
 import { AX_AUTH_OPTIONS } from '../auth-injection-token';
 import { AuthModuleOptionsConfig } from '../auth-module-options-config';
-import { User } from 'src/app/models/api/user';
 import { IsBrowserService } from 'src/auth/helpers/services/is-browser.service';
-import { BaseResponse } from 'src/app/models/api/base-response';
-import { ProfileResponse } from '../../app/models/api/profile-response';
+
+const tokenGetterDefault = (authRes: any) => {
+  return authRes.data?.token;
+};
 
 @Injectable({
   providedIn: 'root',
@@ -89,15 +88,9 @@ export class AuthService implements OnDestroy {
    * It is assumed it stored under email inside the token
    *
    */
-  getProfile(): Observable<BaseResponse<ProfileResponse>> {
+  getProfile<T>(): Observable<T> {
     const url = `${this.authEndpointPrefix}${this.config.profileEndpoint ?? 'profile'}`;
-    const result = baseApiRequest<BaseResponse<ProfileResponse>>(
-      this.http,
-      url,
-      {},
-      this.config.profileMethod ?? 'get',
-      undefined,
-    )
+    const result = baseApiRequest<T>(this.http, url, {}, this.config.profileMethod ?? 'get', undefined)
       .pipe(
         map((res) => {
           return res;
@@ -120,21 +113,16 @@ export class AuthService implements OnDestroy {
   authenticate(data?: any): Observable<AuthResult> {
     const url = `${this.authEndpointPrefix}${this.config.loginEndpoint ?? 'login'}`;
 
-    const result = baseApiRequest<BaseResponse<AuthSuccess>>(
-      this.http,
-      url,
-      {},
-      this.config.loginMethod ?? 'post',
-      data,
-    ).pipe(
+    const result = baseApiRequest(this.http, url, {}, this.config.loginMethod ?? 'post', data).pipe(
       map((res) => {
+        const tokenGetter = this.config?.loginTokengetter ?? tokenGetterDefault;
         return new AuthResult(
           true,
           res,
           true,
           [], // ['Login/Email combination is not correct, please try again.'],
           ['You have been successfully logged in.'],
-          this.createToken(res.data?.token, true),
+          this.createToken(tokenGetter(res), true),
         );
       }),
       catchError((res) => {
@@ -165,7 +153,7 @@ export class AuthService implements OnDestroy {
         if (!url) {
           return of(res);
         }
-        return baseApiRequest<BaseResponse<null>>(this.http, url, {}, this.config.logoutMethod ?? 'delete', undefined);
+        return baseApiRequest(this.http, url, {}, this.config.logoutMethod ?? 'delete', undefined);
       }),
       map((res) => {
         return new AuthResult(
@@ -204,21 +192,16 @@ export class AuthService implements OnDestroy {
    */
   register(data?: any): Observable<AuthResult> {
     const url = `${this.authEndpointPrefix}${this.config.registerEndpoint ?? 'register'}`;
-    const result = baseApiRequest<BaseResponse<AuthSuccess>>(
-      this.http,
-      url,
-      {},
-      this.config.registerMethod ?? 'post',
-      data,
-    ).pipe(
+    const result = baseApiRequest(this.http, url, {}, this.config.registerMethod ?? 'post', data).pipe(
       map((res) => {
+        const tokenGetter = this.config?.registerTokengetter ?? tokenGetterDefault;
         return new AuthResult(
           true,
           res,
           true,
           [], // ['Something went wrong, please try again.'],
           ['You have been successfully registered.'],
-          this.createToken(res.data?.token, true),
+          this.createToken(tokenGetter(res), true),
         );
       }),
       catchError((res) => {
@@ -268,6 +251,7 @@ export class AuthService implements OnDestroy {
           }),
         );
     }
+    this.authenticating = true;
     return this.getToken()
       .pipe(
         switchMap((token) => {
@@ -330,16 +314,11 @@ export class AuthService implements OnDestroy {
    */
   refreshToken(data?: any, callback$?: Observable<any>): Observable<AuthResult> {
     const url = `${this.authEndpointPrefix}${this.config.refreshEndpoint ?? 'refresh'}`;
-    const refresh$ = baseApiRequest<BaseResponse<AuthSuccess>>(
-      this.http,
-      url,
-      {},
-      this.config.refreshMethod ?? 'post',
-      data,
-    )
+    const refresh$ = baseApiRequest(this.http, url, {}, this.config.refreshMethod ?? 'post', data)
       .pipe(
         map((res) => {
-          const token = AuthCreateJWTToken(res.data?.token);
+          const tokenGetter = this.config?.refreshTokengetter ?? tokenGetterDefault;
+          const token = AuthCreateJWTToken(tokenGetter(res));
           const authResult = new AuthResult(
             true,
             res,

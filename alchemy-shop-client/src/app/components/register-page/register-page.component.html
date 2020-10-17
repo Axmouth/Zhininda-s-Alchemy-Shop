@@ -1,7 +1,7 @@
-<div class="register-form">
-  <div class="col-md-8 col-md-offset-3">
-    <h2>Register now at Zhininda's Alchemy Shop</h2>
-    <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()" class="form-horizontal" role="form">
+<div class="register-form text-center">
+  <h2>Register now at Zhininda's Alchemy Shop</h2>
+  <div class="col-md-6 offset-md-3">
+    <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()" class="form-horizontal text-left" role="form">
       <h4>Create a new account for Zhininda to send you her best materials</h4>
       <hr />
       <div class="form-group">
@@ -124,16 +124,23 @@
         </div>
       </div>
 
-      <div class="form-group pull-right form-pull-right-button">
-        <div class="col-md-offset-2 col-md-10">
+      <div class="form-group">
+        <div class="">
           <input
             type="submit"
-            class="btn btn-success"
+            class="btn btn-success col-md-8 offset-md-1"
             value="Register"
             [disabled]="!registerForm.valid || registerInProgress"
           />
         </div>
       </div>
+      <div class="col-md-8 offset-md-1">
+        <a href="/request-password-reset" routerLink="/request-password-reset" class="btn btn-link">
+          Forgot Your Password?
+        </a>
+        <a href="/auth/login" routerLink="/auth/login" class="btn btn-link"> Already have an account? Login here </a>
+      </div>
     </form>
+    <br /><br />
   </div>
 </div>

@@ -121,7 +121,6 @@ export class RegisterPageComponent implements OnInit {
       .subscribe(
         async (result) => {
           if (result.isSuccess()) {
-            // await this.router.navigateByUrl(this.routeStateService.getPreviousUrl());
             await this.router.navigateByUrl('/');
           } else {
             this.errors = result.getResponse().error.errors;

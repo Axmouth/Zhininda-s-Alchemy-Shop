@@ -20,11 +20,13 @@ import { MyOrderDetailsPageComponent } from './components/my-order-details-page/
 import { RequestPasswordResetPageComponent } from './components/request-password-reset-page/request-password-reset-page.component';
 import { VerifyEmailPageComponent } from './components/verify-email-page/verify-email-page.component';
 import { PasswordResetPageComponent } from './components/password-reset-page/password-reset-page.component';
+import { EffectsListPageComponent } from './components/effects-list-page/effects-list-page.component';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent, pathMatch: 'full' },
   { path: 'merchandise/list', component: MerchandiseListPageComponent, pathMatch: 'full' },
   { path: 'merchandise/details/:merchandiseId', component: MerchandiseDetailsPageComponent, pathMatch: 'full' },
+  { path: 'effects/list', component: EffectsListPageComponent, pathMatch: 'full' },
   { path: 'shopping-cart', component: ShoppingCartPageComponent, pathMatch: 'full' },
   { path: 'shopping-cart/checkout', component: CheckoutPageComponent, pathMatch: 'full' },
   { path: 'shopping-cart/checkout-complete', component: CheckoutCompletePageComponent, pathMatch: 'full' },

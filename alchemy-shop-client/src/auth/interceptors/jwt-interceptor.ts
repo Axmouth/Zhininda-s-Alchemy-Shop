@@ -3,12 +3,10 @@ import { AX_AUTH_OPTIONS } from '../auth-injection-token';
 import { TokenService } from '../services/token.service';
 import { HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { AuthJWTToken } from '../internal/auth-jwt-token';
-import { AuthService } from '../services/auth.service';
 import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { parse } from 'url';
 import { isPlatformBrowser } from '@angular/common';
-import { AuthModuleOptions } from '../auth-module-options';
 import { AuthModuleOptionsConfig } from '../auth-module-options-config';
 
 @Injectable()
@@ -28,7 +26,6 @@ export class JwtInterceptor implements OnDestroy {
   constructor(
     private tokenService: TokenService,
     @Inject(AX_AUTH_OPTIONS) config: AuthModuleOptionsConfig,
-    private authService: AuthService,
     @Inject(PLATFORM_ID) private platform: object,
   ) {
     tokenService

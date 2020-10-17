@@ -34,7 +34,6 @@
                     class="form-control here"
                     required="required"
                     type="text"
-                    disabled
                   />
                   <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
@@ -454,6 +453,32 @@
                 </div>
               </div>
             </form>
+            <br />
+            <hr />
+
+            <div class="offset-4 col-8">
+              <button
+                class="btn btn-primary"
+                (click)="onResetYourPasswordClick()"
+                [disabled]="requestPasswordResetInProgress"
+              >
+                <span class="spinner-border spinner-border-sm" *ngIf="requestPasswordResetInProgress"></span>
+                Reset Your Password
+              </button>
+              <br />
+              <hr />
+              <button
+                class="btn btn-primary"
+                (click)="onSendAccountVerificationEmailClick()"
+                [disabled]="sendAccountVerificationEmailClickInProgress"
+              >
+                <span
+                  class="spinner-border spinner-border-sm"
+                  *ngIf="sendAccountVerificationEmailClickInProgress"
+                ></span
+                >Send Account Verification Email
+              </button>
+            </div>
           </div>
         </div>
       </div>

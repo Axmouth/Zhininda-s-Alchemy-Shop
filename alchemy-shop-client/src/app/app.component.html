@@ -42,11 +42,14 @@
   </div>
 </nav>
 <div class="container body-content main-content">
-  <p *ngFor="let error of errors">
-    <ngb-alert type="danger" [dismissible]="false">{{ error }}</ngb-alert>
+  <p *ngFor="let error of errors" class="row">
+    <ngb-alert type="danger" [dismissible]="false" class="col-md-8 offset-md-2">{{ error }}</ngb-alert>
   </p>
-  <p *ngFor="let message of messages">
-    <ngb-alert type="info" [dismissible]="false">{{ message }}</ngb-alert>
+  <p *ngFor="let message of messages" class="row">
+    <ngb-alert type="info" [dismissible]="false" class="col-md-8 offset-md-2">{{ message }}</ngb-alert>
+  </p>
+  <p *ngFor="let message of successMessages" class="row">
+    <ngb-alert type="success" [dismissible]="false" class="col-md-8 offset-md-2">{{ message }}</ngb-alert>
   </p>
   <router-outlet></router-outlet>
 </div>

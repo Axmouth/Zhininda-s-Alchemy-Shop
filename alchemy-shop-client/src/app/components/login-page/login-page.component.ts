@@ -2,13 +2,13 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Meta, Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../auth/services/auth.service';
-import { ErrorsService } from '../../services/errors.service';
-import { AccountSettings } from '../../models/api/account-settings';
+import { AuthService } from 'src/auth/services/auth.service';
+import { AccountSettings } from 'src/app/models/api/account-settings';
 import { AccountService } from 'src/app/services/account.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'zas-login-page',
@@ -28,7 +28,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private accountService: AccountService,
-    private errorsService: ErrorsService,
+    private alertService: AlertService,
     private router: Router,
     private title: Title,
     private meta: Meta,
@@ -59,7 +59,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
             await this.router.navigateByUrl('/');
           } else {
             this.errors = result.getResponse().error.errors;
-            this.errorsService.setErrorList(result.getResponse().error.errors);
+            this.alertService.setErrorList(result.getResponse().error.errors);
           }
           this.loginInProgress = false;
         },

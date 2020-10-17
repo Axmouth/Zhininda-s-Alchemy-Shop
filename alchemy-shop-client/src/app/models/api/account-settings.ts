@@ -10,7 +10,7 @@ export class AccountSettings {
   publicInfo: string;
   zipcode: string;
   state: string;
-  newPassword: string;
-  confirmNewPassword: string;
-  currentPassword: string;
+  newPassword?: string;
+  confirmNewPassword?: string;
+  currentPassword?: string;
 }

@@ -23,6 +23,15 @@
     <div class="dropdown-divider"></div>
     <a
       ngbDropdownItem
+      href="/effects/list"
+      routerLink="/effects/list"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >View All Effects</a
+    >
+    <div class="dropdown-divider"></div>
+    <a
+      ngbDropdownItem
       href="/merchandise/list"
       routerLink="/merchandise/list"
       routerLinkActive="active"

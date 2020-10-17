@@ -5,6 +5,7 @@ import { ProfileResponse } from '../../models/api/profile-response';
 import { AccountService } from '../../services/account.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
+import { IsBrowserService } from 'src/auth/helpers/services/is-browser.service';
 
 @Component({
   selector: 'zas-my-profile-page',
@@ -17,6 +18,7 @@ export class MyProfilePageComponent implements OnInit, OnDestroy {
 
   constructor(
     private accountService: AccountService,
+    private isBrowserService: IsBrowserService,
     private title: Title,
     private meta: Meta,
     @Inject(DOCUMENT) private doc: Document,
@@ -29,6 +31,9 @@ export class MyProfilePageComponent implements OnInit, OnDestroy {
     this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
     this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
     this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
+    if (!this.isBrowserService.isInBrowser()) {
+      return;
+    }
     this.initialise();
   }
 

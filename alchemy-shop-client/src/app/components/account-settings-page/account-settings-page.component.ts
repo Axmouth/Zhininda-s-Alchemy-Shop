@@ -1,13 +1,13 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, switchMap, map } from 'rxjs/operators';
 import { AccountService } from 'src/app/services/account.service';
 import { AccountSettings } from 'src/app/models/api/account-settings';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ErrorsService } from 'src/app/services/errors.service';
-import { MessagesService } from 'src/app/services/messages.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
+import { AlertService } from 'src/app/services/alert.service';
+import { IsBrowserService } from 'src/auth/helpers/services/is-browser.service';
 
 @Component({
   selector: 'zas-account-settings-page',
@@ -17,7 +17,7 @@ import { DOCUMENT } from '@angular/common';
 export class AccountSettingsPageComponent implements OnInit, OnDestroy {
   ngUnsubscribe = new Subject<void>();
   accountSettingsForm = new FormGroup({
-    username: new FormControl(''),
+    username: new FormControl({ value: '', disabled: true }),
     addressLine: new FormControl(''),
     zipcode: new FormControl(''),
     state: new FormControl(''),
@@ -33,11 +33,13 @@ export class AccountSettingsPageComponent implements OnInit, OnDestroy {
     confirmNewPassword: new FormControl(''),
   });
   mySettings: AccountSettings;
+  sendAccountVerificationEmailClickInProgress = false;
+  requestPasswordResetInProgress = false;
 
   constructor(
     private accountService: AccountService,
-    private errorsService: ErrorsService,
-    private messagesService: MessagesService,
+    private alertService: AlertService,
+    private isBrowserService: IsBrowserService,
     private title: Title,
     private meta: Meta,
     @Inject(DOCUMENT) private doc: Document,
@@ -50,6 +52,9 @@ export class AccountSettingsPageComponent implements OnInit, OnDestroy {
     this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
     this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
     this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
+    if (!this.isBrowserService.isInBrowser()) {
+      return;
+    }
     this.initialise();
   }
 
@@ -59,33 +64,75 @@ export class AccountSettingsPageComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (result) => {
-          this.mySettings = result.data;
-          this.accountSettingsForm.setValue(result.data);
+          this.mySettings = { newPassword: null, confirmNewPassword: null, currentPassword: null, ...result.data };
+          this.accountSettingsForm.setValue(this.mySettings);
         },
         (err) => {
           console.log(err);
-          this.errorsService.setErrorList(err?.errors);
+          this.alertService.setErrorList(err?.errors);
         },
       );
   }
 
   onUpdateAccountSettingsSubmit(): void {
     this.mySettings = this.accountSettingsForm.getRawValue();
-    this.messagesService.setMessageList([]);
+    this.alertService.setMessageList([]);
     this.accountService
       .updateAccountSettings(this.mySettings)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (result) => {
-          this.mySettings = result.data;
-          this.accountSettingsForm.setValue(result.data);
-          this.messagesService.setMessageList(['Your settings have been updated.']);
+          this.mySettings = { newPassword: null, confirmNewPassword: null, currentPassword: null, ...result.data };
+          this.accountSettingsForm.setValue(this.mySettings);
+          this.alertService.setMessageList(['Your settings have been updated.']);
         },
         (err) => {
           console.log(err);
-          this.errorsService.setErrorList(err?.errors);
+          this.alertService.setErrorList(err?.errors);
         },
       );
+  }
+
+  onSendAccountVerificationEmailClick(): void {
+    this.sendAccountVerificationEmailClickInProgress = true;
+    this.accountService
+      .getEmail()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(
+        switchMap((email) => {
+          return this.accountService
+            .requestVerificationEmail({ email })
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .pipe(
+              map((t) => {
+                this.sendAccountVerificationEmailClickInProgress = false;
+                return t;
+              }),
+            );
+        }),
+      )
+      .subscribe();
+  }
+
+  onResetYourPasswordClick(): void {
+    this.requestPasswordResetInProgress = true;
+    this.accountService
+      .getEmail()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(
+        switchMap((email) => {
+          return this.accountService
+            .requestPasswordReset({ email })
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .pipe(
+              map((t) => {
+                this.requestPasswordResetInProgress = false;
+                return t;
+              }),
+            );
+        }),
+      )
+      .subscribe();
   }
 
   ngOnDestroy(): void {

@@ -5,7 +5,7 @@ import { TokenPack } from '../internal/token-pack';
 import { AuthToken } from '../internal/auth-token';
 import { isPlatformBrowser } from '@angular/common';
 import { AuthCreateJWTToken } from '../internal/auth-jwt-token';
-import { AX_AUTH_OPTIONS } from '..';
+import { AX_AUTH_OPTIONS } from '../auth-injection-token';
 import { AuthModuleOptionsConfig } from '../auth-module-options-config';
 
 @Injectable({

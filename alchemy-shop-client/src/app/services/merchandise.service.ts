@@ -6,6 +6,7 @@ import { RestApiService } from './rest-api.service';
 import { apiRoot } from 'src/environments/environment';
 import { takeUntil } from 'rxjs/operators';
 import { Category } from '../models/api/category';
+import { Effect } from '../models/api/effect';
 
 @Injectable({
   providedIn: 'root',
@@ -42,9 +43,9 @@ export class MerchandiseService implements OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe));
   }
 
-  getAllMerchandiseEffects(query: any = {}): Observable<BaseResponse<Category[]>> {
+  getAllMerchandiseEffects(query: any = {}): Observable<BaseResponse<Effect[]>> {
     return this.apiService
-      .getAll<BaseResponse<Category[]>>(`${this.effectUrl}`, query, true)
+      .getAll<BaseResponse<Effect[]>>(`${this.effectUrl}`, query, true)
       .pipe(takeUntil(this.ngUnsubscribe));
   }
 

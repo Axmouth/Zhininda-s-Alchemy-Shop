@@ -33,7 +33,7 @@ for row in ingredients_table_rows[1:]:
                     new Merchandise
                     {{
                         Name = "{ingredient_name}",
-                        Price = {ingredient_value},
+                        Value = {ingredient_value},
                         ShortDescription = "{ingredient_name}",
                         LongDescription = "{ingredient_name} is an ingredient, it can be used to make potions at an alchemy lab as part of alchemy.",
                         Category = Categories["Ingredients"],
@@ -96,7 +96,7 @@ while i < len(potions_tables):
                         new Merchandise
                         {{
                             Name = "{potion_name}",
-                            Price = {potion_value},
+                            Value = {potion_value},
                             ShortDescription = "{potion_name}",
                             LongDescription = "{potion_description}",
                             Category = Categories["{category}"],

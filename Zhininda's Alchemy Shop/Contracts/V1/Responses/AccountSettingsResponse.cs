@@ -21,8 +21,5 @@ namespace Zhinindas_Alchemy_Shop.Contracts.V1.Responses
         public string AddressLine { get; set; }
         public string Zipcode { get; set; }
         public string PublicInfo { get; set; }
-        public string CurrentPassword { get; set; }
-        public string NewPassword { get; set; }
-        public string ConfirmNewPassword { get; set; }
     }
 }

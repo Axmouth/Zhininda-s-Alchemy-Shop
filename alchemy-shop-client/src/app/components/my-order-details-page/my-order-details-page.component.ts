@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
+import { IsBrowserService } from 'src/auth/helpers/services/is-browser.service';
 
 @Component({
   selector: 'zas-my-order-details-page',
@@ -20,6 +21,7 @@ export class MyOrderDetailsPageComponent implements OnInit, OnDestroy {
   constructor(
     private orderService: OrderService,
     private route: ActivatedRoute,
+    private isBrowserService: IsBrowserService,
     private title: Title,
     private meta: Meta,
     @Inject(DOCUMENT) private doc: Document,
@@ -32,6 +34,9 @@ export class MyOrderDetailsPageComponent implements OnInit, OnDestroy {
     this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
     this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
     this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
+    if (!this.isBrowserService.isInBrowser()) {
+      return;
+    }
     this.route.params.pipe(takeUntil(this.ngUnsubscribe)).subscribe((params) => {
       this.orderId = params.orderId;
       this.initialise();

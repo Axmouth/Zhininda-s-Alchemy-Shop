@@ -16,9 +16,9 @@
       <tr *ngFor="let shoppingCartItem of shoppingCartModel?.shoppingCart?.shoppingCartItems">
         <td class="text-center">{{ shoppingCartItem?.amount }}</td>
         <td class="text-left">{{ shoppingCartItem.merchandise?.name }}</td>
-        <td class="text-right">{{ shoppingCartItem.merchandise?.price }}</td>
+        <td class="text-right">{{ shoppingCartItem.merchandise?.value }}</td>
         <td class="text-right">
-          {{ shoppingCartItem?.amount * shoppingCartItem?.merchandise?.price }}
+          {{ shoppingCartItem?.amount * shoppingCartItem?.merchandise?.value }}
         </td>
         <td class="text-center">
           <button

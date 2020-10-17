@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 import { map, takeWhile, takeUntil } from 'rxjs/operators';
 import { AuthResult } from 'src/auth/internal/auth-result';
 import { AuthService } from 'src/auth/services/auth.service';
-import { ErrorsService } from '../../services/errors.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'zas-request-password-reset-page',
@@ -26,7 +26,7 @@ export class RequestPasswordResetPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private errorsService: ErrorsService,
+    private alertService: AlertService,
     private title: Title,
     private meta: Meta,
     @Inject(DOCUMENT) private doc: Document,
@@ -52,13 +52,13 @@ export class RequestPasswordResetPageComponent implements OnInit, OnDestroy {
             this.success = true;
             this.errors = [];
             this.successMessages = result.getMessages();
-            this.errorsService.setErrorList([]);
+            this.alertService.clearErrorList();
           } else {
             this.success = false;
             console.log(result.getResponse());
             console.log(result.getErrors());
             this.errors = result.getResponse().error.errors;
-            this.errorsService.setErrorList(this.errors);
+            this.alertService.setErrorList(this.errors);
           }
           this.loading = false;
         },

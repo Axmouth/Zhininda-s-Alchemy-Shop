@@ -7,6 +7,7 @@ import { AccountService } from 'src/app/services/account.service';
 import { OrderService } from '../../services/order.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
+import { IsBrowserService } from 'src/auth/helpers/services/is-browser.service';
 
 @Component({
   selector: 'zas-my-orders-page',
@@ -20,6 +21,7 @@ export class MyOrdersPageComponent implements OnInit, OnDestroy {
   constructor(
     private accountService: AccountService,
     private orderService: OrderService,
+    private isBrowserService: IsBrowserService,
     private title: Title,
     private meta: Meta,
     @Inject(DOCUMENT) private doc: Document,
@@ -32,6 +34,9 @@ export class MyOrdersPageComponent implements OnInit, OnDestroy {
     this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
     this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
     this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
+    if (!this.isBrowserService.isInBrowser()) {
+      return;
+    }
     this.initialise();
   }
 

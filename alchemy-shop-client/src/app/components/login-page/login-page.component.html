@@ -1,11 +1,11 @@
-<div class="login-form">
-  <div class="col-md-8 col-md-offset-3">
-    <h2>Please log in before placing an order.</h2>
-    <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" class="form-horizontal" role="form">
+<div class="login-form text-center">
+  <h2>Please log in before placing an order.</h2>
+  <div class="col-md-6 offset-md-3">
+    <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" class="form-horizontal text-left" role="form">
       <h4>Enter your details below</h4>
       <hr />
       <div class="form-group">
-        <label class="col-md-2 control-label">User</label>
+        <label class="col-md-6 control-label">Username/Email</label>
         <div class="col-md-10">
           <input name="username" formControlName="username" class="form-control" />
           <span asp-validation-for="UserName" class="text-danger"></span>
@@ -13,7 +13,7 @@
       </div>
 
       <div class="form-group">
-        <label class="col-md-2 control-label">Password</label>
+        <label class="col-md-6 control-label">Password</label>
         <div class="col-md-10">
           <input name="password" formControlName="password" class="form-control" type="password" />
           <span asp-validation-for="Password" class="text-danger"></span>
@@ -21,22 +21,31 @@
       </div>
 
       <div class="form-group row">
-        <div class="col-md-6 offset-md-4">
+        <div class="col-md-6 offset-md-1">
           <div class="checkbox">
             <label> <input type="checkbox" name="rememberMe" formControlName="rememberMe" /> Remember Me </label>
           </div>
         </div>
       </div>
 
-      <div class="form-group pull-right form-pull-right-button">
-        <div class="col-md-offset-2 col-md-10">
+      <div class="form-group">
+        <div class="">
           <input
             type="submit"
-            class="btn btn-success"
+            class="btn btn-success col-md-8 offset-md-1"
             value="Log in"
             [disabled]="!loginForm.valid || loginInProgress"
           />
         </div>
+      </div>
+      <br />
+      <div class="col-md-8 offset-md-1">
+        <a href="/request-password-reset" routerLink="/request-password-reset" class="btn btn-link">
+          Forgot Your Password?
+        </a>
+        <a href="/auth/register" routerLink="/auth/register" class="btn btn-link">
+          Need a new account? Register here
+        </a>
       </div>
     </form>
   </div>

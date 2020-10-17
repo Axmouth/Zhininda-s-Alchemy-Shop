@@ -3,9 +3,9 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ErrorsService } from 'src/app/services/errors.service';
 import { AuthService } from 'src/auth';
 import { AuthResult } from 'src/auth/internal/auth-result';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'zas-verify-email-page',
@@ -22,7 +22,7 @@ export class VerifyEmailPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private errorsService: ErrorsService,
+    private alertService: AlertService,
     private title: Title,
     private meta: Meta,
     @Inject(DOCUMENT) private doc: Document,
@@ -42,11 +42,11 @@ export class VerifyEmailPageComponent implements OnInit, OnDestroy {
           this.success = true;
           this.errors = [];
           this.successMessages = result.getMessages();
-          this.errorsService.setErrorList([]);
+          this.alertService.clearErrorList();
         } else {
           this.success = false;
           this.errors = result.getResponse().error.errors;
-          this.errorsService.setErrorList(this.errors);
+          this.alertService.setErrorList(this.errors);
         }
         this.loading = false;
       },

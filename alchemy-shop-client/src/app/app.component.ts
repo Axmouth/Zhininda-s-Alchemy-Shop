@@ -3,8 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ErrorsService } from './services/errors.service';
-import { MessagesService } from './services/messages.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'zas-root',
@@ -19,29 +18,31 @@ export class AppComponent implements OnInit, OnDestroy {
   });
   errors: string[] = [];
   messages: string[] = [];
+  successMessages: string[] = [];
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private errorsService: ErrorsService,
-    private messagesService: MessagesService,
-  ) {}
+  constructor(private router: Router, private route: ActivatedRoute, private alertService: AlertService) {}
 
   ngOnInit(): void {
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe((qParams) => {
       this.searchForm.controls.search.setValue(qParams.search);
     });
-    this.errorsService
+    this.alertService
       .getErrorList()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((errors) => {
         this.errors = errors;
       });
-    this.messagesService
+    this.alertService
       .getMessageList()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((messages) => {
         this.messages = messages;
+      });
+    this.alertService
+      .getSuccessMessageList()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((messages) => {
+        this.successMessages = messages;
       });
   }
 

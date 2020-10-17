@@ -6,10 +6,11 @@ import { Meta, Title } from '@angular/platform-browser';
 import { AccountService } from 'src/app/services/account.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { CheckoutRequest } from '../../models/api/checkout-request';
+import { CheckoutRequest } from 'src/app/models/api/checkout-request';
 import { Router } from '@angular/router';
-import { ErrorsService } from '../../services/errors.service';
 import { DOCUMENT } from '@angular/common';
+import { AlertService } from 'src/app/services/alert.service';
+import { IsBrowserService } from 'src/auth/helpers/services/is-browser.service';
 
 @Component({
   selector: 'zas-checkout-page',
@@ -35,7 +36,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     private orderService: OrderService,
     private shoppingCartService: ShoppingCartService,
     private accountService: AccountService,
-    private errorsService: ErrorsService,
+    private alertService: AlertService,
+    private isBrowserService: IsBrowserService,
     private title: Title,
     private meta: Meta,
     @Inject(DOCUMENT) private doc: Document,
@@ -48,11 +50,14 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
     this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
     this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
+    if (!this.isBrowserService.isInBrowser()) {
+      return;
+    }
     this.accountService
       .getAccountSettings()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((result) => {
-        const { username, publicInfo, newPassword, confirmNewPassword, currentPassword, ...checkoutData } = {
+        const { username, publicInfo, ...checkoutData } = {
           ...result.data,
         };
 
@@ -67,13 +72,13 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (result) => {
-          this.errorsService.setErrorList([]);
+          this.alertService.clearErrorList();
           this.shoppingCartService.reload();
           this.router.navigateByUrl('/shopping-cart/checkout-complete');
         },
         (err) => {
           console.log(err);
-          this.errorsService.setErrorList(err?.error?.errors);
+          this.alertService.setErrorList(err?.error?.errors);
         },
       );
   }
