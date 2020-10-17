@@ -65,11 +65,9 @@ jobs:
         run: DOCKER_HOST="ssh://$SERVER_USERNAME@$SERVER_IP:$SSH_PORT" docker-compose pull
       - name: Use docker-compose to deploy remotely
         env:
-          CAPTCHA_SECRET: ${{ secrets.CAPTCHA_SECRET }}
-          CAPTCHA_VERIFY_URL: https://hcaptcha.com/siteverify
           CONTACT_ADDRESS: ${{ secrets.CONTACT_ADDRESS }}
           CONTAINER_NAME: zhinindas-alchemy-shop-postfix
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ConnectionStrings__DefaultConnection: ${{ secrets.DATABASE_URL }}
           JwtSettings__Secret: ${{ secrets.JWT_SECRET }}
           JwtSettings__TokenLifetime: 0:7:30
           EmailSettings__FromAddress: noreply@zhininda.axmouth.dev
