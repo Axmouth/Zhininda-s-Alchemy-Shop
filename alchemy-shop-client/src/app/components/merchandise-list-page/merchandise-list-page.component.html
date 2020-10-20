@@ -2,7 +2,10 @@
 <h2 *ngIf="showEffectHeader">Effect: {{ effectName }}</h2>
 <h2 *ngIf="showSearchHeader">Search: {{ search }}</h2>
 <h2 *ngIf="showAllHeader">All Merchandise!</h2>
-<h5>{{ totalResults }} entries</h5>
+<div class="spinner-border" *ngIf="loading; else entries"></div>
+<ng-template #entries
+  ><h5>{{ totalResults }} Entries</h5></ng-template
+>
 
 <ngb-pagination
   [collectionSize]="totalResults"

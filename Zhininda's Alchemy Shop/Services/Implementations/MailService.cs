@@ -143,7 +143,10 @@ namespace Zhinindas_Alchemy_Shop.Services
                     // await client.ConnectAsync(_host, _port);
 
                     // Note: only needed if the SMTP server requires authentication
-                    if (!string.IsNullOrEmpty(_username.Trim())) {
+                    if (!string.IsNullOrEmpty(_username.Trim()))
+                    {
+                        Console.WriteLine("_username");
+                        Console.WriteLine(_username);
                         await client.AuthenticateAsync(_username, _password);
                     }
 

@@ -14,6 +14,7 @@ import { Title, Meta } from '@angular/platform-browser';
 export class EffectsListPageComponent implements OnInit, OnDestroy {
   ngUnsubscribe = new Subject<void>();
   effects: Effect[];
+  loading = false;
 
   constructor(
     private merchandiseService: MerchandiseService,
@@ -33,11 +34,13 @@ export class EffectsListPageComponent implements OnInit, OnDestroy {
   }
 
   initialise(): void {
+    this.loading = true;
     this.merchandiseService
       .getAllMerchandiseEffects()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((effectResult) => {
         this.effects = effectResult.data;
+        this.loading = false;
       });
   }
 

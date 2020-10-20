@@ -126,12 +126,14 @@
 
       <div class="form-group">
         <div class="">
-          <input
+          <button
             type="submit"
             class="btn btn-success col-md-8 offset-md-1"
-            value="Register"
             [disabled]="!registerForm.valid || registerInProgress"
-          />
+          >
+            <div class="spinner-border" *ngIf="registerInProgress"></div>
+            Register
+          </button>
         </div>
       </div>
       <div class="col-md-8 offset-md-1">

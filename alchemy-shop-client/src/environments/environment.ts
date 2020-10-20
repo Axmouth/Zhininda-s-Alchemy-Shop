@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
 };
-export const apiRoot = 'http://api.zhinindas.shop.test/api/v1/';
+// export const apiRoot = 'http://api.zhinindas.shop.test/api/v1/';
+export const apiRoot = 'http://localhost:6543/api/v1/';
 export const jwtWhitelist = [
   'localhost',
   'localhost:39051',

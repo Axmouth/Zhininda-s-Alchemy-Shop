@@ -17,6 +17,8 @@ import { IsBrowserService } from 'src/auth/helpers/services/is-browser.service';
 export class MyOrdersPageComponent implements OnInit, OnDestroy {
   ngUnsubscribe = new Subject<void>();
   myOrders: Order[];
+  totalResults: number;
+  loading = false;
 
   constructor(
     private accountService: AccountService,
@@ -41,11 +43,14 @@ export class MyOrdersPageComponent implements OnInit, OnDestroy {
   }
 
   initialise(): void {
+    this.loading = true;
     this.orderService
       .getAllMyOrders()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((result) => {
         this.myOrders = result.data;
+        this.totalResults = result.pagination.totalResults;
+        this.loading = false;
       });
   }
 

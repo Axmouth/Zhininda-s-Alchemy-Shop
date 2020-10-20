@@ -46,69 +46,48 @@ export class RestApiService implements OnDestroy {
     return RestApiService.getReqCache.get(newUrl);
   }
 
-  getAll<T>(baseUrl: string, queryParams: any, cached = false): Observable<T> {
+  getAll<T>(baseUrl: string, queryParams: any, cached = false, auth = true): Observable<T> {
     const url = `${baseUrl}`;
+    if (auth === true) {
+      return this.baseApiRequestWithAuth<T>(url, queryParams, 'get', undefined, cached);
+    }
 
-    return this.authService
-      .isAuthenticatedOrRefresh()
-      .pipe(
-        concatMap(() => {
-          return this.baseApiRequest<T>(url, queryParams, 'get', undefined, cached);
-        }),
-      )
-      .pipe(takeUntil(this.ngUnsubscribe));
+    return this.baseApiRequest<T>(url, queryParams, 'get', undefined, cached);
   }
 
-  get<T>(baseUrl: string, id: string, queryParams: any, cached = false): Observable<T> {
+  get<T>(baseUrl: string, id: string, queryParams: any, cached = false, auth = true): Observable<T> {
     const url = `${baseUrl}/${id}`;
+    if (auth === true) {
+      return this.baseApiRequestWithAuth<T>(url, queryParams, 'get', undefined, cached);
+    }
 
-    return this.authService
-      .isAuthenticatedOrRefresh()
-      .pipe(
-        concatMap(() => {
-          return this.baseApiRequest<T>(url, queryParams, 'get', undefined, cached);
-        }),
-      )
-      .pipe(takeUntil(this.ngUnsubscribe));
+    return this.baseApiRequest<T>(url, queryParams, 'get', undefined, cached);
   }
 
-  create<T>(baseUrl: string, body: any, queryParams: any): Observable<T> {
+  create<T>(baseUrl: string, body: any, queryParams: any, auth = true): Observable<T> {
     const url = `${baseUrl}`;
-
-    return this.authService
-      .isAuthenticatedOrRefresh()
-      .pipe(
-        concatMap(() => {
-          return this.baseApiRequest<T>(url, queryParams, 'post', body);
-        }),
-      )
-      .pipe(takeUntil(this.ngUnsubscribe));
+    if (auth === true) {
+      return this.baseApiRequestWithAuth<T>(url, queryParams, 'post', body);
+    }
+    return this.baseApiRequest<T>(url, queryParams, 'post', body);
   }
 
-  update<T>(baseUrl: string, id: string, body: any, queryParams: any): Observable<T> {
+  update<T>(baseUrl: string, id: string, body: any, queryParams: any, auth = true): Observable<T> {
     const url = `${baseUrl}/${id}`;
 
-    return this.authService
-      .isAuthenticatedOrRefresh()
-      .pipe(
-        concatMap(() => {
-          return this.baseApiRequest<T>(url, queryParams, 'put', body);
-        }),
-      )
-      .pipe(takeUntil(this.ngUnsubscribe));
+    if (auth === true) {
+      return this.baseApiRequestWithAuth<T>(url, queryParams, 'put', body);
+    }
+    return this.baseApiRequest<T>(url, queryParams, 'put', body);
   }
 
-  delete<T>(baseUrl: string, id: string, queryParams: any): Observable<T> {
+  delete<T>(baseUrl: string, id: string, queryParams: any, auth = true): Observable<T> {
     const url = `${baseUrl}/${id}`;
 
-    return this.authService
-      .isAuthenticatedOrRefresh()
-      .pipe(
-        concatMap(() => {
-          return this.baseApiRequest<T>(url, queryParams, 'delete', undefined);
-        }),
-      )
-      .pipe(takeUntil(this.ngUnsubscribe));
+    if (auth === true) {
+      return this.baseApiRequestWithAuth<T>(url, queryParams, 'delete', undefined);
+    }
+    return this.baseApiRequest<T>(url, queryParams, 'delete', undefined);
   }
 
   private baseApiRequest<T>(
@@ -120,7 +99,6 @@ export class RestApiService implements OnDestroy {
   ): Observable<T> {
     const headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
-    headers.append('Access-Control-Allow-Origin', '*');
     const queryString = paramsToQuery(queryParams);
     let newUrl = url;
     if (queryString && queryString.length > 0) {
@@ -144,6 +122,20 @@ export class RestApiService implements OnDestroy {
         }),
       )
       .pipe(takeUntil(this.ngUnsubscribe));
+  }
+
+  private baseApiRequestWithAuth<T>(
+    url: string,
+    queryParams: any,
+    method: HttpMethod,
+    body: any,
+    cached = false,
+  ): Observable<T> {
+    return this.authService.isAuthenticatedOrRefresh().pipe(
+      switchMap(() => {
+        return this.baseApiRequest<T>(url, queryParams, method, body, cached);
+      }),
+    );
   }
 
   ngOnDestroy(): void {

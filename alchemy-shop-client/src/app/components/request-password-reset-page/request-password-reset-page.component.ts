@@ -59,11 +59,13 @@ export class RequestPasswordResetPageComponent implements OnInit, OnDestroy {
             console.log(result.getErrors());
             this.errors = result.getResponse().error.errors;
             this.alertService.setErrorList(this.errors);
+            this.alertService.clearSucessMessageList();
           }
           this.loading = false;
         },
         (err) => {
           console.log(err);
+          this.loading = false;
         },
       );
   }

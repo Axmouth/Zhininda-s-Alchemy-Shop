@@ -25,6 +25,7 @@ export class MerchandiseListPageComponent implements OnInit, OnDestroy {
   pageSize: number;
   pageNumber: number;
   totalResults: number;
+  loading = false;
 
   constructor(
     private router: Router,
@@ -48,6 +49,7 @@ export class MerchandiseListPageComponent implements OnInit, OnDestroy {
   }
 
   initialise(): void {
+    this.loading = true;
     this.ngUnsubscribeOnInit.next();
     this.showSearchHeader = (this.search || '') !== '';
     this.showCategoryHeader = (this.categoryName || '') !== '';
@@ -84,6 +86,7 @@ export class MerchandiseListPageComponent implements OnInit, OnDestroy {
         this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
         this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
         this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
+        this.loading = false;
       });
   }
 

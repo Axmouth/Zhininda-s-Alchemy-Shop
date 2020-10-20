@@ -20,7 +20,11 @@
       <div class="card-body">
         <div class="row">
           <div class="col-md-12">
-            <h4>Your Orders</h4>
+            <h4>My Orders</h4>
+            <div class="spinner-border" *ngIf="loading; else entries"></div>
+            <ng-template #entries
+              ><h5>{{ totalResults }} Entries</h5></ng-template
+            >
             <hr />
 
             <table class="table table-bordered table-striped table-sm">

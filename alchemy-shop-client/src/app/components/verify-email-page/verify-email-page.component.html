@@ -1,5 +1,7 @@
 <p *ngFor="let message of successMessages">
-  <ngb-alert type="success">
+  <ngb-alert type="success" [dismissible]="false">
     {{ message }}
   </ngb-alert>
 </p>
+
+<div class="spinner-border" *ngIf="loading"></div>

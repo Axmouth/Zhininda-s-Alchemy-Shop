@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class LoginPartialComponent implements OnInit, OnDestroy {
   ngUnsubscribe = new Subject<void>();
   loggedIn = false;
-  username = 'Axmouth';
+  username = '';
 
   constructor(private router: Router, private accountService: AccountService) {}
 
@@ -28,6 +28,14 @@ export class LoginPartialComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((result) => {
         this.loggedIn = result;
+        if (this.loggedIn) {
+          this.accountService
+            .getUsername()
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe((username) => {
+              this.username = username;
+            });
+        }
       });
   }
 
