@@ -3,9 +3,7 @@ using Zhinindas_Alchemy_Shop.EmailTemplates.ViewModels;
 using Zhinindas_Alchemy_Shop.Helpers;
 using Identity.Models;
 using MailKit.Net.Smtp;
-using Microsoft.AspNetCore.Http;
 using MimeKit;
-using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -145,7 +143,7 @@ namespace Zhinindas_Alchemy_Shop.Services
                     // await client.ConnectAsync(_host, _port);
 
                     // Note: only needed if the SMTP server requires authentication
-                    if (!string.IsNullOrEmpty(_username)) {
+                    if (!string.IsNullOrEmpty(_username.Trim())) {
                         await client.AuthenticateAsync(_username, _password);
                     }
 

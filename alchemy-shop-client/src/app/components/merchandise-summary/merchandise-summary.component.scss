@@ -11,6 +11,18 @@
   visibility: hidden;
 }
 
+.add-to-cart {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: 0.8em;
+}
+
+.cart-button {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .merch-summ:hover .btn-hidden {
   visibility: visible;
   animation: fadeIn ease 1s;

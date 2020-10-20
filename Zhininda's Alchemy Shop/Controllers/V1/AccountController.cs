@@ -25,19 +25,11 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
     {
         public const string refreshTokenCookieName = "ZhinindasAuthRefreshToken";
         private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly IOrderRepository _orderRepository;
-        private readonly IOrderDetailRepository _orderDetailRepository;
-        private readonly IMapper _mapper;
         private readonly IAccountService _accountService;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IMapper mapper, IAccountService accountService)
+        public AccountController(UserManager<AppUser> userManager, IAccountService accountService)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
-            _orderRepository = orderRepository;
-            _orderDetailRepository = orderDetailRepository;
-            _mapper = mapper;
             _accountService = accountService;
         }
 

@@ -52,7 +52,8 @@ export class AuthService implements OnDestroy {
           }
           const payload = token.getPayload();
           if (payload) {
-            return payload.sub;
+            const userNameKey = this.config.userNameJwtKey ?? 'sub';
+            return payload[userNameKey];
           }
           return null;
         }),
@@ -75,7 +76,8 @@ export class AuthService implements OnDestroy {
           }
           const payload = token.getPayload();
           if (payload) {
-            return payload.email;
+            const emailKey = this.config.emailJwtKey ?? 'sub';
+            return payload[emailKey];
           }
           return null;
         }),

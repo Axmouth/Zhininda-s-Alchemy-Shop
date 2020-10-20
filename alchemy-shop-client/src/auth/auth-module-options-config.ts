@@ -167,6 +167,16 @@ export interface AuthModuleOptionsConfig {
    */
   requestVerificationEmailMethod?: HttpMethod;
   /**
+   * Configuration for the key where user email is stored within the JWT.
+   *
+   */
+  emailJwtKey?: string;
+  /**
+   * Configuration for the key where user name is stored within the JWT.
+   *
+   */
+  userNameJwtKey?: string;
+  /**
    * Configuration for the query keys used by the password reset function.
    *
    */
