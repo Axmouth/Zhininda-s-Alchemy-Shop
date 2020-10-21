@@ -4,14 +4,14 @@
 <h2 *ngIf="showAllHeader">All Merchandise!</h2>
 <div class="spinner-border" *ngIf="loading; else entries"></div>
 <ng-template #entries
-  ><h5>{{ totalResults }} Entries</h5></ng-template
+  ><h5>Showing {{ merchandises?.length }} out of {{ totalResults }} Entries</h5></ng-template
 >
 
 <ngb-pagination
   [collectionSize]="totalResults"
   [(page)]="pageNumber"
-  [boundaryLinks]="true"
-  [maxSize]="5"
+  [boundaryLinks]="false"
+  [maxSize]="4"
   [pageSize]="pageSize"
   (pageChange)="onPageChange()"
 ></ngb-pagination>
@@ -27,11 +27,35 @@
 <br />
 <hr />
 <br />
-<ngb-pagination
-  [collectionSize]="totalResults"
-  [(page)]="pageNumber"
-  [boundaryLinks]="true"
-  [maxSize]="5"
-  [pageSize]="pageSize"
-  (pageChange)="onPageChange()"
-></ngb-pagination>
+<div class="row">
+  <div class="ml-3">
+    <ngb-pagination
+      [collectionSize]="totalResults"
+      [(page)]="pageNumber"
+      [boundaryLinks]="false"
+      [maxSize]="4"
+      [pageSize]="pageSize"
+      (pageChange)="onPageChange()"
+      class=""
+    ></ngb-pagination>
+  </div>
+  <div class="col-md-2 ml-auto">
+    <span>Items per Page: </span>
+    <select class="custom-select" (change)="onPageChange()" [(ngModel)]="pageSize">
+      <option value="21">21</option>
+      <option value="42">42</option>
+      <option value="63">63</option>
+    </select>
+  </div>
+  <div class="col-md-2 ml-3">
+    <span>Sort Items: </span>
+    <select class="custom-select" (change)="onPageChange()" [(ngModel)]="sortType">
+      <option value="NameAsc">Name, A to Z</option>
+      <option value="NameDesc">Name, Z to A</option>
+      <option value="PriceAsc">Price, Low to High</option>
+      <option value="PriceDesc">Price, High to Low</option>
+      <option value="StockDesc">Stock, High to Low</option>
+      <option value="StockAsc">Stock, Low to High</option>
+    </select>
+  </div>
+</div>

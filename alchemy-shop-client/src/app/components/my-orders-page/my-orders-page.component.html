@@ -19,14 +19,21 @@
     <div class="card">
       <div class="card-body">
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-12 overflow-auto">
             <h4>My Orders</h4>
             <div class="spinner-border" *ngIf="loading; else entries"></div>
             <ng-template #entries
-              ><h5>{{ totalResults }} Entries</h5></ng-template
+              ><h5>Showing {{ myOrders?.length }} out of {{ totalResults }} Entries</h5></ng-template
             >
             <hr />
-
+            <ngb-pagination
+              [collectionSize]="totalResults"
+              [(page)]="pageNumber"
+              [boundaryLinks]="false"
+              [maxSize]="4"
+              [pageSize]="pageSize"
+              (pageChange)="onPageChange()"
+            ></ngb-pagination>
             <table class="table table-bordered table-striped table-sm">
               <thead>
                 <tr>
@@ -58,6 +65,36 @@
                 <tr></tr>
               </tfoot>
             </table>
+            <div class="row">
+              <div class="ml-3">
+                <ngb-pagination
+                  [collectionSize]="totalResults"
+                  [(page)]="pageNumber"
+                  [boundaryLinks]="false"
+                  [maxSize]="4"
+                  [pageSize]="pageSize"
+                  (pageChange)="onPageChange()"
+                  class=""
+                ></ngb-pagination>
+              </div>
+              <div class="col-md-2 ml-auto">
+                <span>Items per Page: </span>
+                <select class="custom-select" (change)="onPageChange()" [(ngModel)]="pageSize">
+                  <option value="20">20</option>
+                  <option value="40">40</option>
+                  <option value="80">80</option>
+                </select>
+              </div>
+              <div class="col-md-2 ml-3">
+                <span>Sort Items: </span>
+                <select class="custom-select" (change)="onPageChange()" [(ngModel)]="sortType">
+                  <option value="DatePlacedAsc">Date Placed, Recent to Old</option>
+                  <option value="DatePlacedDesc">Date Placed, Old to Recent</option>
+                  <option value="SubtotalAsc">Subtotal, Low to High</option>
+                  <option value="SubtotalDesc">Subtotal, High to Low</option>
+                </select>
+              </div>
+            </div>
           </div>
         </div>
         <div class="row">

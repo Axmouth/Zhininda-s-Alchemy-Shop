@@ -14,18 +14,18 @@ using Zhinindas_Alchemy_Shop.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 
-public enum MerchandiseSortType
-{
-    NameAsc,
-    NameDesc,
-    StockAsc,
-    StockDesc,
-    DateAddedAsc,
-    DateAddedDesc,
-}
-
 namespace Zhinindas_Alchemy_Shop.Controllers.V1
 {
+    public enum MerchandiseSortType
+    {
+        NameAsc,
+        NameDesc,
+        PriceAsc,
+        PriceDesc,
+        StockAsc,
+        StockDesc,
+    }
+
     [ApiController]
     public class MerchandiseController : ControllerBase
     {
@@ -72,7 +72,31 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
 
             }
             Task<int> countTask = merchCount.CountAsync();
-            merchandises = merchandises.OrderBy(n => n.Name);
+            if (sortType == MerchandiseSortType.NameAsc)
+            {
+                merchandises = merchandises.OrderBy(m => m.Name);
+            }
+            else if (sortType == MerchandiseSortType.NameDesc)
+            {
+                merchandises = merchandises.OrderByDescending(m => m.Name);
+            }
+            else if (sortType == MerchandiseSortType.PriceAsc)
+            {
+                merchandises = merchandises.OrderBy(m => m.Value);
+            }
+            else if (sortType == MerchandiseSortType.PriceDesc)
+            {
+                merchandises = merchandises.OrderByDescending(m => m.Value);
+            }
+            else if (sortType == MerchandiseSortType.StockAsc)
+            {
+                merchandises = merchandises.OrderBy(n => n.AmountInStock);
+            }
+            else if (sortType == MerchandiseSortType.StockDesc)
+            {
+                merchandises = merchandises.OrderByDescending(n => n.AmountInStock);
+            }
+
             if (paginationQuery != null)
             {
                 merchandises = merchandises.Skip(paginationQuery.PageSize * (paginationQuery.PageNumber - 1)).Take(paginationQuery.PageSize);

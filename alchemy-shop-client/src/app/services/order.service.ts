@@ -17,12 +17,12 @@ export class OrderService implements OnDestroy {
 
   constructor(private apiService: RestApiService) {}
 
-  getAllMyOrders(): Observable<BaseResponse<Order[]>> {
-    return this.apiService.getAll<BaseResponse<Order[]>>(this.orderUrl, {}).pipe(takeUntil(this.ngUnsubscribe));
+  getAllMyOrders(query: object = {}): Observable<BaseResponse<Order[]>> {
+    return this.apiService.getAll<BaseResponse<Order[]>>(this.orderUrl, query).pipe(takeUntil(this.ngUnsubscribe));
   }
 
-  getOrder(orderId: string): Observable<BaseResponse<Order>> {
-    return this.apiService.get<BaseResponse<Order>>(this.orderUrl, orderId, {}).pipe(takeUntil(this.ngUnsubscribe));
+  getOrder(orderId: string, query: object = {}): Observable<BaseResponse<Order>> {
+    return this.apiService.get<BaseResponse<Order>>(this.orderUrl, orderId, query).pipe(takeUntil(this.ngUnsubscribe));
   }
 
   checkout(checkoutRequest: CheckoutRequest): Observable<BaseResponse<Order>> {

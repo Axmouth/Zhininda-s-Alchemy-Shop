@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AlertService } from 'src/app/services/alert.service';
+import { UrlMetaTagService } from './services/url-meta-tag.service';
 
 @Component({
   selector: 'zas-root',
@@ -20,7 +21,12 @@ export class AppComponent implements OnInit, OnDestroy {
   messages: string[] = [];
   successMessages: string[] = [];
 
-  constructor(private router: Router, private route: ActivatedRoute, private alertService: AlertService) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private alertService: AlertService,
+    private urlMetaTagService: UrlMetaTagService,
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe((qParams) => {

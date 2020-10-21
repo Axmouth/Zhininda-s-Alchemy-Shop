@@ -38,9 +38,9 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.title.setTitle(`Login | Zhininda's Alchemy Shop`);
     this.meta.updateTag({ name: `title`, content: this.title.getTitle() });
-    this.meta.updateTag({ property: `og:url`, content: this.doc.location.href });
+
     this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
-    this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
+
     this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
   }
 

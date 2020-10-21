@@ -19,9 +19,9 @@ export class CheckoutCompletePageComponent implements OnInit {
   ngOnInit(): void {
     this.title.setTitle(`Checkout Complete! | Zhininda's Alchemy Shop`);
     this.meta.updateTag({ name: `title`, content: this.title.getTitle() });
-    this.meta.updateTag({ property: `og:url`, content: this.doc.location.href });
+
     this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
-    this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
+
     this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
     if (!this.isBrowserService.isInBrowser()) {
       return;

@@ -45,7 +45,7 @@ namespace Zhinindas_Alchemy_Shop.Data.Repositories
 
         public IQueryable<Order> GetUserOrders(string userId)
         {
-            return _appDbContext.SpawnNew().Orders.Include(o => o.OrderLines).ThenInclude(ol => ol.Merchandise).Where(o => o.UserId == userId).OrderByDescending(o => o.OrderPlaced).AsNoTracking();
+            return _appDbContext.SpawnNew().Orders.Include(o => o.OrderLines).ThenInclude(ol => ol.Merchandise).Where(o => o.UserId == userId).AsNoTracking();
         }
 
         public async Task<Order> GetOrderById(int orderId)

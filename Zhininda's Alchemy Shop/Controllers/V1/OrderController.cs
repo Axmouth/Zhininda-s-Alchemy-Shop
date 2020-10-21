@@ -19,6 +19,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Zhinindas_Alchemy_Shop.Controllers.V1
 {
+    public enum OrdersSortType
+    {
+        DatePlacedAsc,
+        DatePlacedDesc,
+        SubtotalAsc,
+        SubtotalDesc,
+    }
+
     [ApiController]
     public class OrderController : ControllerBase
     {
@@ -87,17 +95,32 @@ namespace Zhinindas_Alchemy_Shop.Controllers.V1
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet(ApiRoutes.Orders.GetAll)]
-        public async Task<IActionResult> GetAllOrders([FromQuery] PaginationQuery paginationQuery)
+        public async Task<IActionResult> GetAllOrders([FromQuery] PaginationQuery paginationQuery, [FromQuery] OrdersSortType sortType)
         {
             var username = _userManager.GetUserId(HttpContext.User);
             var userId = (await _userManager.FindByNameAsync(username)).Id;
             var orders = _orderRepository.GetUserOrders(userId);
-            var countTask = _orderRepository.GetUserOrders(userId).CountAsync(); ;
+            var countTask = _orderRepository.GetUserOrders(userId).CountAsync();
+            if (sortType == OrdersSortType.DatePlacedAsc)
+            {
+                orders = orders.OrderBy(o => o.OrderPlaced);
+            }
+            else if (sortType == OrdersSortType.DatePlacedDesc)
+            {
+                orders = orders.OrderByDescending(o => o.OrderPlaced);
+            }
+            else if (sortType == OrdersSortType.SubtotalAsc)
+            {
+                orders = orders.OrderBy(o => o.OrderTotal);
+            }
+            else if (sortType == OrdersSortType.SubtotalDesc)
+            {
+                orders = orders.OrderByDescending(o => o.OrderTotal);
+            }
             if (paginationQuery != null)
             {
                 orders = orders.Skip(paginationQuery.PageSize * (paginationQuery.PageNumber - 1)).Take(paginationQuery.PageSize);
             }
-
 
             if (paginationQuery == null || paginationQuery.PageNumber < 1 || paginationQuery.PageSize < 1)
             {

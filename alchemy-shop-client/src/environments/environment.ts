@@ -16,6 +16,7 @@ export const jwtWhitelist = [
   'localhost:5000',
   'api.zhinindas.shop.test',
 ];
+export const websiteUrl = 'http://zhinindas.shop.test';
 
 /*
  * For easier debugging in development mode, you can import the following file

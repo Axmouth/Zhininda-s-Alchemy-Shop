@@ -25,6 +25,7 @@ export class MerchandiseListPageComponent implements OnInit, OnDestroy {
   pageSize: number;
   pageNumber: number;
   totalResults: number;
+  sortType: string;
   loading = false;
 
   constructor(
@@ -44,6 +45,7 @@ export class MerchandiseListPageComponent implements OnInit, OnDestroy {
       this.search = qParams.search;
       this.pageNumber = qParams.pageNumber ?? 1;
       this.pageSize = qParams.pageSize ?? 21;
+      this.sortType = qParams.sortType;
       this.initialise();
     });
   }
@@ -71,6 +73,7 @@ export class MerchandiseListPageComponent implements OnInit, OnDestroy {
         effectName: this.effectName,
         pageNumber: this.pageNumber,
         pageSize: this.pageSize,
+        sortType: this.sortType,
       })
       .pipe(takeUntil(this.ngUnsubscribe))
       .pipe(takeUntil(this.ngUnsubscribeOnInit))
@@ -82,9 +85,9 @@ export class MerchandiseListPageComponent implements OnInit, OnDestroy {
           name: `keywords`,
           content: `axmouth,developer,webdev,programmer,portfolio,${this.search},${this.categoryName},${this.effectName}`,
         });
-        this.meta.updateTag({ property: `og:url`, content: this.doc.location.href });
+
         this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
-        this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
+
         this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
         this.loading = false;
       });
@@ -93,7 +96,7 @@ export class MerchandiseListPageComponent implements OnInit, OnDestroy {
   onPageChange(): void {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { pageNumber: this.pageNumber },
+      queryParams: { pageNumber: this.pageNumber, pageSize: this.pageSize, sortType: this.sortType },
       queryParamsHandling: 'merge',
     });
   }

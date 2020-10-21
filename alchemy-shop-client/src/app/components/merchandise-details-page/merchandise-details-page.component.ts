@@ -50,12 +50,12 @@ export class MerchandiseDetailsPageComponent implements OnInit, OnDestroy {
             name: `keywords`,
             content: `axmouth,developer,webdev,programmer,portfolio,${this.merchandise.name}`,
           });
-          this.meta.updateTag({ property: `og:url`, content: this.doc.location.href });
+
           this.meta.updateTag({ property: `og:title`, content: this.title.getTitle() });
           this.meta.updateTag({ property: `og:description`, content: this?.merchandise?.shortDescription });
           this.meta.updateTag({ property: `og:image`, content: this?.merchandise?.imageThumbnailUrl });
           this.meta.updateTag({ property: `twitter:card`, content: this?.merchandise?.imageThumbnailUrl });
-          this.meta.updateTag({ property: `twitter:url`, content: this.doc.location.href });
+
           this.meta.updateTag({ property: `twitter:title`, content: this.title.getTitle() });
           this.meta.updateTag({ property: `twitter:description`, content: this?.merchandise?.shortDescription });
           this.meta.updateTag({ property: `twitter:image`, content: this?.merchandise?.imageThumbnailUrl });
