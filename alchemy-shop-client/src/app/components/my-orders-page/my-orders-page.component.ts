@@ -48,7 +48,7 @@ export class MyOrdersPageComponent implements OnInit, OnDestroy {
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe((qParams) => {
       this.pageNumber = qParams.pageNumber ?? 1;
       this.pageSize = qParams.pageSize ?? 20;
-      this.sortType = qParams.sortType;
+      this.sortType = qParams.sortType ?? 'DatePlacedDesc';
       this.initialise();
     });
   }
