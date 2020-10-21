@@ -11,7 +11,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarContent" [class.collapse]="collapsed">
-    <ul class="navbar-nav">
+    <ul class="navbar-nav mr-auto">
       <li class="nav-item" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <a class="nav-link" href="/" routerLink="/">Home <span class="sr-only">(current)</span></a>
       </li>
@@ -24,10 +24,8 @@
       </li>
       <zas-shopping-cart-summary></zas-shopping-cart-summary>
     </ul>
-    <ul class="navbar-nav mr-auto">
-      <zas-login-partial></zas-login-partial>
-    </ul>
     <form class="form-inline my-2 my-lg-0" [formGroup]="searchForm" (ngSubmit)="onSearchSubmit()">
+      <button class="btn btn-secondary mx-2" type="submit">Search</button>
       <input
         type="text"
         class="form-control"
@@ -37,8 +35,10 @@
         aria-required="true"
         required
       />
-      <button class="btn btn-secondary my-sm-0 mx-2" type="submit">Search</button>
     </form>
+    <ul class="navbar-nav ml-5">
+      <zas-login-partial></zas-login-partial>
+    </ul>
   </div>
 </nav>
 <div class="container body-content main-content">
