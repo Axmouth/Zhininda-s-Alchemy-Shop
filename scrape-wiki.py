@@ -2,6 +2,15 @@
 
 import requests
 from bs4 import BeautifulSoup
+import random
+
+
+def negative_to_zero(num):
+    if num >= 0:
+        return num
+    else:
+        return 0
+
 
 ingredients_page = requests.get(
     'https://elderscrolls.fandom.com/wiki/Ingredients_(Skyrim)')
@@ -20,14 +29,16 @@ for row in ingredients_table_rows[1:]:
     ingredient_soup = BeautifulSoup(ingredient_page.content, 'html.parser')
     d = {
         'ingredient_thumbnail': ingredient_soup.select_one(
-            '.pi-image-thumbnail').get('src'),
-        'ingredient_name': row.select('td')[0].select_one('a').get('title'),
+            '.pi-image-thumbnail').get('src').split('/revision/latest')[0].strip(),
+        'ingredient_name': row.select('td')[0].select_one('a').get('title').replace('(Skyrim)', '').replace('(Dragonborn)', ''),
         'ingredient_effect1': row.select('td')[1].select_one('a').text.strip(),
         'ingredient_effect2': row.select('td')[2].select_one('a').text.strip(),
         'ingredient_effect3': row.select('td')[3].select_one('a').text.strip(),
         'ingredient_effect4': row.select('td')[4].select_one('a').text.strip(),
         'ingredient_weight': row.select('td')[5].text.strip(),
-        'ingredient_value': row.select('td')[6].text.strip()
+        'ingredient_value': row.select('td')[6].text.strip(),
+        'amount_in_stock': negative_to_zero(random.randint(-7, 25)),
+        'is_preferred': str(random.randint(-100, 5) > 0).lower()
     }
     ingr_init_list += ['''
                     new Merchandise
@@ -38,9 +49,9 @@ for row in ingredients_table_rows[1:]:
                         LongDescription = "{ingredient_name} is an ingredient, it can be used to make potions at an alchemy lab as part of alchemy.",
                         Category = Categories["Ingredients"],
                         ImageUrl = "{ingredient_thumbnail}",
-                        AmountInStock = 15,
+                        AmountInStock = {amount_in_stock},
                         Weight = {ingredient_weight}M,
-                        IsPreferred = false,
+                        IsPreferred = {is_preferred},
                         ImageThumbnailUrl = "{ingredient_thumbnail}",
                         PrimaryEffect = effects["{ingredient_effect1}"],
                         SecondaryEffect = effects["{ingredient_effect2}"],
@@ -77,20 +88,17 @@ while i < len(potions_tables):
         j += 1
         continue
     potions_table = potions_tables[j]
-    print('======================')
-    print(potions_headlines[i].text)
-    print('----------------------')
     for row in potions_table.select('tr')[1:]:
         columns = row.select('td')
-        print(columns)
-        print(columns[2].text)
         d = {
-            'potion_thumbnail':  columns[3].select_one('a').get('href').strip(),
-            'potion_name': columns[0].contents[0].strip(),
+            'potion_thumbnail':  columns[3].select_one('a').get('href').split('?')[0].replace('/revision/latest', '').strip(),
+            'potion_name': columns[0].contents[0].strip().replace('(Skyrim)', '').replace('(Dragonborn)', ''),
             'potion_description': columns[1].text.strip(),
             'potion_effect1': potions_headlines[i].text.strip(),
             'potion_value': columns[2].text.strip(),
-            'category': category
+            'category': category,
+            'amount_in_stock': negative_to_zero(random.randint(-7, 25)),
+            'is_preferred': str(random.randint(-100, 5) > 0).lower()
         }
         potions_list += ['''
                         new Merchandise
@@ -101,9 +109,9 @@ while i < len(potions_tables):
                             LongDescription = "{potion_description}",
                             Category = Categories["{category}"],
                             ImageUrl = "{potion_thumbnail}",
-                            AmountInStock = 15,
+                            AmountInStock = {amount_in_stock},
                             Weight = 0.1M,
-                            IsPreferred = false,
+                            IsPreferred = {is_preferred},
                             ImageThumbnailUrl = "{potion_thumbnail}",
                             PrimaryEffect = effects["{potion_effect1}"],
                             SecondaryEffect = null,

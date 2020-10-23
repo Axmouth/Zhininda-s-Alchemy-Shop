@@ -44,7 +44,7 @@ export class MerchandiseListPageComponent implements OnInit, OnDestroy {
       this.categoryName = qParams.categoryName;
       this.search = qParams.search;
       this.pageNumber = qParams.pageNumber ?? 1;
-      this.pageSize = qParams.pageSize ?? 21;
+      this.pageSize = qParams.pageSize ?? 15;
       this.sortType = qParams.sortType;
       this.initialise();
     });

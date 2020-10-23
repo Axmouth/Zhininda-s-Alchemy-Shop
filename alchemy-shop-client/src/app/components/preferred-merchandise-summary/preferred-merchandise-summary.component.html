@@ -1,5 +1,5 @@
-<div class="col-sm-4 col-lg-4 col-md-4 thumbnail">
-  <img [src]="merchandise?.imageThumbnailUrl" alt="" class="" loading="lazy" />
+<div class="col-12 col-sm-12 col-lg-4 col-md-4 thumbnail merch-summ">
+  <img [src]="merchandise?.imageThumbnailUrl" alt="" class="img-fluid" loading="lazy" />
   <div class="caption">
     <h3 class="pull-right">
       <img class="septim" src="/assets/GoldIcon.webp" alt="" height="0.75em" width="0.75em" />{{ merchandise?.value }}
@@ -54,9 +54,9 @@
       >
     </div>
   </div>
-  <div class="add-to-cart text-right">
+  <div class="add-to-cart">
     <p class="button">
-      <button class="btn btn-success" id="cart-button" (click)="onAddToCartClick()" [disabled]="addingInProgress">
+      <button class="btn btn-success cart-button col-md-6" (click)="onAddToCartClick()" [disabled]="addingInProgress">
         <div class="spinner-border spinner-border-sm" *ngIf="addingInProgress"></div>
         Add to Cart
       </button>

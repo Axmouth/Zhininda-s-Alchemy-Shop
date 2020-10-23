@@ -21,6 +21,8 @@ services:
     #  - 1587:587
     volumes:
       - /host/keys:/etc/opendkim/keys
+    networks:
+      - zhinindas.net
 
   zhinindas-alchemy-shop-user-client:
     restart: unless-stopped
@@ -28,6 +30,8 @@ services:
     ports:
       - "6544:4000"
     container_name: zhinindas-alchemy-shop-user-client
+    networks:
+      - zhinindas.net
 
   zhinindas-alchemy-shop-api:
     working_dir: /var/lib/axmouth/zhinindas-alchemy-shop/api
@@ -59,5 +63,11 @@ services:
       - WEBSITE_URL
     volumes:
       - zhinindas-alchemy-shop-files:/var/lib/axmouth/axmouth.dev/static-assets:rw
+    networks:
+      - zhinindas.net
+
 volumes:
   zhinindas-alchemy-shop-files:
+
+networks:
+  zhinindas.net:

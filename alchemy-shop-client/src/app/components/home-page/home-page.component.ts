@@ -34,7 +34,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
   initialise(): void {
     this.ngUnsubscribe.next();
     this.merchandiseService
-      .getPreferredMerchandise({ preferred: true })
+      .getAllMerchandise({ preferred: true, pageSize: 6, page: 1 })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((result) => {
         this.merchandises = result.data;
