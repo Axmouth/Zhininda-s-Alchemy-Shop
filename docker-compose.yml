@@ -2,9 +2,12 @@ version: "3"
 services:
   docker-host:
     image: qoomon/docker-host
+    container_name: zhinindas-docker-host
     cap_add: ["NET_ADMIN", "NET_RAW"]
     # mem_limit: 8M
     restart: unless-stopped
+    networks:
+      - zhinindas.net
   zhinindas-alchemy-shop-postfix:
     image: boky/postfix
     container_name: zhinindas-alchemy-shop-postfix
