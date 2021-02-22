@@ -15,7 +15,7 @@ export class UrlMetaTagService implements OnDestroy {
   constructor(private router: Router, private meta: Meta, @Inject(DOCUMENT) private doc: Document) {
     router.events.pipe(takeUntil(this.ngUnsubscribe)).subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        console.log(this.doc.location.href);
+        // console.log(this.doc.location.href);
         this.meta.updateTag({
           property: `og:url`,
           content: this.doc.location.href.replace(this.doc.location.origin, websiteUrl),
