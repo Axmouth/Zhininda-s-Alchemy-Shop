@@ -8,28 +8,27 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.0.0" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="9.2.0" />
-    <PackageReference Include="MailKit" Version="2.9.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0-rc.2.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0-rc.2.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0-rc.2.*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0-rc.2.*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0-rc.2.*">
+    <PackageReference Include="AutoMapper" Version="10.0.*" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.*" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="9.2.*" />
+    <PackageReference Include="MailKit" Version="2.9.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0-rc.2.*" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0-rc.2.*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="5.0.0-rc.2.*" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.0-rc1" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.FuzzyStringMatch" Version="5.0.0-rc1" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="5.0.0-rc1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="6.0.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="5.0.*" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.*" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.FuzzyStringMatch" Version="5.0.*" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="5.0.*" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.*" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="6.0.*" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.*" />
   </ItemGroup>
 
   <ItemGroup>
