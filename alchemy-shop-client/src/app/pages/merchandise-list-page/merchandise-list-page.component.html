@@ -18,7 +18,7 @@
 <br />
 <hr />
 <br />
-<div class="row" *ngIf="merchandises != null; else placeholder">
+<div class="row" *ngIf="loading === false; else placeholder">
   <zas-merchandise-summary [merchandise]="merchandise" *ngFor="let merchandise of merchandises">
   </zas-merchandise-summary>
 </div>
