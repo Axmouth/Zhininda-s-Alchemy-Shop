@@ -50,19 +50,19 @@ jobs:
           SERVER_IP: ${{ secrets.SERVER_IP }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
-        run: DOCKER_HOST="ssh://$SERVER_USERNAME@$SERVER_IP:$SSH_PORT" docker-compose stop
+        run: COMPOSE_PARAMIKO_SSH=1 DOCKER_HOST="ssh://$SERVER_USERNAME@$SERVER_IP:$SSH_PORT" docker-compose stop
       - name: Use docker-compose to remotely remove containers
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
-        run: DOCKER_HOST="ssh://$SERVER_USERNAME@$SERVER_IP:$SSH_PORT" docker-compose rm -f
+        run: COMPOSE_PARAMIKO_SSH=1 DOCKER_HOST="ssh://$SERVER_USERNAME@$SERVER_IP:$SSH_PORT" docker-compose rm -f
       - name: Use docker-compose to remotely pull new containers
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
-        run: DOCKER_HOST="ssh://$SERVER_USERNAME@$SERVER_IP:$SSH_PORT" docker-compose pull
+        run: COMPOSE_PARAMIKO_SSH=1 DOCKER_HOST="ssh://$SERVER_USERNAME@$SERVER_IP:$SSH_PORT" docker-compose pull
       - name: Use docker-compose to deploy remotely
         env:
           CONTACT_ADDRESS: ${{ secrets.CONTACT_ADDRESS }}
@@ -84,4 +84,4 @@ jobs:
           SwaggerOptions__JsonRoute: swagger/{documentName}/swagger.json
           SwaggerOptions__Description: Our API
           SwaggerOptions__UIEndpoint: v1/swagger.json
-        run: DOCKER_HOST="ssh://$SERVER_USERNAME@$SERVER_IP:$SSH_PORT" docker-compose up --remove-orphans -d
+        run: COMPOSE_PARAMIKO_SSH=1 DOCKER_HOST="ssh://$SERVER_USERNAME@$SERVER_IP:$SSH_PORT" docker-compose up --remove-orphans -d
