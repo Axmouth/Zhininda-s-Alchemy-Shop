@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from 'src/auth';
 import { AuthResult } from 'src/auth/internal/auth-result';
-import { CustomValidators, MismatchValidator } from 'src/app/components/register-page/register-page.component';
+import { CustomValidators, MismatchValidator } from 'src/app/pages/register-page/register-page.component';
 import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
