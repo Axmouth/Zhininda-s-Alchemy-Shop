@@ -10,7 +10,7 @@
   >
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarContent" [class.collapse]="collapsed">
+  <div [ngbCollapse]="collapsed" class="collapse navbar-collapse" id="navbarContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <a class="nav-link" href="/" routerLink="/">Home <span class="sr-only">(current)</span></a>
@@ -55,7 +55,5 @@
 </div>
 <hr />
 <footer>
-  <p>
-    <a class="ml-2" target="_blank" href="https://axmouth.dev">&copy; 2019 - Georgios Nikolopoulos</a>
-  </p>
+  <zas-footer></zas-footer>
 </footer>

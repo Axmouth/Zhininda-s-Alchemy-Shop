@@ -33,6 +33,7 @@ import { PasswordResetPageComponent } from 'src/app/pages/password-reset-page/pa
 import { RequestPasswordResetPageComponent } from 'src/app/pages/request-password-reset-page/request-password-reset-page.component';
 import { VerifyEmailPageComponent } from 'src/app/pages/verify-email-page/verify-email-page.component';
 import { EffectsListPageComponent } from 'src/app/pages/effects-list-page/effects-list-page.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { EffectsListPageComponent } from 'src/app/pages/effects-list-page/effect
     RequestPasswordResetPageComponent,
     VerifyEmailPageComponent,
     EffectsListPageComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
