@@ -18,12 +18,16 @@
 <br />
 <hr />
 <br />
-<div class="row">
-  <zas-merchandise-summary
-    [merchandise]="merchandise"
-    *ngFor="let merchandise of merchandises"
-  ></zas-merchandise-summary>
+<div class="row" *ngIf="merchandises != null; else placeholder">
+  <zas-merchandise-summary [merchandise]="merchandise" *ngFor="let merchandise of merchandises">
+  </zas-merchandise-summary>
 </div>
+<ng-template #placeholder>
+  <div class="row">
+    <zas-merchandise-summary-placeholder *ngFor="let i of [1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6]">
+    </zas-merchandise-summary-placeholder>
+  </div>
+</ng-template>
 <br />
 <hr />
 <br />

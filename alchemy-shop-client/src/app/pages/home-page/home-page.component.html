@@ -7,9 +7,14 @@
 <p>(<a href="/merchandise/list" routerLink="/merchandise/list">View All Merchandise here</a>)</p>
 <br />
 
-<div class="row">
+<div class="row" *ngIf="merchandises != null; else placeholder">
   <zas-preferred-merchandise-summary
     [merchandise]="merchandise"
     *ngFor="let merchandise of merchandises"
   ></zas-preferred-merchandise-summary>
 </div>
+<ng-template #placeholder>
+  <div class="row">
+    <zas-merchandise-summary-placeholder *ngFor="let i of [1, 2, 3, 4, 5, 6]"></zas-merchandise-summary-placeholder>
+  </div>
+</ng-template>

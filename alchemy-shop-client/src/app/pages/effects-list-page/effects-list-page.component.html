@@ -1,29 +1,44 @@
-<h2>List of Alchemical Effects:</h2>
-<div class="spinner-border" *ngIf="loading; else entries"></div>
-<ng-template #entries
-  ><h5>{{ effects.length }} Entries</h5></ng-template
+<div *ngIf="loading; else entries" class="placeholder">
+  <h5 class="text line third"></h5>
+  <div class="spinner-border"></div>
+</div>
+<ng-template #entries>
+  <h2>List of Alchemical Effects:</h2>
+  <h5>{{ effects.length }} Entries</h5></ng-template
 >
+<div *ngIf="loading === false; else placeholder">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Effect</th>
+        <th scope="col">Description</th>
+        <th scope="col">Benefficial Effect</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let effect of effects; index as i">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>
+          <a href="/merchandise/list" routerLink="/merchandise/list" [queryParams]="{ effectName: effect?.name }">
+            {{ effect.name }}</a
+          >
+        </td>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Effect</th>
-      <th scope="col">Description</th>
-      <th scope="col">Benefficial Effect</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let effect of effects; index as i">
-      <th scope="row">{{ i + 1 }}</th>
-      <td>
-        <a href="/merchandise/list" routerLink="/merchandise/list" [queryParams]="{ effectName: effect?.name }">
-          {{ effect.name }}</a
-        >
-      </td>
+        <td>{{ effect?.description }}</td>
+        <td>{{ effect?.positive }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-      <td>{{ effect?.description }}</td>
-      <td>{{ effect?.positive }}</td>
-    </tr>
-  </tbody>
-</table>
+<ng-template #placeholder>
+  <div class="placeholder">
+    <h5 class="text line"></h5>
+    <div *ngFor="let i of [].constructor(30)">
+      <h5 class="text line eighth"></h5>
+      <h5 class="text line link fourth"></h5>
+      <h5 class="text line half"></h5>
+    </div>
+  </div>
+</ng-template>

@@ -4,6 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { MerchandiseService } from '../../services/merchandise.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
+import { Merchandise } from 'src/app/models/api/merchandise';
 
 @Component({
   selector: 'zas-home-page',
@@ -12,7 +13,7 @@ import { DOCUMENT } from '@angular/common';
 })
 export class HomePageComponent implements OnInit, OnDestroy {
   ngUnsubscribe = new Subject<void>();
-  merchandises = [];
+  merchandises: Merchandise[];
 
   constructor(
     private merchandiseService: MerchandiseService,

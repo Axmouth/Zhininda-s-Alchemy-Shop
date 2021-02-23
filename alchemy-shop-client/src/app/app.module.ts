@@ -34,6 +34,8 @@ import { RequestPasswordResetPageComponent } from 'src/app/pages/request-passwor
 import { VerifyEmailPageComponent } from 'src/app/pages/verify-email-page/verify-email-page.component';
 import { EffectsListPageComponent } from 'src/app/pages/effects-list-page/effects-list-page.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { MerchandiseSummaryPlaceholderComponent } from './components/merchandise-summary-placeholder/merchandise-summary-placeholder.component';
+import { MerchandiseDetailsPlaceholderComponent } from './components/merchandise-details-placeholder/merchandise-details-placeholder.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +66,8 @@ import { FooterComponent } from './components/footer/footer.component';
     VerifyEmailPageComponent,
     EffectsListPageComponent,
     FooterComponent,
+    MerchandiseSummaryPlaceholderComponent,
+    MerchandiseDetailsPlaceholderComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

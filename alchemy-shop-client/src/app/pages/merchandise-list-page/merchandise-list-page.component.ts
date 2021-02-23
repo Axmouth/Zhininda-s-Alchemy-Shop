@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { MerchandiseService } from 'src/app/services/merchandise.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
+import { Merchandise } from 'src/app/models/api/merchandise';
 
 @Component({
   selector: 'zas-merchandise-list-page',
@@ -14,7 +15,7 @@ import { DOCUMENT } from '@angular/common';
 export class MerchandiseListPageComponent implements OnInit, OnDestroy {
   ngUnsubscribe = new Subject<void>();
   ngUnsubscribeOnInit = new Subject<void>();
-  merchandises = [];
+  merchandises: Merchandise[];
   categoryName: string = undefined;
   effectName: string = undefined;
   search: string = undefined;

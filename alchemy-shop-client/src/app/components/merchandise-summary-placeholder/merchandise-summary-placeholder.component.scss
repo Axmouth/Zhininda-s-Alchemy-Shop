@@ -36,6 +36,7 @@
     &.link {
       background-color: var(--green);
       opacity: 0.4;
+      height: 1.1rem;
       width: 3rem;
     }
 
@@ -49,14 +50,6 @@
 
     &.third {
       width: 33%;
-    }
-
-    &.fourth {
-      width: 25%;
-    }
-
-    &.eighth {
-      width: 12.5%;
     }
   }
 
@@ -95,8 +88,8 @@
     border-radius: 10px;
     display: inline-block;
     background-color: #608df0;
-    height: 16em;
-    width: 20em;
+    height: 8em;
+    width: 80%;
     opacity: 0.2;
     animation: fading 1.5s infinite;
     padding: 0.5em;
